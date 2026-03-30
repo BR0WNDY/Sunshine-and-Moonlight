@@ -68,7 +68,7 @@ class House:
             print("[Scorpius]: Whatever House you’re in… you’ll never be alone here.")
 
         print(
-            "\nProjects James & Lilly Potter : Sunshine and Moonlights - Sorting Hats (Python Versions)")
+            "\nProjects James Lilly Potter: Sunshine and Moonlight - Sorting Hats (Python Versions)")
         print("------------------------------------")
 # ---------- INTRODUCTION ---------- #
 print("Welcome to Hogwarts!")

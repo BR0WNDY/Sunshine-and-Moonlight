@@ -1,23 +1,82 @@
 <!DOCTYPE html>
-<html Lang="en">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Sorting Hat | Project Sunshine</title>
+    <title>Projects James Lilly Potter : Sunshine and Moonlight - The Great Hall : Sorting Ceremony</title>
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
     <style>
-        body { background-color: #121212; color: #d4af37; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; padding: 50px; }
-        h1 { margin-bottom: 20px; text-shadow: 2px 2px #000; }
-        py-terminal { width: 100%; max-width: 800px; border: 3px solid #d4af37; border-radius: 10px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+        /* Ravenclaw Theme: Deep Blue and Silver */
+        body { 
+            background-color: #0b1a2e; /* Deep scholarly midnight blue */
+            color: #e2e8f0; /* Crisp silver-white text */
+            font-family: 'Courier New', monospace; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 40px 20px; 
+            margin: 0;
+        }
+
+        h1 { 
+            margin-bottom: 10px; 
+            color: #93c5fd; /* Soft magical light blue accent */
+            text-shadow: 2px 2px 4px #000; 
+            text-align: center;
+        }
+
+        p {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* The Return to Homepage Button */
+        .home-btn {
+            background-color: transparent;
+            color: #93c5fd;
+            border: 2px solid #93c5fd;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none; /* Removes the underline */
+            font-weight: bold;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* What happens when you hover over the button */
+        .home-btn:hover {
+            background-color: #93c5fd;
+            color: #0b1a2e;
+            box-shadow: 0 0 15px rgba(147, 197, 253, 0.6);
+        }
+
+        /* Ravenclaw Terminal Styling */
+        py-terminal { 
+            width: 100%; 
+            max-width: 800px; 
+            height: 500px; /* Forces a good default height */
+            border: 3px solid #8e9cb0; /* Silver border */
+            border-radius: 8px; 
+            box-shadow: 0 0 25px rgba(37, 99, 235, 0.4); /* Magical blue glow */
+            background-color: #050b14; /* Slightly darker inside the terminal */
+        }
     </style>
 </head>
 <body>
 
-    <h1>The Great Hall: Sorting Ceremony</h1>
+    <a href="index.html" class="home-btn">← Return to Homepage</a>
+
+    <h1>Projects James Lilly Potter: Sunshine and Moonlight</h1>
+    <h1>The Great Hall: Sorting Ceremony (Python Versions)</h1>
     <p>Please wait... the Hat is gathering its thoughts.</p>
+    <p style="font-size: 0.8em; color: #64748b;">PC / Mac is Recommended for this ceremony</p>
 
     <script type="py" src="./sortinghat.py" config="./pyscript.json" terminal worker></script>
 
