@@ -68,7 +68,7 @@ class House:
             print("[Scorpius]: Whatever House you’re in… you’ll never be alone here.")
 
         print(
-            "\nProjects James Lilly Potter: Sunshine and Moonlight - Sorting Hats (Python Versions)")
+            "\nThe Great Hall: Sorting Ceremony (Python Version)")
         print("------------------------------------")
 # ---------- INTRODUCTION ---------- #
 print("Welcome to Hogwarts!")
@@ -85,7 +85,7 @@ while True:
         print("\nToo bad! The Hat is already on your head...\n")
         break
     else:
-        print("Professor McGonagall taps your foot. 'Please answer Yes or No.'")
+        print("wrong input please try again")
 
 # ---------- Creat your Characters ----------
 player = House() # Create the player
@@ -114,7 +114,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 # ---------- Q2 "if you choose E = Forge to Muggle" ----------
 while True:
     print("\nQ2: Where are you most likely to be found at Hogwarts?")
@@ -139,7 +139,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q3 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -165,7 +165,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q4 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -191,7 +191,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q5 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -217,7 +217,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q6 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -243,7 +243,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q7 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -270,7 +270,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q8 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -296,7 +296,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q9 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -322,7 +322,7 @@ while True:
         player.add_muggle_and_squib()
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
 # ---------- Q10 "if you choose E = Forge to Muggle" ----------
 while True:
@@ -351,7 +351,7 @@ while True:
         print("[Scorpius]: You said my name once. That’s all the magic I ever needed.")
         break
     else:
-        print("Invalid answer. Try again.")
+        print("wrong input please try again")
 
     # ---------- FINAL SORTING FROM YOUR QUESTIONS ----------
 player.sort_into_house()

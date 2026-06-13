@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-01T16:55:00Z",
+  "title": "Design System: Projects Sunshine and Moonlight",
+  "extensions": {
+    "colorMeta": {
+      "midnight-void": { "role": "primary", "displayName": "Midnight Void", "canonical": "#050510", "tonalRamp": ["#050510", "#080816", "#0b0b1c", "#0e0e22", "#111128", "#14142e", "#171734", "#1a1a3a"] },
+      "ravenclaw-indigo": { "role": "primary", "displayName": "Ravenclaw Indigo", "canonical": "#1e1e6e", "tonalRamp": ["#0a0a24", "#101038", "#16164c", "#1c1c60", "#222274", "#282888", "#2e2e9c", "#3434b0"] },
+      "moonlight-white": { "role": "neutral", "displayName": "Moonlight White", "canonical": "#ffffff", "tonalRamp": ["#d9d9d9", "#dfdfdf", "#e6e6e6", "#ececec", "#f2f2f2", "#f8f8f8", "#fcfcfc", "#ffffff"] },
+      "glass-panel": { "role": "neutral", "displayName": "Glass Panel", "canonical": "rgba(47, 47, 63, 0.6)", "tonalRamp": ["rgba(47, 47, 63, 0.2)", "rgba(47, 47, 63, 0.4)", "rgba(47, 47, 63, 0.6)", "rgba(47, 47, 63, 0.8)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Used for primary hero headlines." },
+      "body": { "displayName": "Body", "purpose": "Used for paragraphs, navigation links, and standard interface text." }
+    },
+    "shadows": [
+      { "name": "floating-glass", "value": "0 4px 15px rgba(0, 0, 0, 0.5)", "purpose": "Lift glass panels off the background gradient." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Navigation Panel",
+      "kind": "nav",
+      "refersTo": "nav-panel",
+      "description": "Glassmorphic floating navbar",
+      "html": "<nav class=\"ds-nav-panel\"><div class=\"ds-logo\">Projects Sunshine and Moonlights</div></nav>",
+      "css": ".ds-nav-panel { width: 90%; max-width: 1200px; padding: 15px 30px; background: rgba(47, 47, 63, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); } .ds-logo { font-size: 1.1rem; font-weight: 500; color: #f0f0f0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Starlit Academy",
+    "overview": "The visual system for Projects Sunshine and Moonlight is built around deep, nocturnal gradients and ethereal glassmorphic layers. It reflects the structured intellect of Ravenclaw while capturing the atmospheric magic of a starlit night. The design is modern, clean, and highly legible, refusing to compromise clarity for the sake of its theme.\n\nThis system explicitly rejects generic corporate templates, dry technical displays, and cluttered layouts. It uses its magical atmosphere to frame the content, not overwhelm it.",
+    "keyCharacteristics": [
+      "Deep, immersive background gradients.",
+      "Floating, translucent \"glass\" layers for structural components.",
+      "Stark white, modern sans-serif typography that ensures high contrast and clarity."
+    ],
+    "rules": [
+      { "name": "The Glass Depth Rule", "body": "Opaque backgrounds are forbidden for components resting on the main gradient. Structure is built with translucency, not flat colors.", "section": "colors" },
+      { "name": "The Legibility Rule", "body": "Text resting directly on the dark gradient must be Moonlight White to maintain stark contrast and complete legibility.", "section": "typography" },
+      { "name": "The Floating Architecture Rule", "body": "Structural elements like navigation and primary cards must appear to float above the page, separated by deep shadows and blur filters.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use the deep Midnight Void to Ravenclaw Indigo gradient for all foundational backgrounds.",
+      "Do rely on glassmorphism and the Floating Glass shadow to create distinct structural elements.",
+      "Do use Moonlight White (#FFFFFF) text on all dark or glass backgrounds for maximum legibility."
+    ],
+    "donts": [
+      "Don't use generic corporate templates or dry, flat design patterns.",
+      "Don't clutter the layout; allow the deep background and glass panels to breathe.",
+      "Don't use opaque, flat colors for structural containers resting on the main gradient."
+    ]
+  }
+}
