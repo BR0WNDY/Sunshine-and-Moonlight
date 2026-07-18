@@ -1,48 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Projects James Lilly Potter : Sunshine and Moonlight</title>
-    
-    <link rel="stylesheet" href="styles.css?v=2">
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Sorting Hat — Suwapat Saelee</title>
+<meta name="description" content="An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house." />
+<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<style>
+  .sorting-wrap{max-width:900px;margin:0 auto}
+  .terminal-card{margin-top:28px;border-radius:16px;border:1px solid var(--line);
+    background:rgba(5,11,20,.8);backdrop-filter:blur(10px);
+    box-shadow:0 24px 48px -24px rgba(0,0,0,.8);overflow:hidden}
+  .terminal-card .hint{padding:14px 20px;font-family:var(--font-mono);
+    font-size:.74rem;letter-spacing:.5px;color:var(--muted);
+    border-bottom:1px solid var(--line)}
+  .terminal-wrapper{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  py-terminal{width:100%;min-width:300px;height:480px;background:transparent!important;
+    display:block;box-sizing:border-box}
+  @media(max-width:600px){ py-terminal{height:400px;font-size:.8rem} }
+</style>
 </head>
 <body>
-    
-    <nav class="navbar">
-        <div class="logo-text">Project Sunshine and Moonlights</div>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <ul class="menu">
-            <li class="menu-item"><a href="index.html">Home</a></li>
-            <li class="menu-item"><a href="soon2.html">Coming Soon</a></li>
-            <li class="menu-item"><a href="projects.html">Projects</a></li>
-            <li class="menu-item"><a href="blog.html">Blog</a></li>
-            <li class="menu-item"><a href="about.html">About</a></li>
-            <li class="menu-item lang-switch">
-                <a href="sortinghats-th.html" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px; transition: all 0.2s; text-decoration: none; display: inline-block;">🇬🇧 EN</a>
-            </li>
-        </ul>
-    </nav>
+<div class="stars" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
 
-    <div class="projects-layout">
-        <div class="sorting-ceremony-container">
-            <h1>The Great Hall: Sorting Ceremony (Python Version)</h1>
-            <p>Please wait... the Hat is gathering its thoughts.</p>
-            <p style="font-size: 0.8em; color: #64748b;">PC / Mac is Recommended for this ceremony</p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="eagle" viewBox="0 0 64 64">
+    <path fill="none" stroke="#c8a23a" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"
+      d="M32 6 L38 16 L52 14 L44 24 L58 30 L44 34 L50 46 L37 42 L32 56 L27 42 L14 46 L20 34 L6 30 L20 24 L12 14 L26 16 Z"/>
+    <circle cx="32" cy="30" r="5" fill="#2a4a86" stroke="#dcc06a" stroke-width="1.6"/>
+  </symbol>
+</svg>
 
-            <div class="terminal-wrapper">
-                <script type="py" src="./sortinghat.py" config="./pyscript.json" terminal worker></script>
-            </div>
-        </div>
+<header>
+  <nav class="nav">
+    <a class="brand" href="index.html#top">
+      <svg class="crest"><use href="#eagle"/></svg>
+      <span>Suwapat Saelee</span>
+    </a>
+    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <div class="nav-links">
+      <a href="index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
+      <a href="index.html#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+      <a href="paotang.html" data-en="Paotang Calculator" data-th="เครื่องคำนวณผ่านเป๋าตัง">Paotang Calculator</a>
+      <a href="life-management/" data-en="Starlit Ledger" data-th="Starlit Ledger">Starlit Ledger</a>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
     </div>
+  </nav>
+</header>
 
-    <script src="nav.js"></script>
+<main class="page wrap">
+  <div class="sorting-wrap">
+    <p class="eyebrow" data-en="Projects · Interactive" data-th="ผลงาน · เชิงโต้ตอบ">Projects · Interactive</p>
+    <h1 class="page-title" data-en="The Great Hall: Sorting Ceremony" data-th="ห้องโถงใหญ่: พิธีคัดสรร">The Great Hall: Sorting Ceremony</h1>
+    <p class="lead" data-en="An interactive Python app running entirely in your browser via PyScript. Answer the Hat's questions honestly — it always knows." data-th="แอป Python เชิงโต้ตอบที่รันบนเบราว์เซอร์ของคุณทั้งหมดด้วย PyScript ตอบคำถามของหมวกอย่างจริงใจ มันรู้เสมอ">An interactive Python app running entirely in your browser via PyScript. Answer the Hat's questions honestly — it always knows.</p>
+
+    <div class="terminal-card">
+      <p class="hint" data-en="PC / Mac recommended · the Hat is gathering its thoughts…" data-th="แนะนำให้ใช้คอมพิวเตอร์ · หมวกกำลังรวบรวมความคิด…">PC / Mac recommended · the Hat is gathering its thoughts…</p>
+      <div class="terminal-wrapper">
+        <script type="py" src="./sortinghat.py" config="./pyscript.json" terminal worker></script>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Suwapat Saelee</span>
+    <a href="index.html#top" data-en="← Back to portfolio" data-th="← กลับสู่พอร์ตโฟลิโอ">← Back to portfolio</a>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

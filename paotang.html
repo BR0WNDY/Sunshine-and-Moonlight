@@ -1,420 +1,542 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Co-Pay Calculator | Sunshine and Moonlights</title>
-    <link rel="stylesheet" href="styles.css?v=3">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Thai Chuay Thai Calculator — Suwapat Saelee</title>
+<meta name="description" content="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." />
+<link rel="stylesheet" href="styles.css?v=4" />
+<style>
+  .pao-wrap{max-width:var(--maxw);margin:0 auto}
+  .pao-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start;margin-top:8px}
+  .wallet-card{background:linear-gradient(135deg, rgba(42,74,134,.28) 0%, rgba(200,163,58,.08) 100%);
+    border:1px solid var(--line);border-radius:16px;padding:24px;
+    box-shadow:0 8px 32px rgba(0,0,0,.35)}
+  .wallet-header{display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:18px;font-family:var(--font-mono);font-size:.85rem;letter-spacing:.5px}
+  .badge{padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:500;
+    font-family:var(--font-mono)}
+  .badge-bronze{background:rgba(200,163,58,.18);color:var(--bronze-soft);
+    border:1px solid rgba(200,163,58,.35)}
+  .badge-blue{background:rgba(79,121,201,.18);color:var(--ravenclaw-bright);
+    border:1px solid rgba(79,121,201,.35)}
+  .wallet-balance{text-align:center;margin-bottom:20px}
+  .wallet-balance p{color:var(--muted);font-size:.92rem;margin-bottom:6px}
+  .wallet-balance h2{font-family:var(--font-display);font-size:2.6rem;font-weight:600;
+    color:#fff;margin:0}
+  .wallet-progress-container{width:100%;height:8px;background:rgba(255,255,255,.08);
+    border-radius:10px;margin-bottom:14px;overflow:hidden}
+  .wallet-progress-bar{height:100%;border-radius:10px;transition:width .5s ease-out,background .5s ease}
+  .wallet-subtext{color:var(--silver);font-size:.85rem}
+  .wallet-countdown{font-size:.82rem;color:var(--bronze-soft);margin:0;font-weight:500}
+
+  .input-card{margin-top:20px;padding:24px}
+  .input-section{margin-bottom:20px}
+  .input-section label{display:block;margin-bottom:8px;color:var(--muted);font-size:.9rem}
+  .input-wrapper{position:relative;display:flex;align-items:center}
+  .input-wrapper input{width:100%;background:rgba(7,13,31,.6);border:1px solid var(--line);
+    border-radius:10px;padding:14px;color:var(--parchment);font-family:inherit;
+    font-size:1rem;outline:none;transition:.2s}
+  .input-wrapper input::placeholder{color:var(--muted)}
+  .input-wrapper input:focus{border-color:var(--bronze-soft);
+    box-shadow:0 0 0 3px rgba(200,163,58,.15)}
+  .input-wrapper input[type="number"]{font-size:1.4rem;padding-right:48px}
+  .currency-label{position:absolute;right:14px;color:var(--muted);font-size:1rem;pointer-events:none}
+  .quick-add{display:flex;gap:10px;margin-top:12px}
+  .btn-quick-add{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);
+    color:var(--silver);padding:9px;border-radius:9px;cursor:pointer;transition:.2s;
+    font-family:var(--font-mono);font-size:.82rem}
+  .btn-quick-add:hover{background:rgba(255,255,255,.09);border-color:var(--bronze-soft);
+    color:var(--bronze-soft)}
+
+  .split-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}
+  .split-box{background:rgba(7,13,31,.5);border-radius:14px;padding:14px;text-align:center;
+    border:1px solid var(--line)}
+  .split-label{font-size:.85rem;margin-bottom:5px;font-family:var(--font-mono)}
+  .split-amount{font-size:1.4rem;font-weight:600;font-family:var(--font-display)}
+  .split-gov .split-label{color:var(--ravenclaw-bright)}
+  .split-gov .split-amount{color:var(--ravenclaw-bright)}
+  .split-user .split-label{color:var(--bronze-soft)}
+  .split-user .split-amount{color:var(--bronze-soft)}
+
+  .final-box{background:linear-gradient(135deg, rgba(200,163,58,.12) 0%, rgba(220,192,106,.05) 100%);
+    border:1px solid rgba(200,163,58,.35);border-radius:14px;padding:18px;text-align:center}
+  .final-label{color:var(--bronze-soft);font-size:.92rem;margin-bottom:5px;font-family:var(--font-mono)}
+  .final-amount{font-size:2.1rem;font-weight:600;color:#fff;margin:0;font-family:var(--font-display)}
+
+  .pao-btn{width:100%;margin-top:14px;padding:14px;font-size:1rem;border-radius:10px}
+
+  .timeline-card{padding:24px;max-height:800px;display:flex;flex-direction:column}
+  .pao-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+  .pao-header h2{font-family:var(--font-display);font-size:1.35rem;font-weight:600;
+    color:var(--parchment);margin:0}
+  .timeline-wrapper{flex:1;overflow-y:auto;padding-right:8px;display:flex;
+    flex-direction:column;gap:16px;max-height:440px}
+  .timeline-item{display:flex;gap:14px;position:relative}
+  .timeline-item::before{content:'';position:absolute;left:6px;top:22px;bottom:-16px;
+    width:2px;background:var(--line)}
+  .timeline-item:last-child::before{display:none}
+  .timeline-dot{width:14px;height:14px;background:var(--bronze);border-radius:50%;
+    margin-top:5px;border:3px solid var(--night);z-index:1;box-shadow:0 0 8px rgba(200,163,58,.5)}
+  .timeline-content{flex:1;background:rgba(7,13,31,.45);border:1px solid var(--line);
+    border-radius:12px;padding:14px;transition:.2s}
+  .timeline-content:hover{transform:translateX(4px);border-color:rgba(200,163,58,.35)}
+  .timeline-header{display:flex;justify-content:space-between;align-items:center}
+  .timeline-name{font-weight:600;color:var(--parchment);font-size:1.02rem}
+  .timeline-date{font-size:.78rem;color:var(--muted)}
+  .timeline-delete-btn{background:transparent;border:none;color:#e07a7a;cursor:pointer;
+    font-size:1.05rem;padding:0;transition:transform .2s}
+  .timeline-delete-btn:hover{transform:scale(1.15)}
+  .timeline-details{display:flex;justify-content:space-between;margin-top:8px;font-size:.82rem;gap:8px}
+  .t-amount{display:flex;flex-direction:column;color:var(--muted)}
+  .t-amount .val{font-weight:600;color:var(--parchment)}
+  .t-amount.gov .val{color:var(--ravenclaw-bright)}
+  .t-amount.user .val{color:var(--bronze-soft)}
+  .empty-state{text-align:center;color:var(--muted);font-size:.9rem;padding:20px}
+
+  .history-actions{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .history-actions-row{display:flex;gap:10px}
+  .btn-secondary{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);
+    color:var(--silver);font-size:.82rem;padding:10px;border-radius:9px;cursor:pointer;
+    text-align:center;font-family:var(--font-mono);transition:.2s}
+  .btn-secondary:hover{border-color:var(--bronze-soft);color:var(--bronze-soft)}
+  .btn-danger{background:rgba(224,122,122,.1);border:1px solid rgba(224,122,122,.35);color:#e07a7a}
+  .btn-danger:hover{border-color:#e07a7a;color:#e07a7a}
+
+  @media(max-width:860px){
+    .pao-grid{grid-template-columns:1fr}
+    .timeline-wrapper{max-height:400px}
+  }
+</style>
 </head>
 <body>
-    
-    <nav class="navbar">
-        <div class="logo-text">Project Sunshine and Moonlights</div>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <ul class="menu">
-            <li class="menu-item"><a href="index.html">Home</a></li>
-            <li class="menu-item"><a href="soon2.html">Coming Soon</a></li>
-            <li class="menu-item"><a href="projects.html">Projects</a></li>
-            <li class="menu-item"><a href="blog.html">Blog</a></li>
-            <li class="menu-item"><a href="about.html">About</a></li>
-            <li class="menu-item lang-switch">
-                <a href="paotang-th.html" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px; transition: all 0.2s; text-decoration: none; display: inline-block;">🇬🇧 EN</a>
-            </li>
-        </ul>
-    </nav>
+<div class="stars" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
 
-    <div class="projects-layout paotang-container">
-        <!-- Left Side: Dashboard -->
-        <div class="paotang-dashboard">
-            <!-- Digital Wallet Card -->
-            <div class="digital-wallet-card">
-                <div class="wallet-header">
-                    <span>Thai Chuai Thai <span class="highlight-green">Plus</span></span></span>
-                    <span class="badge badge-red">1,000 THB/Month</span>
-                </div>
-                <div class="wallet-balance">
-                    <p>Remaining Gov Subsidy This Month</p>
-                    <h2><span id="monthly-quota">1,000.00</span> <span style="font-size: 1.2rem; font-weight: 400; color: rgba(255,255,255,0.7);">THB</span></h2>
-                </div>
-                <div class="wallet-progress-container">
-                    <div class="wallet-progress-bar" id="wallet-progress" style="width: 100%;"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <p class="wallet-subtext" style="text-align: left; margin: 0;">From maximum limit of 4,000 THB</p>
-                    <p class="wallet-countdown" id="wallet-countdown" style="font-size: 0.85rem; color: #fbbf24; margin: 0; font-weight: 500;">⏳ คำนวณเวลา...</p>
-                </div>
-            </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="eagle" viewBox="0 0 64 64">
+    <path fill="none" stroke="#c8a23a" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"
+      d="M32 6 L38 16 L52 14 L44 24 L58 30 L44 34 L50 46 L37 42 L32 56 L27 42 L14 46 L20 34 L6 30 L20 24 L12 14 L26 16 Z"/>
+    <circle cx="32" cy="30" r="5" fill="#2a4a86" stroke="#dcc06a" stroke-width="1.6"/>
+  </symbol>
+</svg>
 
-            <!-- Input Section -->
-            <div class="paotang-card input-panel">
-                <div class="input-section">
-                    <label>Item (e.g., Food, Groceries)</label>
-                    <div class="input-wrapper" style="margin-bottom: 15px;">
-                        <input type="text" id="item-name" placeholder="ระบุรายการ..." style="text-align: left; font-size: 1.2rem;" placeholder="Enter item...">
-                    </div>
-                    
-                    <label>Amount (THB)</label>
-                    <div class="input-wrapper">
-                        <input type="number" id="purchase-amount" placeholder="0">
-                        <span class="currency-label">THB</span>
-                    </div>
-
-                    <!-- Quick Add Buttons -->
-                    <div class="quick-add-buttons" style="display: flex; gap: 10px; margin-top: 15px; justify-content: space-between;">
-                        <button class="btn-quick-add" onclick="addAmount(50)">+50</button>
-                        <button class="btn-quick-add" onclick="addAmount(100)">+100</button>
-                        <button class="btn-quick-add" onclick="addAmount(500)">+500</button>
-                    </div>
-                </div>
-
-                <div class="split-grid">
-                    <div class="split-box split-gov">
-                        <p class="split-label">Gov Pays (60%)</p>
-                        <p class="split-amount" id="gov-pays">0.00</p>
-                    </div>
-                    <div class="split-box split-user">
-                        <p class="split-label">You Pay (40%)</p>
-                        <p class="split-amount" id="user-pays">0.00</p>
-                    </div>
-                </div>
-
-                <div class="final-box">
-                    <p class="final-label">Amount to pay via app</p>
-                    <p class="final-amount"><span id="final-amount">0.00</span> ฿</p>
-                </div>
-
-                <button class="btn-primary paotang-btn" id="save-btn" style="width: 100%; margin-top: 15px; padding: 15px; font-size: 1.2rem;">
-                    <span>💸</span> <span>Save Transaction</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Right Side: Timeline History -->
-        <div class="paotang-timeline-container paotang-card">
-            <div class="paotang-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                <h2 style="font-size: 1.5rem; color: #93c5fd; font-weight: 700; margin: 0;">Transaction History</h2>
-                <span class="badge badge-blue">Timeline</span>
-            </div>
-            
-            <div id="history-timeline" class="timeline-wrapper">
-                <!-- Timeline items injected here via JS -->
-            </div>
-            
-            <div class="history-actions" style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px;">
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-secondary paotang-btn" id="export-btn" style="font-size: 0.85rem; padding: 10px; flex: 1;">
-                        📤 Export CSV
-                    </button>
-                    <label class="btn-secondary paotang-btn" style="font-size: 0.85rem; padding: 10px; flex: 1; text-align: center; cursor: pointer; margin: 0; display: block; width: auto;">
-                        📥 Import CSV
-                        <input type="file" id="import-btn" accept=".csv" style="display: none;">
-                    </label>
-                </div>
-                <button class="btn-secondary paotang-btn" id="clear-btn" style="font-size: 0.9rem; padding: 10px; background: rgba(225, 29, 72, 0.2); border: 1px solid rgba(225, 29, 72, 0.4);">
-                    🗑️ <span>Clear All History</span>
-                </button>
-            </div>
-        </div>
+<header>
+  <nav class="nav">
+    <a class="brand" href="index.html#top">
+      <svg class="crest"><use href="#eagle"/></svg>
+      <span>Suwapat Saelee</span>
+    </a>
+    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <div class="nav-links">
+      <a href="index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
+      <a href="index.html#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+      <a href="sortinghats.html" data-en="Sorting Hat" data-th="หมวกคัดสรร">Sorting Hat</a>
+      <a href="life-management/" data-en="Starlit Ledger" data-th="Starlit Ledger">Starlit Ledger</a>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
     </div>
+  </nav>
+</header>
 
-    <script src="nav.js"></script>
-    <script>
+<main class="page wrap">
+  <div class="pao-wrap">
+    <p class="eyebrow" data-en="Projects · Calculator" data-th="ผลงาน · เครื่องคำนวณ">Projects · Calculator</p>
+    <h1 class="page-title" data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h1>
+    <p class="lead" data-en="A co-payment calculator for the state scheme (government 60% : citizen 40%). Track purchases against your monthly government subsidy." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60% : ประชาชน 40%) ติดตามยอดซื้อเทียบกับวงเงินอุดหนุนรายเดือนจากรัฐ">A co-payment calculator for the state scheme (government 60% : citizen 40%). Track purchases against your monthly government subsidy.</p>
 
-        // 1. Get references to our HTML elements
-        const inputElement = document.getElementById('purchase-amount');
-        const govPaysElement = document.getElementById('gov-pays');
-        const userPaysElement = document.getElementById('user-pays');
-        const finalAmountElement = document.getElementById('final-amount');
-        const saveBtn = document.getElementById('save-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const exportBtn = document.getElementById('export-btn');
-        const importBtn = document.getElementById('import-btn');
-        const historyList = document.getElementById('history-timeline');
-        const itemNameInput = document.getElementById('item-name');
-        
-        // Initial Quota State
-        let currentMonthlyQuota = 1000;
-        let transactions = JSON.parse(localStorage.getItem('paotangHistory')) || [];
+    <div class="pao-grid">
+      <!-- Left: dashboard -->
+      <div>
+        <div class="wallet-card">
+          <div class="wallet-header">
+            <span data-en="Thai Chuay Thai Plus" data-th="ไทยช่วยไทย พลัส">Thai Chuay Thai Plus</span>
+            <span class="badge badge-bronze" data-en="1,000 THB / month" data-th="1,000 บาท / เดือน">1,000 THB / month</span>
+          </div>
+          <div class="wallet-balance">
+            <p data-en="Remaining Gov Subsidy This Month" data-th="วงเงินอุดหนุนที่เหลือเดือนนี้">Remaining Gov Subsidy This Month</p>
+            <h2><span id="monthly-quota">1,000.00</span> <span style="font-size:1.05rem;font-weight:400;color:var(--muted)">THB</span></h2>
+          </div>
+          <div class="wallet-progress-container">
+            <div class="wallet-progress-bar" id="wallet-progress" style="width:100%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <p class="wallet-subtext" data-en="From maximum limit of 4,000 THB" data-th="จากวงเงินสูงสุด 4,000 บาท">From maximum limit of 4,000 THB</p>
+            <p class="wallet-countdown" id="wallet-countdown">⏳ …</p>
+          </div>
+        </div>
 
-        function renderHistory() {
-            historyList.innerHTML = '';
-            if (transactions.length === 0) {
-                historyList.innerHTML = '<p style="text-align: center; color: #64748b; font-size: 0.9rem; padding: 20px;"><span>No transaction history</span></p>';
-                return;
-            }
+        <div class="card input-card">
+          <div class="input-section">
+            <label data-en="Item (e.g., Food, Groceries)" data-th="รายการ (เช่น อาหาร, ของใช้)">Item (e.g., Food, Groceries)</label>
+            <div class="input-wrapper" style="margin-bottom:14px">
+              <input type="text" id="item-name" data-en-placeholder="Enter item…" data-th-placeholder="ระบุรายการ…" placeholder="Enter item…" style="text-align:left" />
+            </div>
+            <label data-en="Amount (THB)" data-th="จำนวนเงิน (บาท)">Amount (THB)</label>
+            <div class="input-wrapper">
+              <input type="number" id="purchase-amount" placeholder="0" />
+              <span class="currency-label">THB</span>
+            </div>
+            <div class="quick-add">
+              <button class="btn-quick-add" onclick="addAmount(50)">+50</button>
+              <button class="btn-quick-add" onclick="addAmount(100)">+100</button>
+              <button class="btn-quick-add" onclick="addAmount(500)">+500</button>
+            </div>
+          </div>
 
-            transactions.slice().reverse().forEach((tx, reversedIndex) => {
-                const originalIndex = transactions.length - 1 - reversedIndex;
-                const div = document.createElement('div');
-                div.className = 'timeline-item';
-                div.innerHTML = `
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <span class="timeline-name">${tx.itemName || 'Unspecified Item'}</span>
-                            <div class="timeline-actions" style="display: flex; align-items: center; gap: 10px;">
-                                <span class="timeline-date">${tx.date}</span>
-                                <button onclick="deleteTransaction(${originalIndex})" class="timeline-delete-btn" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1.1rem; padding: 0; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="ลบรายการ">🗑️</button>
-                            </div>
-                        </div>
-                        <div class="timeline-details" style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem;">
-                            <div class="t-amount" style="color: #94a3b8;"><span class="label">${'Total:'}</span> <span class="val">${tx.total} ฿</span></div>
-                            <div class="t-amount gov" style="color: #60a5fa;"><span class="label">${'Gov:'}</span> <span class="val">${tx.govPays} ฿</span></div>
-                            <div class="t-amount user" style="color: #34d399;"><span class="label">${'You:'}</span> <span class="val">${tx.userPays} ฿</span></div>
-                        </div>
-                    </div>
-                `;
-                historyList.appendChild(div);
-            });
-        }
+          <div class="split-grid">
+            <div class="split-box split-gov">
+              <p class="split-label" data-en="Gov Pays (60%)" data-th="รัฐจ่าย (60%)">Gov Pays (60%)</p>
+              <p class="split-amount" id="gov-pays">0.00</p>
+            </div>
+            <div class="split-box split-user">
+              <p class="split-label" data-en="You Pay (40%)" data-th="คุณจ่าย (40%)">You Pay (40%)</p>
+              <p class="split-amount" id="user-pays">0.00</p>
+            </div>
+          </div>
 
-        window.deleteTransaction = function(index) {
-            if(confirm('Are you sure you want to delete this transaction?')) {
-                transactions.splice(index, 1);
-                localStorage.setItem('paotangHistory', JSON.stringify(transactions));
-                calculateInitialQuota();
-                renderHistory();
-            }
-        };
+          <div class="final-box">
+            <p class="final-label" data-en="Amount to pay via app" data-th="ยอดที่ต้องจ่ายผ่านแอป">Amount to pay via app</p>
+            <p class="final-amount"><span id="final-amount">0.00</span> ฿</p>
+          </div>
 
-        function calculateInitialQuota() {
-            const now = new Date();
-            let year = now.getFullYear();
-            let month = now.getMonth();
-            
-            let cycleStart;
-            if (month === 5 && now.getDate() === 1 && now.getHours() < 6) {
-                // June 1 before 6 AM
-                cycleStart = new Date(year, 4, 1, 0, 0, 0); 
-            } else if (month === 5) {
-                // June 1 6 AM onwards
-                cycleStart = new Date(year, 5, 1, 6, 0, 0);
-            } else {
-                // Other months: 1st of the month at midnight
-                cycleStart = new Date(year, month, 1, 0, 0, 0);
-            }
+          <button class="btn btn-primary pao-btn" id="save-btn">
+            <span>💸</span> <span data-en="Save Transaction" data-th="บันทึกรายการ">Save Transaction</span>
+          </button>
+        </div>
+      </div>
 
-            let usedGov = transactions.reduce((sum, tx) => {
-                let txDate = tx.isoDate ? new Date(tx.isoDate) : new Date(); // Fallback to current time if missing
-                if (txDate >= cycleStart) {
-                    return sum + parseFloat(tx.govPays.replace(/,/g, ''));
-                }
-                return sum;
-            }, 0);
+      <!-- Right: history -->
+      <div class="card timeline-card">
+        <div class="pao-header">
+          <h2 data-en="Transaction History" data-th="ประวัติรายการ">Transaction History</h2>
+          <span class="badge badge-blue" data-en="Timeline" data-th="ไทม์ไลน์">Timeline</span>
+        </div>
 
-            currentMonthlyQuota = Math.max(0, 1000 - usedGov);
-            document.getElementById('monthly-quota').innerText = currentMonthlyQuota.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            
-            // Update Progress Bar
-            const progressBar = document.getElementById('wallet-progress');
-            if (progressBar) {
-                const percentage = (currentMonthlyQuota / 1000) * 100;
-                progressBar.style.width = percentage + '%';
-                if (percentage < 20) {
-                    progressBar.style.background = 'linear-gradient(90deg, #ef4444 0%, #f43f5e 100%)';
-                } else {
-                    progressBar.style.background = 'linear-gradient(90deg, #10b981 0%, #34d399 100%)';
-                }
-            }
-        }
-        
-        window.addAmount = function(val) {
-            let current = parseFloat(inputElement.value) || 0;
-            inputElement.value = current + val;
-            inputElement.dispatchEvent(new Event('input'));
-        };
+        <div id="history-timeline" class="timeline-wrapper"></div>
 
-        
-        function startCountdown() {
-            function update() {
-                const now = new Date();
-                let year = now.getFullYear();
-                let month = now.getMonth();
-                
-                let nextCycle;
-                if (month < 5 || (month === 5 && now.getDate() === 1 && now.getHours() < 6)) {
-                    nextCycle = new Date(year, 5, 1, 6, 0, 0); // Next is June 1st 6 AM
-                } else {
-                    nextCycle = new Date(year, month + 1, 1, 0, 0, 0); // Next is 1st of next month midnight
-                }
+        <div class="history-actions">
+          <div class="history-actions-row">
+            <button class="btn-secondary" id="export-btn">📤 <span data-en="Export CSV" data-th="ส่งออก CSV">Export CSV</span></button>
+            <label class="btn-secondary" style="cursor:pointer;margin:0">
+              📥 <span data-en="Import CSV" data-th="นำเข้า CSV">Import CSV</span>
+              <input type="file" id="import-btn" accept=".csv" style="display:none" />
+            </label>
+          </div>
+          <button class="btn-secondary btn-danger" id="clear-btn">🗑️ <span data-en="Clear All History" data-th="ล้างประวัติทั้งหมด">Clear All History</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
-                const diff = nextCycle - now;
-                const el = document.getElementById('wallet-countdown');
-                if (!el) return;
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Suwapat Saelee</span>
+    <a href="index.html#top" data-en="← Back to portfolio" data-th="← กลับสู่พอร์ตโฟลิโอ">← Back to portfolio</a>
+  </div>
+</footer>
 
-                if (diff <= 0) {
-                    el.innerText = '✨ Quota reset! (Please refresh)';
-                    return;
-                }
+<script src="site.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
 
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((diff / 1000 / 60) % 60);
-                
-                let text = '⏳ Next reset in: ';
-                if (days > 0) text += `${days}${' days '}`;
-                if (hours > 0) text += `${hours}${' hrs '}`;
-                text += `${minutes}${' mins'}`;
-                
-                el.innerText = text;
-            }
-            update();
-            setInterval(update, 60000); // Update every minute
-        }
+// --- placeholder i18n (site.js only swaps textContent, not placeholders) ---
+function applyPlaceholders(){
+  var lang = document.documentElement.lang === 'th' ? 'th' : 'en';
+  document.querySelectorAll('[data-en-placeholder]').forEach(function(el){
+    el.placeholder = el.getAttribute('data-' + lang + '-placeholder');
+  });
+}
 
-        // Run on load
-                calculateInitialQuota();
-        // renderHistory is called inside applyLanguage()
-        // startCountdown is called inside applyLanguage()
+// --- dynamic-content i18n dictionary ---
+var L = {
+  en: { noHistory:'No transaction history', total:'Total:', gov:'Gov:', you:'You:',
+        resetSoon:'✨ Quota reset! (please refresh)', nextReset:'⏳ Next reset in: ',
+        days:'d ', hrs:'h ', mins:'m', confirmDelete:'Delete this transaction?',
+        confirmClear:'Clear all history?', invalidAmount:'Please enter a valid amount',
+        noExport:'No data to export', invalidCsv:'Invalid file format (must match exported file)',
+        imported:'Successfully imported {n} items' },
+  th: { noHistory:'ยังไม่มีประวัติรายการ', total:'รวม:', gov:'รัฐ:', you:'คุณ:',
+        resetSoon:'✨ วงเงินรีเซ็ตแล้ว! (กรุณารีเฟรช)', nextReset:'⏳ รีเซ็ตในอีก: ',
+        days:'วัน ', hrs:'ชม. ', mins:'นาที', confirmDelete:'ลบรายการนี้หรือไม่?',
+        confirmClear:'ล้างประวัติทั้งหมดหรือไม่?', invalidAmount:'กรุณาระบุจำนวนเงินที่ถูกต้อง',
+        noExport:'ไม่มีข้อมูลให้ส่งออก', invalidCsv:'รูปแบบไฟล์ไม่ถูกต้อง (ต้องตรงกับไฟล์ที่ส่งออก)',
+        imported:'นำเข้าสำเร็จ {n} รายการ' }
+};
+function t(key){
+  var lang = document.documentElement.lang === 'th' ? 'th' : 'en';
+  return L[lang][key];
+}
+function dateLocale(){ return document.documentElement.lang === 'th' ? 'th-TH' : 'en-GB'; }
 
-        // 2. Listen for typing in the input field
-        inputElement.addEventListener('input', function(e) {
-            let amount = parseFloat(e.target.value) || 0;
-            let calculatedGovShare = amount * 0.60;
-            let actualGovPays = Math.min(calculatedGovShare, currentMonthlyQuota);
-            let actualUserPays = amount - actualGovPays;
+// 1. Element references
+const inputElement = document.getElementById('purchase-amount');
+const govPaysElement = document.getElementById('gov-pays');
+const userPaysElement = document.getElementById('user-pays');
+const finalAmountElement = document.getElementById('final-amount');
+const saveBtn = document.getElementById('save-btn');
+const clearBtn = document.getElementById('clear-btn');
+const exportBtn = document.getElementById('export-btn');
+const importBtn = document.getElementById('import-btn');
+const historyList = document.getElementById('history-timeline');
+const itemNameInput = document.getElementById('item-name');
 
-            govPaysElement.innerText = actualGovPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            userPaysElement.innerText = actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            finalAmountElement.innerText = actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+let currentMonthlyQuota = 1000;
+let transactions = JSON.parse(localStorage.getItem('paotangHistory')) || [];
+
+function renderHistory() {
+  historyList.innerHTML = '';
+  if (transactions.length === 0) {
+    historyList.innerHTML = '<p class="empty-state">' + t('noHistory') + '</p>';
+    return;
+  }
+  transactions.slice().reverse().forEach((tx, reversedIndex) => {
+    const originalIndex = transactions.length - 1 - reversedIndex;
+    const div = document.createElement('div');
+    div.className = 'timeline-item';
+    div.innerHTML = `
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-header">
+          <span class="timeline-name">${tx.itemName || '—'}</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="timeline-date">${tx.date}</span>
+            <button onclick="deleteTransaction(${originalIndex})" class="timeline-delete-btn" title="${t('confirmDelete')}">🗑️</button>
+          </div>
+        </div>
+        <div class="timeline-details">
+          <div class="t-amount"><span class="label">${t('total')}</span> <span class="val">${tx.total} ฿</span></div>
+          <div class="t-amount gov"><span class="label">${t('gov')}</span> <span class="val">${tx.govPays} ฿</span></div>
+          <div class="t-amount user"><span class="label">${t('you')}</span> <span class="val">${tx.userPays} ฿</span></div>
+        </div>
+      </div>
+    `;
+    historyList.appendChild(div);
+  });
+}
+
+window.deleteTransaction = function(index) {
+  if (confirm(t('confirmDelete'))) {
+    transactions.splice(index, 1);
+    localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+    calculateInitialQuota();
+    renderHistory();
+  }
+};
+
+function calculateInitialQuota() {
+  const now = new Date();
+  let year = now.getFullYear();
+  let month = now.getMonth();
+
+  let cycleStart;
+  if (month === 5 && now.getDate() === 1 && now.getHours() < 6) {
+    cycleStart = new Date(year, 4, 1, 0, 0, 0);
+  } else if (month === 5) {
+    cycleStart = new Date(year, 5, 1, 6, 0, 0);
+  } else {
+    cycleStart = new Date(year, month, 1, 0, 0, 0);
+  }
+
+  let usedGov = transactions.reduce((sum, tx) => {
+    let txDate = tx.isoDate ? new Date(tx.isoDate) : new Date();
+    if (txDate >= cycleStart) return sum + parseFloat(tx.govPays.replace(/,/g, ''));
+    return sum;
+  }, 0);
+
+  currentMonthlyQuota = Math.max(0, 1000 - usedGov);
+  document.getElementById('monthly-quota').innerText =
+    currentMonthlyQuota.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+  const progressBar = document.getElementById('wallet-progress');
+  if (progressBar) {
+    const percentage = (currentMonthlyQuota / 1000) * 100;
+    progressBar.style.width = percentage + '%';
+    progressBar.style.background = percentage < 20
+      ? 'linear-gradient(90deg,#e0637a 0%,#e88a9a 100%)'
+      : 'linear-gradient(90deg,#c8a23a 0%,#dcc06a 100%)';
+  }
+}
+
+window.addAmount = function(val) {
+  let current = parseFloat(inputElement.value) || 0;
+  inputElement.value = current + val;
+  inputElement.dispatchEvent(new Event('input'));
+};
+
+function startCountdown() {
+  function update() {
+    const now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth();
+
+    let nextCycle;
+    if (month < 5 || (month === 5 && now.getDate() === 1 && now.getHours() < 6)) {
+      nextCycle = new Date(year, 5, 1, 6, 0, 0);
+    } else {
+      nextCycle = new Date(year, month + 1, 1, 0, 0, 0);
+    }
+
+    const diff = nextCycle - now;
+    const el = document.getElementById('wallet-countdown');
+    if (!el) return;
+
+    if (diff <= 0) { el.innerText = t('resetSoon'); return; }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / 1000 / 60) % 60);
+
+    let text = t('nextReset');
+    if (days > 0) text += `${days}${t('days')}`;
+    if (hours > 0) text += `${hours}${t('hrs')}`;
+    text += `${minutes}${t('mins')}`;
+
+    el.innerText = text;
+  }
+  update();
+  setInterval(update, 60000);
+}
+
+calculateInitialQuota();
+renderHistory();
+startCountdown();
+applyPlaceholders();
+
+inputElement.addEventListener('input', function(e) {
+  let amount = parseFloat(e.target.value) || 0;
+  let calculatedGovShare = amount * 0.60;
+  let actualGovPays = Math.min(calculatedGovShare, currentMonthlyQuota);
+  let actualUserPays = amount - actualGovPays;
+
+  govPaysElement.innerText = actualGovPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  userPaysElement.innerText = actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  finalAmountElement.innerText = actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+});
+
+saveBtn.addEventListener('click', () => {
+  let amount = parseFloat(inputElement.value);
+  if (!amount || amount <= 0) { alert(t('invalidAmount')); return; }
+
+  let calculatedGovShare = amount * 0.60;
+  let actualGovPays = Math.min(calculatedGovShare, currentMonthlyQuota);
+  let actualUserPays = amount - actualGovPays;
+  let name = itemNameInput.value.trim();
+
+  const tx = {
+    itemName: name,
+    total: amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+    govPays: actualGovPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+    userPays: actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+    date: new Date().toLocaleString(dateLocale()),
+    isoDate: new Date().toISOString()
+  };
+
+  transactions.push(tx);
+  localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+
+  calculateInitialQuota();
+  inputElement.value = '';
+  itemNameInput.value = '';
+  inputElement.dispatchEvent(new Event('input'));
+
+  renderHistory();
+});
+
+exportBtn.addEventListener('click', () => {
+  if (transactions.length === 0) { alert(t('noExport')); return; }
+  let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+  csvContent += "Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB),ISO Date\n";
+
+  transactions.forEach(tx => {
+    let name = tx.itemName ? tx.itemName.replace(/"/g, '""') : '';
+    let total = tx.total.replace(/,/g, '');
+    let gov = tx.govPays.replace(/,/g, '');
+    let user = tx.userPays.replace(/,/g, '');
+    let iso = tx.isoDate || '';
+    csvContent += `"${tx.date}","${name}","${total}","${gov}","${user}","${iso}"\n`;
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "paotang_history.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+importBtn.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(event) {
+    const text = event.target.result;
+    const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+
+    if (lines.length > 0) {
+      const header = lines[0].replace(/\uFEFF/g, '');
+      if (!header.includes("Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB)")) {
+        alert(t('invalidCsv'));
+        e.target.value = '';
+        return;
+      }
+    }
+
+    let newTransactions = [];
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      if (values.length >= 5) {
+        const date = values[0].replace(/^"|"$/g, '');
+        const name = values[1].replace(/^"|"$/g, '').replace(/""/g, '"');
+
+        const totalNum = parseFloat(values[2].replace(/^"|"$/g, '')) || 0;
+        const govNum = parseFloat(values[3].replace(/^"|"$/g, '')) || 0;
+        const userNum = parseFloat(values[4].replace(/^"|"$/g, '')) || 0;
+        const isoDate = values.length >= 6 ? values[5].replace(/^"|"$/g, '') : new Date().toISOString();
+
+        newTransactions.push({
+          date, itemName: name,
+          total: totalNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+          govPays: govNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+          userPays: userNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+          isoDate
         });
+      }
+    }
 
-        // 3. Save Button
-        saveBtn.addEventListener('click', () => {
-            let amount = parseFloat(inputElement.value);
-            if (!amount || amount <= 0) {
-                alert('Please enter a valid amount');
-                return;
-            }
+    if (newTransactions.length > 0) {
+      transactions = transactions.concat(newTransactions);
+      localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+      calculateInitialQuota();
+      renderHistory();
+      alert(t('imported').replace('{n}', newTransactions.length));
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
 
-            let calculatedGovShare = amount * 0.60;
-            let actualGovPays = Math.min(calculatedGovShare, currentMonthlyQuota);
-            let actualUserPays = amount - actualGovPays;
-            let name = itemNameInput.value.trim();
+clearBtn.addEventListener('click', () => {
+  if (confirm(t('confirmClear'))) {
+    transactions = [];
+    localStorage.removeItem('paotangHistory');
+    calculateInitialQuota();
+    renderHistory();
+  }
+});
 
-            const tx = {
-                itemName: name,
-                total: amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
-                govPays: actualGovPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
-                userPays: actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
-                date: new Date().toLocaleString('th-TH'),
-                isoDate: new Date().toISOString()
-            };
-
-            transactions.push(tx);
-            localStorage.setItem('paotangHistory', JSON.stringify(transactions));
-            
-            calculateInitialQuota();
-            
-            inputElement.value = '';
-            itemNameInput.value = '';
-            inputElement.dispatchEvent(new Event('input')); // trigger update to zero
-
-            renderHistory();
-        });
-
-        // 4. Export CSV
-        exportBtn.addEventListener('click', () => {
-            if (transactions.length === 0) {
-                alert('No data to export');
-                return;
-            }
-            // CSV Header
-            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-            csvContent += "Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB),ISO Date\n";
-
-            transactions.forEach(tx => {
-                // Escape quotes in strings for CSV
-                let name = tx.itemName ? tx.itemName.replace(/"/g, '""') : '';
-                let total = tx.total.replace(/,/g, '');
-                let gov = tx.govPays.replace(/,/g, '');
-                let user = tx.userPays.replace(/,/g, '');
-                let iso = tx.isoDate || '';
-                
-                let row = `"${tx.date}","${name}","${total}","${gov}","${user}","${iso}"`;
-                csvContent += row + "\n";
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "paotang_history.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-
-        // 5. Import CSV
-        importBtn.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const text = event.target.result;
-                const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
-                
-                if (lines.length > 0) {
-                    const header = lines[0].replace(/\uFEFF/g, ''); 
-                    if (!header.includes("Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB)")) {
-                        alert('Invalid file format (must match exported file)');
-                        e.target.value = ''; 
-                        return;
-                    }
-                }
-
-                let newTransactions = [];
-                for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i];
-                    // Regex to split by comma but ignore commas inside quotes
-                    const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    if (values.length >= 5) {
-                        const date = values[0].replace(/^"|"$/g, '');
-                        const name = values[1].replace(/^"|"$/g, '').replace(/""/g, '"');
-                        
-                        const totalNum = parseFloat(values[2].replace(/^"|"$/g, '')) || 0;
-                        const govNum = parseFloat(values[3].replace(/^"|"$/g, '')) || 0;
-                        const userNum = parseFloat(values[4].replace(/^"|"$/g, '')) || 0;
-                        const isoDate = values.length >= 6 ? values[5].replace(/^"|"$/g, '') : new Date().toISOString();
-
-                        newTransactions.push({
-                            date: date,
-                            itemName: name,
-                            total: totalNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
-                            govPays: govNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
-                            userPays: userNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
-                            isoDate: isoDate
-                        });
-                    }
-                }
-
-                if (newTransactions.length > 0) {
-                    transactions = transactions.concat(newTransactions);
-                    localStorage.setItem('paotangHistory', JSON.stringify(transactions));
-                    calculateInitialQuota();
-                    renderHistory();
-                    alert('Successfully imported {n} items'.replace('{n}', newTransactions.length));
-                }
-                
-                e.target.value = ''; 
-            };
-            
-            reader.readAsText(file);
-        });
-
-        // 6. Clear Button
-        clearBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all history?')) {
-                transactions = [];
-                localStorage.removeItem('paotangHistory');
-                calculateInitialQuota();
-                renderHistory();
-            }
-        });
-    </script>
+// re-render dynamic (JS-authored) text whenever the shared language toggle fires
+document.addEventListener('DOMContentLoaded', function(){
+  var origToggle = window.toggleLang;
+  window.toggleLang = function(){
+    origToggle();
+    applyPlaceholders();
+    renderHistory();
+  };
+});
+</script>
 </body>
 </html>
