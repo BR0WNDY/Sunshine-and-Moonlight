@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suwapat Saelee — Front-End Developer</title>
+<meta name="description" content="Portfolio of Suwapat Saelee, a Front-End Developer and Computer Science student based in Bangkok." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#070d1f;          /* deepest midnight */
+    --night:#0c1730;        /* raised panel */
+    --night-2:#101f42;      /* card */
+    --line:rgba(200,163,58,.18);
+    --ravenclaw:#2a4a86;    /* house blue */
+    --ravenclaw-bright:#4f79c9;
+    --bronze:#c8a23a;       /* house metal */
+    --bronze-soft:#dcc06a;
+    --silver:#c3cee0;
+    --parchment:#eef2fb;
+    --muted:#8fa1c4;
+    --font-display:'Cormorant Garamond', 'IBM Plex Sans Thai', Georgia, serif;
+    --font-body:'Inter','IBM Plex Sans Thai',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono','IBM Plex Sans Thai',monospace;
+    --maxw:1080px;
+  }
+  html.lang-th{ --font-display:'IBM Plex Sans Thai',sans-serif; }
+  html.lang-th body{ font-family:'IBM Plex Sans Thai',sans-serif; }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink);
+    color:var(--parchment);
+    font-family:var(--font-body);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- ambient starfield ---------- */
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1px 1px at 20% 30%, rgba(220,192,106,.7), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(195,206,224,.6), transparent),
+      radial-gradient(1.5px 1.5px at 40% 80%, rgba(220,192,106,.5), transparent),
+      radial-gradient(1px 1px at 85% 25%, rgba(195,206,224,.55), transparent),
+      radial-gradient(1px 1px at 55% 15%, rgba(220,192,106,.5), transparent),
+      radial-gradient(1px 1px at 12% 70%, rgba(195,206,224,.5), transparent),
+      radial-gradient(1px 1px at 90% 80%, rgba(220,192,106,.45), transparent);
+    background-repeat:no-repeat;
+    animation:twinkle 6s ease-in-out infinite alternate;
+  }
+  .glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(900px 500px at 78% -5%, rgba(42,74,134,.45), transparent 60%),
+      radial-gradient(700px 500px at 5% 100%, rgba(42,74,134,.28), transparent 60%);
+  }
+  @keyframes twinkle{from{opacity:.55}to{opacity:1}}
+
+  .wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* ---------- nav ---------- */
+  header{position:sticky;top:0;z-index:50;
+    background:rgba(7,13,31,.72);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px;
+    max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--font-display);
+    font-size:1.28rem;letter-spacing:.3px}
+  .brand .crest{width:30px;height:30px;flex:0 0 auto}
+  .nav-links{display:flex;align-items:center;gap:28px}
+  .nav-links a{font-size:.82rem;letter-spacing:.4px;color:var(--silver);
+    transition:color .2s}
+  .nav-links a:hover{color:var(--bronze-soft)}
+  .lang-btn{font-family:var(--font-mono);font-size:.74rem;letter-spacing:1px;
+    color:var(--bronze-soft);border:1px solid var(--line);background:transparent;
+    padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
+  .lang-btn:hover{border-color:var(--bronze);color:var(--bronze)}
+  .menu-toggle{display:none;background:none;border:0;color:var(--parchment);
+    font-size:1.5rem;cursor:pointer}
+
+  /* ---------- shared ---------- */
+  .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;
+    text-transform:uppercase;color:var(--bronze);display:flex;align-items:center;
+    gap:10px;margin-bottom:18px}
+  .eyebrow::before{content:"✦";color:var(--bronze);font-size:.9rem}
+  section{padding:96px 0;position:relative;z-index:2}
+  h2{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,4vw,2.9rem);
+    line-height:1.1;margin-bottom:22px}
+  .lead{color:var(--silver);max-width:60ch;font-size:1.05rem}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);
+    max-width:var(--maxw);margin:0 auto}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(70px,11vw,120px) 0 clamp(60px,8vw,96px)}
+  .hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:center}
+  .motto{font-family:var(--font-display);font-style:italic;color:var(--bronze-soft);
+    font-size:1.05rem;margin-bottom:20px;letter-spacing:.3px}
+  .hero h1{font-family:var(--font-display);font-weight:600;
+    font-size:clamp(2.9rem,7vw,5rem);line-height:1;margin-bottom:10px;
+    background:linear-gradient(180deg,#fff, #cfe0ff 70%);-webkit-background-clip:text;
+    background-clip:text;color:transparent}
+  .hero .role{font-family:var(--font-mono);font-size:.95rem;letter-spacing:1.5px;
+    color:var(--bronze);text-transform:uppercase;margin-bottom:26px}
+  .hero .tagline{color:var(--silver);font-size:1.12rem;max-width:46ch;margin-bottom:34px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{font-family:var(--font-mono);font-size:.82rem;letter-spacing:.8px;
+    padding:13px 26px;border-radius:8px;transition:.2s;cursor:pointer;border:1px solid transparent}
+  .btn-primary{background:var(--bronze);color:#1a1405;font-weight:600}
+  .btn-primary:hover{background:var(--bronze-soft);transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line);color:var(--silver)}
+  .btn-ghost:hover{border-color:var(--bronze);color:var(--bronze-soft)}
+
+  .portrait{position:relative;justify-self:center}
+  .portrait-frame{width:270px;height:270px;border-radius:50%;position:relative;
+    display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 35%, var(--ravenclaw), var(--night) 70%);
+    border:1px solid var(--line);box-shadow:0 0 0 8px rgba(42,74,134,.12),0 30px 60px -20px rgba(0,0,0,.7)}
+  .portrait-frame img{width:246px;height:246px;border-radius:50%;object-fit:cover}
+  .ring{position:absolute;inset:-16px;border-radius:50%;border:1px dashed rgba(200,163,58,.35);
+    animation:spin 40s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .crest-fallback{width:150px;height:150px}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+  .facts{display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--line);
+    padding-left:26px}
+  .fact{display:flex;justify-content:space-between;gap:16px;padding:12px 0;
+    border-bottom:1px solid rgba(200,163,58,.09)}
+  .fact .k{font-family:var(--font-mono);font-size:.75rem;letter-spacing:1px;
+    text-transform:uppercase;color:var(--muted)}
+  .fact .v{color:var(--parchment);text-align:right}
+
+  /* ---------- skills ---------- */
+  .skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .skill-card{background:var(--night);border:1px solid var(--line);border-radius:14px;
+    padding:24px 22px;transition:.25s}
+  .skill-card:hover{border-color:rgba(200,163,58,.4);transform:translateY(-3px);
+    background:var(--night-2)}
+  .skill-card h3{font-family:var(--font-mono);font-size:.78rem;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--bronze-soft);margin-bottom:16px}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{font-size:.82rem;color:var(--silver);background:rgba(42,74,134,.28);
+    border:1px solid rgba(79,121,201,.25);padding:5px 11px;border-radius:7px}
+
+  /* ---------- projects ---------- */
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+  .proj{background:linear-gradient(180deg,var(--night-2),var(--night));
+    border:1px solid var(--line);border-radius:16px;padding:28px 26px;
+    display:flex;flex-direction:column;transition:.28s;position:relative;overflow:hidden}
+  .proj::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--bronze),transparent);opacity:.55}
+  .proj:hover{transform:translateY(-5px);border-color:rgba(200,163,58,.42);
+    box-shadow:0 24px 48px -24px rgba(0,0,0,.8)}
+  .proj .icon{font-size:1.7rem;margin-bottom:16px}
+  .proj h3{font-family:var(--font-display);font-size:1.5rem;font-weight:600;margin-bottom:10px}
+  .proj p{color:var(--silver);font-size:.94rem;margin-bottom:20px;flex:1}
+  .proj .stack{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.6px;
+    color:var(--muted);margin-bottom:18px}
+  .proj .link{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.8px;
+    color:var(--bronze-soft);display:inline-flex;align-items:center;gap:7px}
+  .proj .link:hover{color:var(--bronze)}
+  .proj .link .arr{transition:.2s}
+  .proj:hover .link .arr{transform:translateX(4px)}
+
+  /* ---------- services ---------- */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
+  .svc{background:var(--night);border:1px solid var(--line);border-radius:16px;
+    padding:30px 26px;position:relative;display:flex;flex-direction:column}
+  .svc.featured{border-color:rgba(200,163,58,.5);
+    background:linear-gradient(180deg,rgba(42,74,134,.25),var(--night))}
+  .svc .badge{position:absolute;top:-11px;right:22px;font-family:var(--font-mono);
+    font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:#1a1405;
+    background:var(--bronze);padding:4px 12px;border-radius:999px}
+  .svc .tier{font-family:var(--font-mono);font-size:.74rem;letter-spacing:2px;
+    text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
+  .svc h3{font-family:var(--font-display);font-size:1.55rem;font-weight:600;
+    margin-bottom:14px;line-height:1.15}
+  .svc p.svc-for{color:var(--silver);font-size:.9rem;margin-bottom:20px}
+  .svc-meta{list-style:none;margin:0 0 22px;border-top:1px solid rgba(200,163,58,.12)}
+  .svc-meta li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;
+    border-bottom:1px solid rgba(200,163,58,.10);font-size:.88rem}
+  .svc-meta .k{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.8px;
+    text-transform:uppercase;color:var(--muted)}
+  .svc-meta .v{color:var(--parchment);font-weight:500}
+  .svc .price{font-family:var(--font-display);font-size:2.3rem;font-weight:600;
+    color:#fff;margin:auto 0 20px;line-height:1}
+  .svc .price small{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;
+    color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;font-weight:400}
+  .svc .svc-btn{width:100%;text-align:center;justify-content:center}
+  .hire-wrap{text-align:center;margin-top:46px}
+  .hire-btn{display:inline-flex;align-items:center;gap:11px;font-family:var(--font-mono);
+    font-size:.95rem;letter-spacing:.8px;background:var(--bronze);color:#1a1405;font-weight:600;
+    padding:17px 40px;border-radius:11px;transition:.2s;border:1px solid var(--bronze)}
+  .hire-btn:hover{background:var(--bronze-soft);transform:translateY(-2px);
+    box-shadow:0 18px 38px -16px rgba(200,162,58,.65)}
+  .hire-btn .arr{transition:transform .2s}
+  .hire-btn:hover .arr{transform:translate(3px,-3px)}
+  .hire-note{color:var(--muted);font-size:.82rem;margin-top:15px;
+    font-family:var(--font-mono);letter-spacing:.3px}
+
+  /* ---------- contact ---------- */
+  .contact{text-align:center}
+  .contact h2{margin-bottom:16px}
+  .contact .lead{margin:0 auto 34px}
+  .contact-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index:2}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    color:var(--muted);font-size:.82rem;font-family:var(--font-mono);letter-spacing:.4px}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .portrait{order:-1}
+    .about-grid{grid-template-columns:1fr;gap:32px}
+    .skills-grid{grid-template-columns:repeat(2,1fr)}
+    .proj-grid,.svc-grid{grid-template-columns:1fr}
+    .nav-links{position:fixed;inset:66px 0 auto 0;flex-direction:column;
+      background:rgba(7,13,31,.97);padding:24px;gap:20px;border-bottom:1px solid var(--line);
+      transform:translateY(-140%);transition:transform .3s;align-items:flex-start}
+    .nav-links.open{transform:translateY(0)}
+    .menu-toggle{display:block}
+  }
+  @media(max-width:480px){ .skills-grid{grid-template-columns:1fr} section{padding:70px 0} }
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+
+<!-- eagle crest reused as SVG -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="eagle" viewBox="0 0 64 64">
+    <path fill="none" stroke="#c8a23a" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"
+      d="M32 6 L38 16 L52 14 L44 24 L58 30 L44 34 L50 46 L37 42 L32 56 L27 42 L14 46 L20 34 L6 30 L20 24 L12 14 L26 16 Z"/>
+    <circle cx="32" cy="30" r="5" fill="#2a4a86" stroke="#dcc06a" stroke-width="1.6"/>
+  </symbol>
+</svg>
+
+<header>
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <svg class="crest"><use href="#eagle"/></svg>
+      <span>Suwapat Saelee</span>
+    </a>
+    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <div class="nav-links">
+      <a href="#about" data-en="About" data-th="เกี่ยวกับ">About</a>
+      <a href="#skills" data-en="Skills" data-th="ทักษะ">Skills</a>
+      <a href="#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+      <a href="#services" data-en="Services" data-th="บริการ">Services</a>
+      <a href="#contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="motto" data-en="“Wit beyond measure is man's greatest treasure.”" data-th="“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”">“Wit beyond measure is man's greatest treasure.”</p>
+        <h1>Suwapat Saelee</h1>
+        <p class="role" data-en="Front-End Developer · Computer Science" data-th="นักพัฒนา Front-End · วิทยาการคอมพิวเตอร์">Front-End Developer · Computer Science</p>
+        <p class="tagline" data-en="I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail." data-th="ผมสร้างเว็บที่สะอาด เรียบง่าย และใช้งานได้จริง ด้วยความละเอียดในแบบเรเวนคลอว์">I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me" data-th="จ้างงานผม">Hire Me</a>
+          <a class="btn btn-ghost" href="#projects" data-en="View Projects" data-th="ดูผลงาน">View Projects</a>
+        </div>
+      </div>
+      <div class="portrait">
+        <div class="ring"></div>
+        <div class="portrait-frame">
+          <img src="images/Me.jpeg" alt="Suwapat Saelee"
+            onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<svg class=\'crest-fallback\'><use href=\'#eagle\'/></svg>')" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about" class="wrap">
+    <p class="eyebrow" data-en="About" data-th="เกี่ยวกับ">About</p>
+    <div class="about-grid">
+      <div>
+        <h2 data-en="A developer who thinks before casting the spell." data-th="นักพัฒนาที่คิดให้รอบคอบก่อนลงมือ">A developer who thinks before casting the spell.</h2>
+        <p class="lead" data-en="I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software — from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project." data-th="ผมเป็นนักศึกษาวิทยาการคอมพิวเตอร์ในกรุงเทพฯ และรับงานพัฒนาเว็บแบบฟรีแลนซ์ ผมชอบเปลี่ยนไอเดียให้กลายเป็นซอฟต์แวร์ที่ใช้งานได้จริง ตั้งแต่เว็บไซต์ที่รองรับทุกหน้าจอ ไปจนถึงเครื่องมือเล็ก ๆ ที่ช่วยแก้ปัญหา ผมใส่ใจโค้ดที่สะอาด โครงสร้างที่ดี และเรียนรู้สิ่งใหม่ในทุกโปรเจกต์">I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software — from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><span class="k" data-en="Location" data-th="ที่ตั้ง">Location</span><span class="v" data-en="Bangkok, Thailand" data-th="กรุงเทพฯ ประเทศไทย">Bangkok, Thailand</span></div>
+        <div class="fact"><span class="k" data-en="Focus" data-th="สายงาน">Focus</span><span class="v" data-en="Web Development" data-th="พัฒนาเว็บ">Web Development</span></div>
+        <div class="fact"><span class="k" data-en="Studying" data-th="กำลังศึกษา">Studying</span><span class="v" data-en="Computer Science" data-th="วิทยาการคอมพิวเตอร์">Computer Science</span></div>
+        <div class="fact"><span class="k" data-en="House" data-th="บ้าน">House</span><span class="v" data-en="Ravenclaw 🦅" data-th="เรเวนคลอว์ 🦅">Ravenclaw 🦅</span></div>
+        <div class="fact"><span class="k" data-en="Availability" data-th="สถานะ">Availability</span><span class="v" data-en="Open to work" data-th="เปิดรับงาน">Open to work</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills" class="wrap">
+    <p class="eyebrow" data-en="Skills" data-th="ทักษะ">Skills</p>
+    <h2 data-en="What I work with" data-th="เครื่องมือที่ผมใช้">What I work with</h2>
+    <div class="skills-grid" style="margin-top:36px">
+      <div class="skill-card">
+        <h3 data-en="Languages" data-th="ภาษาโปรแกรม">Languages</h3>
+        <div class="tags"><span class="tag">Java</span><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">SQL</span></div>
+      </div>
+      <div class="skill-card">
+        <h3 data-en="Web" data-th="เว็บ">Web</h3>
+        <div class="tags"><span class="tag" data-en="Responsive Design" data-th="รองรับทุกจอ">Responsive Design</span><span class="tag">PyScript</span><span class="tag">REST APIs</span><span class="tag">Git</span></div>
+      </div>
+      <div class="skill-card">
+        <h3 data-en="Data & ML" data-th="ข้อมูล & ML">Data & ML</h3>
+        <div class="tags"><span class="tag" data-en="Data Analysis" data-th="วิเคราะห์ข้อมูล">Data Analysis</span><span class="tag">scikit-learn</span><span class="tag" data-en="Clustering" data-th="Clustering">Clustering</span><span class="tag" data-en="Algorithms" data-th="อัลกอริทึม">Algorithms</span></div>
+      </div>
+      <div class="skill-card">
+        <h3 data-en="Tools" data-th="เครื่องมือ">Tools</h3>
+        <div class="tags"><span class="tag">Docker</span><span class="tag">Linux</span><span class="tag">GitHub</span><span class="tag">Packet Tracer</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="wrap">
+    <p class="eyebrow" data-en="Projects" data-th="ผลงาน">Projects</p>
+    <h2 data-en="Things I've built" data-th="ผลงานที่ผมสร้าง">Things I've built</h2>
+    <div class="proj-grid" style="margin-top:36px">
+      <article class="proj">
+        <div class="icon">🌙</div>
+        <h3 data-en="Portfolio Website" data-th="เว็บพอร์ตโฟลิโอ">Portfolio Website</h3>
+        <p data-en="This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive." data-th="เว็บนี้เอง — พอร์ตโฟลิโอสองภาษาธีมเรเวนคลอว์ สร้างเองทั้งหมดและรองรับทุกหน้าจอ">This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive.</p>
+        <div class="stack">HTML · CSS · JavaScript</div>
+        <a class="link" href="#top" data-en="View" data-th="ดูผลงาน">View <span class="arr">→</span></a>
+      </article>
+      <article class="proj">
+        <div class="icon">🧙</div>
+        <h3 data-en="The Sorting Hat" data-th="หมวกคัดสรร">The Sorting Hat</h3>
+        <p data-en="An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house." data-th="แอป Python เชิงโต้ตอบที่รันบนเบราว์เซอร์ด้วย PyScript เพื่อจัดคุณเข้าบ้านฮอกวอตส์">An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house.</p>
+        <div class="stack">Python · PyScript</div>
+        <a class="link" href="sortinghats.html" data-en="Launch App" data-th="เปิดใช้งาน">Launch App <span class="arr">→</span></a>
+      </article>
+      <article class="proj">
+        <div class="icon">📱</div>
+        <h3 data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h3>
+        <p data-en="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60 : ประชาชน 40) ช่วยประเมินยอดที่ต้องจ่าย">A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share.</p>
+        <div class="stack">HTML · CSS · JavaScript</div>
+        <a class="link" href="paotang.html" data-en="Launch App" data-th="เปิดใช้งาน">Launch App <span class="arr">→</span></a>
+      </article>
+      <article class="proj">
+        <div class="icon">📊</div>
+        <h3 data-en="Starlit Ledger" data-th="Starlit Ledger">Starlit Ledger</h3>
+        <p data-en="A personal life-management dashboard for money, debts, homework, sales and habits — built in React with charts and offline local persistence." data-th="แดชบอร์ดจัดการชีวิตส่วนตัว ครอบคลุมการเงิน หนี้สิน การบ้าน งานขาย และนิสัย สร้างด้วย React พร้อมกราฟและบันทึกข้อมูลในเครื่อง">A personal life-management dashboard for money, debts, homework, sales and habits — built in React with charts and offline local persistence.</p>
+        <div class="stack">React · Recharts</div>
+        <a class="link" href="life-management/" data-en="Launch App" data-th="เปิดใช้งาน">Launch App <span class="arr">→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SERVICES -->
+  <section id="services" class="wrap">
+    <p class="eyebrow" data-en="Freelance Services · Fastwork" data-th="บริการฟรีแลนซ์ · Fastwork">Freelance Services · Fastwork</p>
+    <h2 data-en="Web development, three packages" data-th="รับพัฒนาเว็บ สามแพ็กเกจ">Web development, three packages</h2>
+    <div class="svc-grid" style="margin-top:36px">
+
+      <div class="svc">
+        <p class="tier">Basic</p>
+        <h3 data-en="Landing Page / Portfolio" data-th="Landing Page / Portfolio">Landing Page / Portfolio</h3>
+        <p class="svc-for" data-en="For a personal résumé site, a portfolio to showcase your work, or a landing page to promote a campaign." data-th="เหมาะสำหรับ: เว็บไซต์เรซูเม่ส่วนตัว, พอร์ตโฟลิโอนำเสนอผลงาน หรือหน้า Landing Page สำหรับโปรโมทแคมเปญ">For a personal résumé site, a portfolio to showcase your work, or a landing page to promote a campaign.</p>
+        <ul class="svc-meta">
+          <li><span class="k" data-en="Delivery" data-th="ระยะเวลา">Delivery</span><span class="v" data-en="5 days" data-th="5 วัน">5 days</span></li>
+          <li><span class="k" data-en="Revisions" data-th="แก้ไขงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
+        </ul>
+        <p class="price"><small data-en="Starting at" data-th="เริ่มต้น">Starting at</small>฿2,500</p>
+      </div>
+
+      <div class="svc featured">
+        <span class="badge" data-en="Popular" data-th="ยอดนิยม">Popular</span>
+        <p class="tier">Standard</p>
+        <h3 data-en="Corporate / Multi-page Website" data-th="Corporate / Multi-page Website แบบจัดเต็ม">Corporate / Multi-page Website</h3>
+        <p class="svc-for" data-en="For a company profile, a small business, or a multi-page site that needs clear, well-organised sections." data-th="เหมาะสำหรับ: เว็บไซต์โปรไฟล์บริษัท, ธุรกิจขนาดย่อม หรือเว็บนำเสนอผลงานที่ต้องการแบ่งหมวดหมู่ชัดเจน">For a company profile, a small business, or a multi-page site that needs clear, well-organised sections.</p>
+        <ul class="svc-meta">
+          <li><span class="k" data-en="Delivery" data-th="ระยะเวลา">Delivery</span><span class="v" data-en="10 days" data-th="10 วัน">10 days</span></li>
+          <li><span class="k" data-en="Revisions" data-th="แก้ไขงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
+        </ul>
+        <p class="price"><small data-en="Starting at" data-th="เริ่มต้น">Starting at</small>฿5,500</p>
+      </div>
+
+      <div class="svc">
+        <p class="tier">Premium</p>
+        <h3 data-en="Web App / E-commerce" data-th="Web Application / E-commerce แบบมีระบบหลังบ้าน">Web App / E-commerce</h3>
+        <p class="svc-for" data-en="For online stores, booking or appointment systems, sites that store user data, or businesses that manage their own content through an admin dashboard." data-th="เหมาะสำหรับ: ร้านค้าออนไลน์, ระบบจองคิว/นัดหมาย, เว็บที่ต้องเก็บข้อมูลผู้ใช้ หรือธุรกิจที่ต้องการจัดการข้อมูลเองผ่านหน้าแอดมิน">For online stores, booking or appointment systems, sites that store user data, or businesses that manage their own content through an admin dashboard.</p>
+        <ul class="svc-meta">
+          <li><span class="k" data-en="Delivery" data-th="ระยะเวลา">Delivery</span><span class="v" data-en="25 days" data-th="25 วัน">25 days</span></li>
+          <li><span class="k" data-en="Revisions" data-th="แก้ไขงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
+        </ul>
+        <p class="price"><small data-en="Starting at" data-th="เริ่มต้น">Starting at</small>฿13,500</p>
+      </div>
+
+    </div>
+
+    <div class="hire-wrap">
+      <a class="hire-btn" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me on Fastwork ↗" data-th="จ้างงานผ่าน Fastwork ↗">Hire Me on Fastwork ↗</a>
+      <p class="hire-note" data-en="Secure payment &amp; escrow through Fastwork · Reply within 24 hours" data-th="ชำระเงินปลอดภัยผ่าน Fastwork · ตอบกลับภายใน 24 ชม.">Secure payment &amp; escrow through Fastwork · Reply within 24 hours</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="wrap contact">
+    <p class="eyebrow" style="justify-content:center" data-en="Contact" data-th="ติดต่อ">Contact</p>
+    <h2 data-en="Send a scroll" data-th="ส่งข้อความหาผม">Send a scroll</h2>
+    <p class="lead" data-en="Looking for a developer, or want to talk about a project? I'd be glad to hear from you." data-th="กำลังมองหานักพัฒนา หรืออยากคุยเรื่องโปรเจกต์? ยินดีรับฟังเสมอครับ">Looking for a developer, or want to talk about a project? I'd be glad to hear from you.</p>
+    <div class="contact-links">
+      <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me on Fastwork" data-th="จ้างงานผมบน Fastwork">Hire Me on Fastwork</a>
+      <a class="btn btn-ghost" href="mailto:browndy_moconi@icloud.com">✉ Email</a>
+      <a class="btn btn-ghost" href="https://github.com/BR0WNDY" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Suwapat Saelee</span>
+    <span data-en="Built with code, coffee & Ravenclaw wit." data-th="สร้างด้วยโค้ด กาแฟ และไหวพริบแบบเรเวนคลอว์">Built with code, coffee & Ravenclaw wit.</span>
+  </div>
+</footer>
+
+<script>
+  var lang = 'en';
+  function applyLang(){
+    document.documentElement.lang = lang;
+    document.documentElement.classList.toggle('lang-th', lang === 'th');
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      var t = el.getAttribute('data-' + lang);
+      if(t !== null) el.textContent = t;
+    });
+    document.getElementById('langBtn').textContent = (lang === 'en') ? 'TH ◇ EN' : 'EN ◇ TH';
+  }
+  function toggleLang(){ lang = (lang === 'en') ? 'th' : 'en'; applyLang(); }
+  document.getElementById('year').textContent = new Date().getFullYear();
+  // close mobile menu on link click
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    a.addEventListener('click', function(){ document.querySelector('.nav-links').classList.remove('open'); });
+  });
+  applyLang();
+</script>
+</body>
+</html>

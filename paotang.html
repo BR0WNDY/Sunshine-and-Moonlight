@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Co-Pay Calculator | Sunshine and Moonlights</title>
+    <link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="logo-text">Project Sunshine and Moonlights</div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="menu">
+            <li class="menu-item"><a href="index.html">Home</a></li>
+            <li class="menu-item"><a href="soon2.html">Coming Soon</a></li>
+            <li class="menu-item"><a href="projects.html">Projects</a></li>
+            <li class="menu-item"><a href="blog.html">Blog</a></li>
+            <li class="menu-item"><a href="about.html">About</a></li>
+            <li class="menu-item lang-switch">
+                <a href="paotang-th.html" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 5px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; margin-left: 10px; transition: all 0.2s; text-decoration: none; display: inline-block;">🇬🇧 EN</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="projects-layout paotang-container">
+        <!-- Left Side: Dashboard -->
+        <div class="paotang-dashboard">
+            <!-- Digital Wallet Card -->
+            <div class="digital-wallet-card">
+                <div class="wallet-header">
+                    <span>Thai Chuai Thai <span class="highlight-green">Plus</span></span></span>
+                    <span class="badge badge-red">1,000 THB/Month</span>
+                </div>
+                <div class="wallet-balance">
+                    <p>Remaining Gov Subsidy This Month</p>
+                    <h2><span id="monthly-quota">1,000.00</span> <span style="font-size: 1.2rem; font-weight: 400; color: rgba(255,255,255,0.7);">THB</span></h2>
+                </div>
+                <div class="wallet-progress-container">
+                    <div class="wallet-progress-bar" id="wallet-progress" style="width: 100%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p class="wallet-subtext" style="text-align: left; margin: 0;">From maximum limit of 4,000 THB</p>
+                    <p class="wallet-countdown" id="wallet-countdown" style="font-size: 0.85rem; color: #fbbf24; margin: 0; font-weight: 500;">⏳ คำนวณเวลา...</p>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="paotang-card input-panel">
+                <div class="input-section">
+                    <label>Item (e.g., Food, Groceries)</label>
+                    <div class="input-wrapper" style="margin-bottom: 15px;">
+                        <input type="text" id="item-name" placeholder="ระบุรายการ..." style="text-align: left; font-size: 1.2rem;" placeholder="Enter item...">
+                    </div>
+                    
+                    <label>Amount (THB)</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="purchase-amount" placeholder="0">
+                        <span class="currency-label">THB</span>
+                    </div>
+
+                    <!-- Quick Add Buttons -->
+                    <div class="quick-add-buttons" style="display: flex; gap: 10px; margin-top: 15px; justify-content: space-between;">
+                        <button class="btn-quick-add" onclick="addAmount(50)">+50</button>
+                        <button class="btn-quick-add" onclick="addAmount(100)">+100</button>
+                        <button class="btn-quick-add" onclick="addAmount(500)">+500</button>
+                    </div>
+                </div>
+
+                <div class="split-grid">
+                    <div class="split-box split-gov">
+                        <p class="split-label">Gov Pays (60%)</p>
+                        <p class="split-amount" id="gov-pays">0.00</p>
+                    </div>
+                    <div class="split-box split-user">
+                        <p class="split-label">You Pay (40%)</p>
+                        <p class="split-amount" id="user-pays">0.00</p>
+                    </div>
+                </div>
+
+                <div class="final-box">
+                    <p class="final-label">Amount to pay via app</p>
+                    <p class="final-amount"><span id="final-amount">0.00</span> ฿</p>
+                </div>
+
+                <button class="btn-primary paotang-btn" id="save-btn" style="width: 100%; margin-top: 15px; padding: 15px; font-size: 1.2rem;">
+                    <span>💸</span> <span>Save Transaction</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Side: Timeline History -->
+        <div class="paotang-timeline-container paotang-card">
+            <div class="paotang-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.5rem; color: #93c5fd; font-weight: 700; margin: 0;">Transaction History</h2>
+                <span class="badge badge-blue">Timeline</span>
+            </div>
+            
+            <div id="history-timeline" class="timeline-wrapper">
+                <!-- Timeline items injected here via JS -->
+            </div>
+            
+            <div class="history-actions" style="margin-top: 30px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-secondary paotang-btn" id="export-btn" style="font-size: 0.85rem; padding: 10px; flex: 1;">
+                        📤 Export CSV
+                    </button>
+                    <label class="btn-secondary paotang-btn" style="font-size: 0.85rem; padding: 10px; flex: 1; text-align: center; cursor: pointer; margin: 0; display: block; width: auto;">
+                        📥 Import CSV
+                        <input type="file" id="import-btn" accept=".csv" style="display: none;">
+                    </label>
+                </div>
+                <button class="btn-secondary paotang-btn" id="clear-btn" style="font-size: 0.9rem; padding: 10px; background: rgba(225, 29, 72, 0.2); border: 1px solid rgba(225, 29, 72, 0.4);">
+                    🗑️ <span>Clear All History</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script>
+
+        // 1. Get references to our HTML elements
+        const inputElement = document.getElementById('purchase-amount');
+        const govPaysElement = document.getElementById('gov-pays');
+        const userPaysElement = document.getElementById('user-pays');
+        const finalAmountElement = document.getElementById('final-amount');
+        const saveBtn = document.getElementById('save-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const historyList = document.getElementById('history-timeline');
+        const itemNameInput = document.getElementById('item-name');
+        
+        // Initial Quota State
+        let currentMonthlyQuota = 1000;
+        let transactions = JSON.parse(localStorage.getItem('paotangHistory')) || [];
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            if (transactions.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #64748b; font-size: 0.9rem; padding: 20px;"><span>No transaction history</span></p>';
+                return;
+            }
+
+            transactions.slice().reverse().forEach((tx, reversedIndex) => {
+                const originalIndex = transactions.length - 1 - reversedIndex;
+                const div = document.createElement('div');
+                div.className = 'timeline-item';
+                div.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span class="timeline-name">${tx.itemName || 'Unspecified Item'}</span>
+                            <div class="timeline-actions" style="display: flex; align-items: center; gap: 10px;">
+                                <span class="timeline-date">${tx.date}</span>
+                                <button onclick="deleteTransaction(${originalIndex})" class="timeline-delete-btn" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1.1rem; padding: 0; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'" title="ลบรายการ">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="timeline-details" style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem;">
+                            <div class="t-amount" style="color: #94a3b8;"><span class="label">${'Total:'}</span> <span class="val">${tx.total} ฿</span></div>
+                            <div class="t-amount gov" style="color: #60a5fa;"><span class="label">${'Gov:'}</span> <span class="val">${tx.govPays} ฿</span></div>
+                            <div class="t-amount user" style="color: #34d399;"><span class="label">${'You:'}</span> <span class="val">${tx.userPays} ฿</span></div>
+                        </div>
+                    </div>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+
+        window.deleteTransaction = function(index) {
+            if(confirm('Are you sure you want to delete this transaction?')) {
+                transactions.splice(index, 1);
+                localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+                calculateInitialQuota();
+                renderHistory();
+            }
+        };
+
+        function calculateInitialQuota() {
+            const now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth();
+            
+            let cycleStart;
+            if (month === 5 && now.getDate() === 1 && now.getHours() < 6) {
+                // June 1 before 6 AM
+                cycleStart = new Date(year, 4, 1, 0, 0, 0); 
+            } else if (month === 5) {
+                // June 1 6 AM onwards
+                cycleStart = new Date(year, 5, 1, 6, 0, 0);
+            } else {
+                // Other months: 1st of the month at midnight
+                cycleStart = new Date(year, month, 1, 0, 0, 0);
+            }
+
+            let usedGov = transactions.reduce((sum, tx) => {
+                let txDate = tx.isoDate ? new Date(tx.isoDate) : new Date(); // Fallback to current time if missing
+                if (txDate >= cycleStart) {
+                    return sum + parseFloat(tx.govPays.replace(/,/g, ''));
+                }
+                return sum;
+            }, 0);
+
+            currentMonthlyQuota = Math.max(0, 1000 - usedGov);
+            document.getElementById('monthly-quota').innerText = currentMonthlyQuota.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            
+            // Update Progress Bar
+            const progressBar = document.getElementById('wallet-progress');
+            if (progressBar) {
+                const percentage = (currentMonthlyQuota / 1000) * 100;
+                progressBar.style.width = percentage + '%';
+                if (percentage < 20) {
+                    progressBar.style.background = 'linear-gradient(90deg, #ef4444 0%, #f43f5e 100%)';
+                } else {
+                    progressBar.style.background = 'linear-gradient(90deg, #10b981 0%, #34d399 100%)';
+                }
+            }
+        }
+        
+        window.addAmount = function(val) {
+            let current = parseFloat(inputElement.value) || 0;
+            inputElement.value = current + val;
+            inputElement.dispatchEvent(new Event('input'));
+        };
+
+        
+        function startCountdown() {
+            function update() {
+                const now = new Date();
+                let year = now.getFullYear();
+                let month = now.getMonth();
+                
+                let nextCycle;
+                if (month < 5 || (month === 5 && now.getDate() === 1 && now.getHours() < 6)) {
+                    nextCycle = new Date(year, 5, 1, 6, 0, 0); // Next is June 1st 6 AM
+                } else {
+                    nextCycle = new Date(year, month + 1, 1, 0, 0, 0); // Next is 1st of next month midnight
+                }
+
+                const diff = nextCycle - now;
+                const el = document.getElementById('wallet-countdown');
+                if (!el) return;
+
+                if (diff <= 0) {
+                    el.innerText = '✨ Quota reset! (Please refresh)';
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / 1000 / 60) % 60);
+                
+                let text = '⏳ Next reset in: ';
+                if (days > 0) text += `${days}${' days '}`;
+                if (hours > 0) text += `${hours}${' hrs '}`;
+                text += `${minutes}${' mins'}`;
+                
+                el.innerText = text;
+            }
+            update();
+            setInterval(update, 60000); // Update every minute
+        }
+
+        // Run on load
+                calculateInitialQuota();
+        // renderHistory is called inside applyLanguage()
+        // startCountdown is called inside applyLanguage()
+
+        // 2. Listen for typing in the input field
+        inputElement.addEventListener('input', function(e) {
+            let amount = parseFloat(e.target.value) || 0;
+            let calculatedGovShare = amount * 0.60;
+            let actualGovPays = Math.min(calculatedGovShare, currentMonthlyQuota);
+            let actualUserPays = amount - actualGovPays;
+
+            govPaysElement.innerText = actualGovPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            userPaysElement.innerText = actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            finalAmountElement.innerText = actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        });
+
+        // 3. Save Button
+        saveBtn.addEventListener('click', () => {
+            let amount = parseFloat(inputElement.value);
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            let calculatedGovShare = amount * 0.60;
+            let actualGovPays = Math.min(calculatedGovShare, currentMonthlyQuota);
+            let actualUserPays = amount - actualGovPays;
+            let name = itemNameInput.value.trim();
+
+            const tx = {
+                itemName: name,
+                total: amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                govPays: actualGovPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                userPays: actualUserPays.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                date: new Date().toLocaleString('th-TH'),
+                isoDate: new Date().toISOString()
+            };
+
+            transactions.push(tx);
+            localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+            
+            calculateInitialQuota();
+            
+            inputElement.value = '';
+            itemNameInput.value = '';
+            inputElement.dispatchEvent(new Event('input')); // trigger update to zero
+
+            renderHistory();
+        });
+
+        // 4. Export CSV
+        exportBtn.addEventListener('click', () => {
+            if (transactions.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            // CSV Header
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB),ISO Date\n";
+
+            transactions.forEach(tx => {
+                // Escape quotes in strings for CSV
+                let name = tx.itemName ? tx.itemName.replace(/"/g, '""') : '';
+                let total = tx.total.replace(/,/g, '');
+                let gov = tx.govPays.replace(/,/g, '');
+                let user = tx.userPays.replace(/,/g, '');
+                let iso = tx.isoDate || '';
+                
+                let row = `"${tx.date}","${name}","${total}","${gov}","${user}","${iso}"`;
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "paotang_history.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // 5. Import CSV
+        importBtn.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+                
+                if (lines.length > 0) {
+                    const header = lines[0].replace(/\uFEFF/g, ''); 
+                    if (!header.includes("Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB)")) {
+                        alert('Invalid file format (must match exported file)');
+                        e.target.value = ''; 
+                        return;
+                    }
+                }
+
+                let newTransactions = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    // Regex to split by comma but ignore commas inside quotes
+                    const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                    if (values.length >= 5) {
+                        const date = values[0].replace(/^"|"$/g, '');
+                        const name = values[1].replace(/^"|"$/g, '').replace(/""/g, '"');
+                        
+                        const totalNum = parseFloat(values[2].replace(/^"|"$/g, '')) || 0;
+                        const govNum = parseFloat(values[3].replace(/^"|"$/g, '')) || 0;
+                        const userNum = parseFloat(values[4].replace(/^"|"$/g, '')) || 0;
+                        const isoDate = values.length >= 6 ? values[5].replace(/^"|"$/g, '') : new Date().toISOString();
+
+                        newTransactions.push({
+                            date: date,
+                            itemName: name,
+                            total: totalNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                            govPays: govNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                            userPays: userNum.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}),
+                            isoDate: isoDate
+                        });
+                    }
+                }
+
+                if (newTransactions.length > 0) {
+                    transactions = transactions.concat(newTransactions);
+                    localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+                    calculateInitialQuota();
+                    renderHistory();
+                    alert('Successfully imported {n} items'.replace('{n}', newTransactions.length));
+                }
+                
+                e.target.value = ''; 
+            };
+            
+            reader.readAsText(file);
+        });
+
+        // 6. Clear Button
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all history?')) {
+                transactions = [];
+                localStorage.removeItem('paotangHistory');
+                calculateInitialQuota();
+                renderHistory();
+            }
+        });
+    </script>
+</body>
+</html>

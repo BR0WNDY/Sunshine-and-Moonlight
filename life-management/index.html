@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Management — Suwapat Saelee</title>
+  <meta name="description" content="A personal life-management dashboard: money, debts, homework, sales and habits. Built in React by Suwapat Saelee." />
+  <style>
+    html,body{margin:0;padding:0;background:#0a0f1d;color:#ece7d8;
+      font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+    #root{min-height:100vh}
+    .back-link{position:fixed;top:14px;left:14px;z-index:9999;display:inline-flex;align-items:center;
+      gap:7px;font-size:.8rem;letter-spacing:.4px;color:#e6cd8c;text-decoration:none;
+      background:rgba(10,15,29,.75);backdrop-filter:blur(8px);
+      border:1px solid rgba(203,161,90,.35);padding:8px 14px;border-radius:999px;transition:.2s}
+    .back-link:hover{border-color:#cba15a;color:#cba15a}
+    .loading{position:fixed;inset:0;display:grid;place-items:center;color:#93a0b8;font-size:.95rem}
+  </style>
+</head>
+<body>
+  <a class="back-link" href="../index.html#projects">← Portfolio</a>
+  <div id="root"><div class="loading">Loading the ledger…</div></div>
+  <script src="./bundle.js" defer></script>
+</body>
+</html>
