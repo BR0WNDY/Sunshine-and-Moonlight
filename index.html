@@ -446,7 +446,7 @@
 </footer>
 
 <script>
-  var lang = 'en';
+  var lang = localStorage.getItem('site:lang') || 'en';
   function applyLang(){
     document.documentElement.lang = lang;
     document.documentElement.classList.toggle('lang-th', lang === 'th');
@@ -456,7 +456,7 @@
     });
     document.getElementById('langBtn').textContent = (lang === 'en') ? 'TH ◇ EN' : 'EN ◇ TH';
   }
-  function toggleLang(){ lang = (lang === 'en') ? 'th' : 'en'; applyLang(); }
+  function toggleLang(){ lang = (lang === 'en') ? 'th' : 'en'; localStorage.setItem('site:lang', lang); applyLang(); }
   document.getElementById('year').textContent = new Date().getFullYear();
   // close mobile menu on link click
   document.querySelectorAll('.nav-links a').forEach(function(a){
