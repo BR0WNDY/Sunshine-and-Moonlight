@@ -9,21 +9,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    *{box-sizing:border-box}
     html,body{margin:0;padding:0;background:#070d1f;color:#eef2fb;
       font-family:'Inter','IBM Plex Sans Thai',system-ui,-apple-system,'Segoe UI',sans-serif;
       -webkit-font-smoothing:antialiased}
     #root{min-height:100vh}
-    .back-link{position:fixed;bottom:14px;left:14px;z-index:9999;display:inline-flex;align-items:center;
-      gap:7px;font-size:.8rem;letter-spacing:.4px;color:#dcc06a;text-decoration:none;
-      background:rgba(7,13,31,.78);backdrop-filter:blur(8px);
-      border:1px solid rgba(200,163,58,.35);padding:8px 14px;border-radius:999px;transition:.2s}
-    .back-link:hover{border-color:#c8a23a;color:#c8a23a}
-    .back-link:focus-visible{outline:2px solid #dcc06a;outline-offset:3px}
     .loading{position:fixed;inset:0;display:grid;place-items:center;color:#8fa1c4;font-size:.95rem}
   </style>
 </head>
 <body>
-  <a class="back-link" href="../index.html#projects">← Portfolio</a>
   <div id="root"><div class="loading">Loading the ledger…</div></div>
   <script src="./bundle.js" defer></script>
 </body>

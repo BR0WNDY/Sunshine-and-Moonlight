@@ -84,6 +84,7 @@ const MESSAGES = {
     streak: (n) => `${n} วันติด`,
     noHabits: 'ยังไม่มีนิสัยที่ติดตาม — เพิ่มอันแรกแล้วเริ่มสร้างสตรีค',
     chartIncome: 'รับ', chartExpense: 'จ่าย',
+    backPortfolio: '← พอร์ตโฟลิโอ',
     locale: 'th-TH',
   },
   en: {
@@ -138,6 +139,7 @@ const MESSAGES = {
     streak: (n) => `${n}-day streak`,
     noHabits: 'No habits tracked yet — add one and start a streak',
     chartIncome: 'Income', chartExpense: 'Expense',
+    backPortfolio: '← Portfolio',
     locale: 'en-GB',
   },
 };
@@ -183,7 +185,7 @@ const Card = ({ children, style, ...rest }) => (
 const inputStyle = {
   background: T.panel2, border: `1px solid ${T.border}`, color: T.ink,
   borderRadius: 9, padding: '9px 11px', fontSize: 14, outline: 'none', width: '100%',
-  fontFamily: BODY_FONT,
+  fontFamily: BODY_FONT, boxSizing: 'border-box', minHeight: 38,
 };
 const Input = (props) => <input {...props} style={{ ...inputStyle, ...(props.style || {}) }} />;
 const Select = ({ children, ...rest }) => (
@@ -803,22 +805,32 @@ function App() {
     <div style={{ background: T.bg, minHeight: '100vh', color: T.ink, fontFamily: BODY_FONT }}>
       <div style={{ position: 'relative', overflow: 'hidden', borderBottom: `1px solid ${T.border}`, background: `linear-gradient(180deg,#0c1730 0%,${T.bg} 100%)` }}>
         <Starfield />
-        <div style={{ maxWidth: 1080, margin: '0 auto', padding: '22px 20px 18px', position: 'relative' }}>
+        <div style={{ maxWidth: 1080, margin: '0 auto', padding: '14px 20px 18px', position: 'relative' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14 }}>
+            <a href="../index.html#projects" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none',
+              border: `1px solid ${T.border}`, color: T.bronzeSoft,
+              borderRadius: 999, padding: '7px 13px', fontSize: 12, letterSpacing: 0.4,
+              fontFamily: BODY_FONT, whiteSpace: 'nowrap',
+            }}>
+              {t.backPortfolio}
+            </a>
+            <button onClick={() => setLang(lang === 'th' ? 'en' : 'th')} style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'transparent', border: `1px solid ${T.border}`, color: T.bronzeSoft,
+              borderRadius: 999, padding: '7px 13px', fontSize: 12, letterSpacing: 1,
+              cursor: 'pointer', fontFamily: BODY_FONT, whiteSpace: 'nowrap',
+            }}>
+              <Languages size={14} />
+              {lang === 'th' ? 'EN ◇ TH' : 'TH ◇ EN'}
+            </button>
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <Star size={20} color={T.bronze} fill={T.bronze} />
             <div>
               <div style={{ fontFamily: DISPLAY_FONT, fontSize: 26, fontWeight: 600, letterSpacing: 0.3 }}>Starlit Ledger</div>
               <div style={{ fontSize: 12, color: T.sub, marginTop: 1 }}>{t.subtitle}</div>
             </div>
-            <button onClick={() => setLang(lang === 'th' ? 'en' : 'th')} style={{
-              marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 6,
-              background: 'transparent', border: `1px solid ${T.border}`, color: T.bronzeSoft,
-              borderRadius: 999, padding: '7px 13px', fontSize: 12, letterSpacing: 1,
-              cursor: 'pointer', fontFamily: BODY_FONT,
-            }}>
-              <Languages size={14} />
-              {lang === 'th' ? 'EN ◇ TH' : 'TH ◇ EN'}
-            </button>
           </div>
           <div style={{ width: 46, height: 2, background: T.bronze, borderRadius: 2, marginTop: 12 }} />
         </div>
