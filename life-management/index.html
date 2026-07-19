@@ -3,18 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Life Management — Suwapat Saelee</title>
+  <title>Starlit Ledger — Suwapat Saelee</title>
   <meta name="description" content="A personal life-management dashboard: money, debts, homework, sales and habits. Built in React by Suwapat Saelee." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    html,body{margin:0;padding:0;background:#0a0f1d;color:#ece7d8;
-      font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+    html,body{margin:0;padding:0;background:#070d1f;color:#eef2fb;
+      font-family:'Inter','IBM Plex Sans Thai',system-ui,-apple-system,'Segoe UI',sans-serif;
+      -webkit-font-smoothing:antialiased}
     #root{min-height:100vh}
-    .back-link{position:fixed;top:14px;left:14px;z-index:9999;display:inline-flex;align-items:center;
-      gap:7px;font-size:.8rem;letter-spacing:.4px;color:#e6cd8c;text-decoration:none;
-      background:rgba(10,15,29,.75);backdrop-filter:blur(8px);
-      border:1px solid rgba(203,161,90,.35);padding:8px 14px;border-radius:999px;transition:.2s}
-    .back-link:hover{border-color:#cba15a;color:#cba15a}
-    .loading{position:fixed;inset:0;display:grid;place-items:center;color:#93a0b8;font-size:.95rem}
+    .back-link{position:fixed;bottom:14px;left:14px;z-index:9999;display:inline-flex;align-items:center;
+      gap:7px;font-size:.8rem;letter-spacing:.4px;color:#dcc06a;text-decoration:none;
+      background:rgba(7,13,31,.78);backdrop-filter:blur(8px);
+      border:1px solid rgba(200,163,58,.35);padding:8px 14px;border-radius:999px;transition:.2s}
+    .back-link:hover{border-color:#c8a23a;color:#c8a23a}
+    .back-link:focus-visible{outline:2px solid #dcc06a;outline-offset:3px}
+    .loading{position:fixed;inset:0;display:grid;place-items:center;color:#8fa1c4;font-size:.95rem}
   </style>
 </head>
 <body>
