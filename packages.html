@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Web Development Packages — Suwapat Saelee</title>
+<meta name="description" content="Freelance web development packages by Suwapat Saelee: landing pages, multi-page corporate sites and full web applications." />
+<link rel="stylesheet" href="assets/styles.css?v=4" />
+<style>
+  .pkg-wrap{max-width:var(--maxw);margin:0 auto}
+  .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch;margin-top:36px}
+  .pkg{background:var(--night);border:1px solid var(--line);border-radius:16px;
+    padding:30px 26px;position:relative;display:flex;flex-direction:column;transition:.25s}
+  .pkg:hover{transform:translateY(-4px);border-color:rgba(200,163,58,.42)}
+  .pkg.featured{border-color:rgba(200,163,58,.5);
+    background:linear-gradient(180deg,rgba(42,74,134,.25),var(--night))}
+  .pkg .badge{position:absolute;top:-11px;right:22px;font-family:var(--font-mono);
+    font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:#1a1405;
+    background:var(--bronze);padding:4px 12px;border-radius:999px}
+  .pkg .tier{font-family:var(--font-mono);font-size:.74rem;letter-spacing:2px;
+    text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
+  .pkg h2{font-family:var(--font-display);font-size:1.55rem;font-weight:600;
+    margin-bottom:14px;line-height:1.15}
+  .pkg .for{color:var(--silver);font-size:.9rem;margin-bottom:20px}
+  .pkg-meta{list-style:none;margin:0 0 22px;border-top:1px solid rgba(200,163,58,.12);padding:0}
+  .pkg-meta li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;
+    border-bottom:1px solid rgba(200,163,58,.10);font-size:.88rem}
+  .pkg-meta .k{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.8px;
+    text-transform:uppercase;color:var(--muted)}
+  .pkg-meta .v{color:var(--parchment);font-weight:500}
+  .pkg .price{font-family:var(--font-display);font-size:2.3rem;font-weight:600;
+    color:#fff;margin:auto 0 20px;line-height:1}
+  .pkg .price small{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;
+    color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;font-weight:400}
+  .pkg .btn{width:100%}
+  .hire-note{color:var(--muted);font-size:.82rem;margin-top:26px;text-align:center;
+    font-family:var(--font-mono);letter-spacing:.3px}
+  @media(max-width:860px){ .pkg-grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="eagle" viewBox="0 0 64 64">
+    <path fill="none" stroke="#c8a23a" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"
+      d="M32 6 L38 16 L52 14 L44 24 L58 30 L44 34 L50 46 L37 42 L32 56 L27 42 L14 46 L20 34 L6 30 L20 24 L12 14 L26 16 Z"/>
+    <circle cx="32" cy="30" r="5" fill="#2a4a86" stroke="#dcc06a" stroke-width="1.6"/>
+  </symbol>
+</svg>
+
+<header>
+  <nav class="nav">
+    <a class="brand" href="index.html#top">
+      <svg class="crest"><use href="#eagle"/></svg>
+      <span>Suwapat Saelee</span>
+    </a>
+    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <div class="nav-links">
+      <a href="index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
+      <a href="index.html#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+      <a href="index.html#contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
+    </div>
+  </nav>
+</header>
+
+<main class="page wrap">
+  <div class="pkg-wrap">
+    <p class="eyebrow" data-en="Freelance Services · Fastwork" data-th="บริการฟรีแลนซ์ · Fastwork">Freelance Services · Fastwork</p>
+    <h1 class="page-title" data-en="Web development, three packages" data-th="รับพัฒนาเว็บไซต์ 3 แพ็กเกจ">Web development, three packages</h1>
+    <p class="lead" data-en="Pick the package that fits your project. Every package includes responsive design, clean code, and 2 revision rounds." data-th="เลือกแพ็กเกจที่เหมาะกับโปรเจกต์ของคุณ ทุกแพ็กเกจรองรับทุกหน้าจอ โค้ดสะอาด และแก้ไขงานได้ 2 ครั้ง">Pick the package that fits your project. Every package includes responsive design, clean code, and 2 revision rounds.</p>
+
+    <div class="pkg-grid">
+
+      <div class="pkg">
+        <p class="tier">Basic</p>
+        <h2 data-en="Landing Page / Portfolio" data-th="Landing Page / Portfolio">Landing Page / Portfolio</h2>
+        <p class="for" data-en="For a personal résumé site, a portfolio to showcase your work, or a landing page to promote a campaign." data-th="เหมาะสำหรับ: เว็บไซต์เรซูเม่ส่วนตัว, พอร์ตโฟลิโอนำเสนอผลงาน หรือหน้า Landing Page สำหรับโปรโมทแคมเปญ">For a personal résumé site, a portfolio to showcase your work, or a landing page to promote a campaign.</p>
+        <ul class="pkg-meta">
+          <li><span class="k" data-en="Delivery" data-th="ระยะเวลาในการทำงาน">Delivery</span><span class="v" data-en="5 days" data-th="5 วัน">5 days</span></li>
+          <li><span class="k" data-en="Revisions" data-th="จำนวนการปรับแก้ชิ้นงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
+        </ul>
+        <p class="price"><small data-en="Price" data-th="ราคา">Price</small>฿2,500</p>
+        <a class="btn btn-ghost" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+      </div>
+
+      <div class="pkg featured">
+        <span class="badge" data-en="Popular" data-th="ยอดนิยม">Popular</span>
+        <p class="tier">Standard</p>
+        <h2 data-en="Corporate / Multi-page Website" data-th="Corporate / Multi-page Website แบบจัดเต็ม">Corporate / Multi-page Website</h2>
+        <p class="for" data-en="For a company profile, a small business, or a multi-page site that needs clear, well-organised sections." data-th="เหมาะสำหรับ: เว็บไซต์โปรไฟล์บริษัท, ธุรกิจขนาดย่อม หรือเว็บนำเสนอผลงานที่ต้องการแบ่งหมวดหมู่ชัดเจน">For a company profile, a small business, or a multi-page site that needs clear, well-organised sections.</p>
+        <ul class="pkg-meta">
+          <li><span class="k" data-en="Delivery" data-th="ระยะเวลาในการทำงาน">Delivery</span><span class="v" data-en="10 days" data-th="10 วัน">10 days</span></li>
+          <li><span class="k" data-en="Revisions" data-th="จำนวนการปรับแก้ชิ้นงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
+        </ul>
+        <p class="price"><small data-en="Price" data-th="ราคา">Price</small>฿5,500</p>
+        <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+      </div>
+
+      <div class="pkg">
+        <p class="tier">Premium</p>
+        <h2 data-en="Web Application / E-commerce" data-th="Web Application / E-commerce แบบมีระบบหลังบ้าน">Web Application / E-commerce</h2>
+        <p class="for" data-en="For online stores, booking or appointment systems, sites that store user data, or businesses that manage their own content through an admin dashboard." data-th="เหมาะสำหรับ: ร้านค้าออนไลน์, ระบบจองคิว/นัดหมาย, เว็บที่ต้องเก็บข้อมูลผู้ใช้ หรือธุรกิจที่ต้องการจัดการข้อมูลเองผ่านหน้าแอดมิน">For online stores, booking or appointment systems, sites that store user data, or businesses that manage their own content through an admin dashboard.</p>
+        <ul class="pkg-meta">
+          <li><span class="k" data-en="Delivery" data-th="ระยะเวลาในการทำงาน">Delivery</span><span class="v" data-en="25 days" data-th="25 วัน">25 days</span></li>
+          <li><span class="k" data-en="Revisions" data-th="จำนวนการปรับแก้ชิ้นงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
+        </ul>
+        <p class="price"><small data-en="Price" data-th="ราคา">Price</small>฿13,500</p>
+        <a class="btn btn-ghost" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+      </div>
+
+    </div>
+
+    <p class="hire-note" data-en="Secure payment &amp; escrow through Fastwork · Reply within 24 hours" data-th="ชำระเงินปลอดภัยผ่าน Fastwork · ตอบกลับภายใน 24 ชม.">Secure payment &amp; escrow through Fastwork · Reply within 24 hours</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Suwapat Saelee</span>
+    <a href="index.html#top" data-en="← Back to portfolio" data-th="← กลับสู่พอร์ตโฟลิโอ">← Back to portfolio</a>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

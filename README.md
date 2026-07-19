@@ -1,17 +1,58 @@
-# Projects Sunshine and Moonlight
-Projects Sunshine and Moonlight is my dream for coding with passion, jobs, and a major in CS
+# Sunshine and Moonlight
 
-### 📜 The Restricted Section (About Me)
+Personal portfolio of **Suwapat Saelee** ([BR0WNDY](https://github.com/BR0WNDY)) — a bilingual (EN/TH)
+static site with a Ravenclaw / "Starlit Academy" theme, deployed on Vercel.
 
-I am a developer based in **Thailand**, dedicated to the pursuit of knowledge in **Coding for portfolio site**. Unlike others who rush into battle, I analyze the logic before casting the spell.
+## Structure
 
-- 🔭 **Observing:** New patterns in  HTML / CSS / Python / JS
-- 🦅 **House:** Ravenclaw (Wisdom, Wit, Intellectual Ability)
-- 🧩 **Current Riddle:** Solving complex algorithms and debugging logic.
-- 📚 **Looking to collaborate on:** Projects that require deep thought and innovation.
-- 📩 **Send a scroll via:** browndy_moconi@icloud.com
+```
+index.html          the homepage (self-contained: its CSS/JS live inside the file)
+sortinghats.html    page: The Sorting Hat (Python in the browser via PyScript)
+paotang.html        page: Thai Chuay Thai co-payment calculator
+packages.html       page: Fastwork service packages demo (Basic/Standard/Premium)
+life-management/    page: Starlit Ledger React dashboard (index.html + built bundle.js)
 
-### 📖 The Project 1 is a Portfolio Site in HTML Java Script and CSS
-### 📖 The Project 2 is a Soring Hats in Python with running in site
-### 📖 The Project 3 is a Thai Goverments Projects "Thai Chuy Thai" Calculator
+assets/             shared look & feel for sub-pages (styles.css + site.js)
+sorting-hat/        Python code + config used by sortinghats.html
+src/                React source for the Ledger (edit here, then build)
+images/             photos and project thumbnails
+videos/             media files
+docs/               DESIGN.md (theme rules) and PRODUCT.md (product notes)
 
+server.py           local dev server with the same headers as production
+vercel.json         Vercel deploy headers (needed by PyScript)
+package.json        npm deps + the Ledger build script
+```
+
+Every page you can visit sits at the top level; everything inside a folder is
+supporting material for one of those pages.
+
+Language choice persists in `localStorage('site:lang')` across pages; the Ledger keeps its own
+`lm:lang` (defaults to Thai) plus data keys `lm:transactions`, `lm:debts`, `lm:assignments`,
+`lm:sales`, `lm:habits`.
+
+## Develop
+
+Serve locally with the COOP/COEP headers PyScript needs (same headers `vercel.json` sets in production):
+
+```bash
+python3 server.py   # http://localhost:8000
+```
+
+## Build the Starlit Ledger
+
+The main site is plain static — only the dashboard is compiled. After editing
+`src/life-management.jsx`:
+
+```bash
+npm install
+npm run build:ledger   # emits life-management/bundle.js (commit it)
+```
+
+The built `bundle.js` is committed, so Vercel needs no build step.
+
+## Deploy
+
+Auto-deploys on Vercel from `main`. `vercel.json` sets
+`Cross-Origin-Embedder-Policy: require-corp` and `Cross-Origin-Opener-Policy: same-origin`
+(required by PyScript) — keep all resources same-origin or CORP-enabled.
