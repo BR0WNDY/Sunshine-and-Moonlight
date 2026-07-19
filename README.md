@@ -31,7 +31,17 @@ Language choice persists in `localStorage('site:lang')` across pages; the Ledger
 `lm:lang` (defaults to Thai) plus data keys `lm:transactions`, `lm:debts`, `lm:assignments`,
 `lm:sales`, `lm:habits`.
 
-**Ledger: personal vs public view.** `/life-management/` is the personal app — data persists in
+**Private vs public views.** The Ledger and the Paotang calculator both come in two flavors,
+guarded by the same password (one unlock opens both in the same tab):
+
+| | Private (yours) | Public (portfolio links here) |
+|---|---|---|
+| Starlit Ledger | `/life-management/` | `/life-management/?demo=1` |
+| Paotang calculator | `/paotang.html` | `/paotang.html?demo=1` |
+
+Demo views load sample data, show a Demo badge and save nothing.
+
+**Ledger details.** `/life-management/` is the personal app — data persists in
 the browser's localStorage and a password lock screen guards it (unlock expires after 30 minutes,
 or when the browser closes — whichever comes first). `/life-management/?demo=1` is the public view the portfolio links to — it loads sample
 data, shows a Demo badge, saves nothing, and needs no password.

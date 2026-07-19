@@ -129,10 +129,26 @@
   </nav>
 </header>
 
+<div id="lock-overlay" style="position:fixed;inset:0;z-index:1000;background:var(--ink);display:none;place-items:center;padding:20px">
+  <form id="lock-form" class="card" style="width:100%;max-width:360px;text-align:center;padding:34px 28px">
+    <div style="font-size:1.6rem;margin-bottom:10px">🔒</div>
+    <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:600;margin-bottom:6px">Thai Chuay Thai</div>
+    <div style="font-size:.82rem;color:var(--silver);margin-bottom:4px" data-en="Private view" data-th="มุมมองส่วนตัว">Private view</div>
+    <div style="font-size:.78rem;color:var(--muted);margin-bottom:20px" data-en="Enter the password to open your calculator" data-th="ใส่รหัสผ่านเพื่อเปิดเครื่องคำนวณของคุณ">Enter the password to open your calculator</div>
+    <input type="password" name="password" id="lock-pw" autocomplete="current-password" autocapitalize="off" spellcheck="false"
+      data-en-placeholder="Password" data-th-placeholder="รหัสผ่าน" placeholder="Password"
+      style="width:100%;background:rgba(7,13,31,.6);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--parchment);font-family:inherit;font-size:1rem;outline:none;text-align:center;margin-bottom:10px" />
+    <div id="lock-error" hidden style="font-size:.78rem;color:#e07a6b;margin-bottom:10px" data-en="Wrong password" data-th="รหัสผ่านไม่ถูกต้อง">Wrong password</div>
+    <button type="submit" id="lock-btn" class="btn btn-primary" style="width:100%" data-en="Unlock" data-th="ปลดล็อก">Unlock</button>
+    <a href="?demo=1" style="display:inline-block;margin-top:16px;font-size:.78rem;color:var(--muted)" data-en="or view the public demo →" data-th="หรือดูเดโมสาธารณะ →">or view the public demo →</a>
+  </form>
+</div>
+
 <main class="page wrap">
   <div class="pao-wrap">
     <p class="eyebrow" data-en="Projects · Calculator" data-th="ผลงาน · เครื่องคำนวณ">Projects · Calculator</p>
     <h1 class="page-title" data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h1>
+    <p id="demo-badge" style="display:none;align-items:center;gap:6px;background:rgba(200,163,58,.14);border:1px solid var(--line);color:var(--bronze-soft);border-radius:999px;padding:5px 12px;font-size:.78rem;margin:0 auto 18px" data-en="Demo · sample data, nothing is saved" data-th="เดโม · ข้อมูลตัวอย่าง ไม่ถูกบันทึก">Demo · sample data, nothing is saved</p>
     <p class="lead" data-en="A co-payment calculator for the state scheme (government 60% : citizen 40%). Track purchases against your monthly government subsidy." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60% : ประชาชน 40%) ติดตามยอดซื้อเทียบกับวงเงินอุดหนุนรายเดือนจากรัฐ">A co-payment calculator for the state scheme (government 60% : citizen 40%). Track purchases against your monthly government subsidy.</p>
 
     <div class="pao-grid">
@@ -260,6 +276,45 @@ function t(key){
 }
 function dateLocale(){ return document.documentElement.lang === 'th' ? 'th-TH' : 'en-GB'; }
 
+// --- private / public (demo) modes ---
+const DEMO = new URLSearchParams(location.search).has('demo');
+const PASS_KDF = {
+  salt: '0bfcf4f02864271a82b9939ff7237f9b',
+  iterations: 600000,
+  key: '67c883bbeaad63b2b63afa4a653d027f504d1fe95d4691d5a3eb190c70cda6b1'
+};
+const UNLOCK_TTL_MS = 30 * 60 * 1000;
+
+function readUnlockExpiry() {
+  try {
+    const { k, exp } = JSON.parse(sessionStorage.getItem('site:unlock'));
+    if (k === PASS_KDF.key && typeof exp === 'number' && Date.now() < exp) return exp;
+  } catch {}
+  try { sessionStorage.removeItem('site:unlock'); } catch {}
+  return null;
+}
+async function deriveKeyHex(password) {
+  const salt = new Uint8Array(PASS_KDF.salt.match(/.{2}/g).map(b => parseInt(b, 16)));
+  const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: PASS_KDF.iterations }, material, 256);
+  return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function demoTransactions() {
+  const mk = (name, total, daysAgo) => {
+    const d = new Date(Date.now() - daysAgo * 864e5);
+    const gov = total * 0.6, user = total - gov;
+    const fmt = n => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return { itemName: name, total: fmt(total), govPays: fmt(gov), userPays: fmt(user),
+             date: d.toLocaleString('th-TH'), isoDate: d.toISOString() };
+  };
+  return [mk('ข้าวมันไก่', 65, 6), mk('ของใช้เข้าบ้าน', 250, 3), mk('ก๋วยเตี๋ยวเรือ', 120, 1)];
+}
+
+const escapeHtml = s => String(s).replace(/[&<>"']/g, c => (
+  { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+));
+
 // 1. Element references
 const inputElement = document.getElementById('purchase-amount');
 const govPaysElement = document.getElementById('gov-pays');
@@ -273,7 +328,10 @@ const historyList = document.getElementById('history-timeline');
 const itemNameInput = document.getElementById('item-name');
 
 let currentMonthlyQuota = 1000;
-let transactions = JSON.parse(localStorage.getItem('paotangHistory')) || [];
+let transactions = DEMO ? demoTransactions() : (JSON.parse(localStorage.getItem('paotangHistory')) || []);
+function persist() {
+  if (!DEMO) persist();
+}
 
 function renderHistory() {
   historyList.innerHTML = '';
@@ -289,16 +347,16 @@ function renderHistory() {
       <div class="timeline-dot"></div>
       <div class="timeline-content">
         <div class="timeline-header">
-          <span class="timeline-name">${tx.itemName || '—'}</span>
+          <span class="timeline-name">${escapeHtml(tx.itemName || '—')}</span>
           <div style="display:flex;align-items:center;gap:10px">
-            <span class="timeline-date">${tx.date}</span>
+            <span class="timeline-date">${escapeHtml(tx.date)}</span>
             <button onclick="deleteTransaction(${originalIndex})" class="timeline-delete-btn" title="${t('confirmDelete')}">🗑️</button>
           </div>
         </div>
         <div class="timeline-details">
-          <div class="t-amount"><span class="label">${t('total')}</span> <span class="val">${tx.total} ฿</span></div>
-          <div class="t-amount gov"><span class="label">${t('gov')}</span> <span class="val">${tx.govPays} ฿</span></div>
-          <div class="t-amount user"><span class="label">${t('you')}</span> <span class="val">${tx.userPays} ฿</span></div>
+          <div class="t-amount"><span class="label">${t('total')}</span> <span class="val">${escapeHtml(tx.total)} ฿</span></div>
+          <div class="t-amount gov"><span class="label">${t('gov')}</span> <span class="val">${escapeHtml(tx.govPays)} ฿</span></div>
+          <div class="t-amount user"><span class="label">${t('you')}</span> <span class="val">${escapeHtml(tx.userPays)} ฿</span></div>
         </div>
       </div>
     `;
@@ -309,7 +367,7 @@ function renderHistory() {
 window.deleteTransaction = function(index) {
   if (confirm(t('confirmDelete'))) {
     transactions.splice(index, 1);
-    localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+    persist();
     calculateInitialQuota();
     renderHistory();
   }
@@ -389,9 +447,46 @@ function startCountdown() {
   setInterval(update, 60000);
 }
 
-calculateInitialQuota();
-renderHistory();
-startCountdown();
+function startApp() {
+  calculateInitialQuota();
+  renderHistory();
+  startCountdown();
+}
+
+const lockOverlay = document.getElementById('lock-overlay');
+if (DEMO) {
+  document.getElementById('demo-badge').style.display = 'inline-flex';
+  startApp();
+} else {
+  const exp = readUnlockExpiry();
+  if (exp) {
+    setTimeout(() => location.reload(), exp - Date.now());
+    startApp();
+  } else {
+    lockOverlay.style.display = 'grid';
+    document.getElementById('lock-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('lock-btn');
+      const pwEl = document.getElementById('lock-pw');
+      btn.disabled = true;
+      const ok = (await deriveKeyHex(pwEl.value)) === PASS_KDF.key;
+      if (ok) {
+        const until = Date.now() + UNLOCK_TTL_MS;
+        try { sessionStorage.setItem('site:unlock', JSON.stringify({ k: PASS_KDF.key, exp: until })); } catch {}
+        lockOverlay.style.display = 'none';
+        setTimeout(() => location.reload(), UNLOCK_TTL_MS);
+        startApp();
+      } else {
+        document.getElementById('lock-error').hidden = false;
+        pwEl.value = '';
+        setTimeout(() => { btn.disabled = false; }, 800);
+      }
+    });
+    document.getElementById('lock-pw').addEventListener('input', () => {
+      document.getElementById('lock-error').hidden = true;
+    });
+  }
+}
 applyPlaceholders();
 
 inputElement.addEventListener('input', function(e) {
@@ -424,7 +519,7 @@ saveBtn.addEventListener('click', () => {
   };
 
   transactions.push(tx);
-  localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+  persist();
 
   calculateInitialQuota();
   inputElement.value = '';
@@ -445,7 +540,7 @@ exportBtn.addEventListener('click', () => {
     let gov = tx.govPays.replace(/,/g, '');
     let user = tx.userPays.replace(/,/g, '');
     let iso = tx.isoDate || '';
-    csvContent += `"${tx.date}","${name}","${total}","${gov}","${user}","${iso}"\n`;
+    csvContent += `"${escapeHtml(tx.date)}","${name}","${total}","${gov}","${user}","${iso}"\n`;
   });
 
   const encodedUri = encodeURI(csvContent);
@@ -500,7 +595,7 @@ importBtn.addEventListener('change', (e) => {
 
     if (newTransactions.length > 0) {
       transactions = transactions.concat(newTransactions);
-      localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+      persist();
       calculateInitialQuota();
       renderHistory();
       alert(t('imported').replace('{n}', newTransactions.length));
@@ -513,7 +608,7 @@ importBtn.addEventListener('change', (e) => {
 clearBtn.addEventListener('click', () => {
   if (confirm(t('confirmClear'))) {
     transactions = [];
-    localStorage.removeItem('paotangHistory');
+    if (!DEMO) localStorage.removeItem('paotangHistory');
     calculateInitialQuota();
     renderHistory();
   }
