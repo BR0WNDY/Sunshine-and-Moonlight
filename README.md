@@ -32,8 +32,8 @@ Language choice persists in `localStorage('site:lang')` across pages; the Ledger
 `lm:sales`, `lm:habits`.
 
 **Ledger: personal vs public view.** `/life-management/` is the personal app — data persists in
-the browser's localStorage and a password lock screen guards it (unlock lasts for the browser
-session). `/life-management/?demo=1` is the public view the portfolio links to — it loads sample
+the browser's localStorage and a password lock screen guards it (unlock expires after 30 minutes,
+or when the browser closes — whichever comes first). `/life-management/?demo=1` is the public view the portfolio links to — it loads sample
 data, shows a Demo badge, saves nothing, and needs no password.
 
 To change the password, derive a new PBKDF2 key:

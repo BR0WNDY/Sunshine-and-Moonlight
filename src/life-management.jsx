@@ -216,6 +216,25 @@ const PASS_KDF = {
   key: '67c883bbeaad63b2b63afa4a653d027f504d1fe95d4691d5a3eb190c70cda6b1',
 };
 
+const UNLOCK_TTL_MS = 30 * 60 * 1000; // unlock expires after 30 minutes
+
+function readUnlockExpiry() {
+  try {
+    const raw = sessionStorage.getItem('lm:unlock');
+    if (!raw) return null;
+    const { k, exp } = JSON.parse(raw);
+    if (k === PASS_KDF.key && typeof exp === 'number' && Date.now() < exp) return exp;
+    sessionStorage.removeItem('lm:unlock');
+    return null;
+  } catch { return null; }
+}
+
+function storeUnlock() {
+  const exp = Date.now() + UNLOCK_TTL_MS;
+  try { sessionStorage.setItem('lm:unlock', JSON.stringify({ k: PASS_KDF.key, exp })); } catch {}
+  return exp;
+}
+
 const hexToBytes = (hex) => new Uint8Array(hex.match(/.{2}/g).map((b) => parseInt(b, 16)));
 
 async function deriveKeyHex(password) {
@@ -240,8 +259,7 @@ function LockScreen({ t, onUnlock }) {
     if (attempts.current > 0) await new Promise((r) => setTimeout(r, Math.min(attempts.current * 800, 5000)));
     const ok = (await deriveKeyHex(pw)) === PASS_KDF.key;
     if (ok) {
-      sessionStorage.setItem('lm:unlock', PASS_KDF.key);
-      onUnlock();
+      onUnlock(storeUnlock());
     } else {
       attempts.current += 1;
       setError(true);
@@ -905,9 +923,18 @@ function HabitTab({ t, habits, setHabits }) {
 function App() {
   const [lang, setLang] = useLocalStorage('lm:lang', 'th');
   const t = MESSAGES[lang] || MESSAGES.th;
-  const [unlocked, setUnlocked] = useState(() => (
-    DEMO || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('lm:unlock') === PASS_KDF.key)
+  const [unlockExp, setUnlockExp] = useState(() => (
+    DEMO ? Infinity : (typeof sessionStorage !== 'undefined' ? readUnlockExpiry() : null)
   ));
+  const unlocked = unlockExp != null && Date.now() < unlockExp;
+  useEffect(() => {
+    if (DEMO || !unlocked || unlockExp === Infinity) return;
+    const id = setTimeout(() => {
+      try { sessionStorage.removeItem('lm:unlock'); } catch {}
+      setUnlockExp(null);
+    }, unlockExp - Date.now());
+    return () => clearTimeout(id);
+  }, [unlockExp, unlocked]);
   const [tab, setTab] = useState('dash');
   const [tx, setTx] = useLocalStorage('lm:transactions', []);
   const [debts, setDebts] = useLocalStorage('lm:debts', []);
@@ -915,7 +942,7 @@ function App() {
   const [sales, setSales] = useLocalStorage('lm:sales', []);
   const [habits, setHabits] = useLocalStorage('lm:habits', []);
 
-  if (!unlocked) return <LockScreen t={t} onUnlock={() => setUnlocked(true)} />;
+  if (!unlocked) return <LockScreen t={t} onUnlock={(exp) => setUnlockExp(exp)} />;
 
   const tabs = [
     { id: 'dash', label: t.tabDash, icon: LayoutDashboard },
