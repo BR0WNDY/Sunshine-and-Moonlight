@@ -85,6 +85,7 @@ const MESSAGES = {
     noHabits: 'ยังไม่มีนิสัยที่ติดตาม — เพิ่มอันแรกแล้วเริ่มสร้างสตรีค',
     chartIncome: 'รับ', chartExpense: 'จ่าย',
     backPortfolio: '← พอร์ตโฟลิโอ',
+    demoBadge: 'เดโม · ข้อมูลตัวอย่าง ไม่ถูกบันทึก',
     locale: 'th-TH',
   },
   en: {
@@ -140,6 +141,7 @@ const MESSAGES = {
     noHabits: 'No habits tracked yet — add one and start a streak',
     chartIncome: 'Income', chartExpense: 'Expense',
     backPortfolio: '← Portfolio',
+    demoBadge: 'Demo · sample data, nothing is saved',
     locale: 'en-GB',
   },
 };
@@ -154,15 +156,55 @@ const CAT_EN = {
 };
 const PIE_COLORS = [T.bronze, T.blueSoft, T.violet, T.green, T.amber, T.red, T.bronzeSoft, T.faint];
 
+/* ---------------- demo mode (public view) ----------------
+   /life-management/          -> personal app, persists to localStorage
+   /life-management/?demo=1   -> public demo: sample data, nothing saved */
+const DEMO = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo');
+
+const demoDate = (daysFromNow) => {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().slice(0, 10);
+};
+const DEMO_DATA = {
+  'lm:transactions': [
+    { id: 'dm1', type: 'income', amount: 5500, category: 'Fastwork', note: 'เว็บร้านกาแฟ', date: demoDate(-3) },
+    { id: 'dm2', type: 'expense', amount: 120, category: 'อาหาร', note: 'ข้าวมันไก่', date: demoDate(-2) },
+    { id: 'dm3', type: 'expense', amount: 450, category: 'การศึกษา', note: 'หนังสือ Java', date: demoDate(-25) },
+    { id: 'dm4', type: 'income', amount: 2500, category: 'Fastwork', note: 'Landing page', date: demoDate(-40) },
+    { id: 'dm5', type: 'expense', amount: 800, category: 'เดินทาง', note: '', date: demoDate(-70) },
+  ],
+  'lm:debts': [
+    { id: 'dd1', kind: 'owe', name: 'ผ่อน SPay', total: 3000, paid: 1000, due: demoDate(12) },
+    { id: 'dd2', kind: 'lent', name: 'เพื่อน A', total: 500, paid: 0, due: '' },
+  ],
+  'lm:assignments': [
+    { id: 'dh1', subject: 'Java', title: 'Quiz array', due: demoDate(2), prio: 'high', done: false },
+    { id: 'dh2', subject: 'Network', title: 'Packet Tracer lab', due: demoDate(9), prio: 'med', done: false },
+    { id: 'dh3', subject: 'Math', title: 'Matrix worksheet', due: demoDate(-1), prio: 'low', done: true },
+  ],
+  'lm:sales': [
+    { id: 'ds1', client: 'ร้านกาแฟ Bloom', tier: 'Standard', amount: 5500, status: 'done', date: demoDate(-3) },
+    { id: 'ds2', client: 'คลินิกฟัน', tier: 'Premium', amount: 13500, status: 'progress', date: demoDate(-1) },
+    { id: 'ds3', client: 'พอร์ตช่างภาพ', tier: 'Basic', amount: 2500, status: 'lead', date: demoDate(0) },
+  ],
+  'lm:habits': [
+    { id: 'db1', name: 'เขียนโค้ด 30 นาที', dates: [demoDate(-2), demoDate(-1), demoDate(0)] },
+    { id: 'db2', name: 'อ่านหนังสือ', dates: [demoDate(-1)] },
+  ],
+};
+
 /* ---------------- helpers ---------------- */
 function useLocalStorage(key, initial) {
   const [value, setValue] = useState(() => {
+    if (DEMO) return key in DEMO_DATA ? DEMO_DATA[key] : initial;
     try {
       const raw = typeof window !== 'undefined' ? window.localStorage.getItem(key) : null;
       return raw ? JSON.parse(raw) : initial;
     } catch { return initial; }
   });
   useEffect(() => {
+    if (DEMO) return;
     try { window.localStorage.setItem(key, JSON.stringify(value)); } catch {}
   }, [key, value]);
   return [value, setValue];
@@ -832,6 +874,15 @@ function App() {
               <div style={{ fontSize: 12, color: T.sub, marginTop: 1 }}>{t.subtitle}</div>
             </div>
           </div>
+          {DEMO && (
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 10,
+              background: 'rgba(200,163,58,.14)', border: `1px solid ${T.border}`,
+              color: T.bronzeSoft, borderRadius: 999, padding: '5px 12px', fontSize: 12,
+            }}>
+              {t.demoBadge}
+            </div>
+          )}
           <div style={{ width: 46, height: 2, background: T.bronze, borderRadius: 2, marginTop: 12 }} />
         </div>
       </div>

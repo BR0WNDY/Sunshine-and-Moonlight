@@ -31,6 +31,10 @@ Language choice persists in `localStorage('site:lang')` across pages; the Ledger
 `lm:lang` (defaults to Thai) plus data keys `lm:transactions`, `lm:debts`, `lm:assignments`,
 `lm:sales`, `lm:habits`.
 
+**Ledger: personal vs public view.** `/life-management/` is the personal app — data persists in
+the browser's localStorage. `/life-management/?demo=1` is the public view the portfolio links to —
+it loads sample data, shows a Demo badge, and saves nothing.
+
 ## Develop
 
 Serve locally with the COOP/COEP headers PyScript needs (same headers `vercel.json` sets in production):
