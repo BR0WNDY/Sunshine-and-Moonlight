@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   LayoutDashboard, Wallet, HandCoins, BookOpen, Briefcase, Flame,
-  Star, Plus, Trash2, Check, TriangleAlert, TrendingUp, Languages,
+  Star, Plus, Trash2, Check, TriangleAlert, TrendingUp, Languages, Lock,
 } from 'lucide-react';
 
 /* ---------------- theme (Ravenclaw palette, matches the main site) ---------------- */
@@ -86,6 +86,12 @@ const MESSAGES = {
     chartIncome: 'รับ', chartExpense: 'จ่าย',
     backPortfolio: '← พอร์ตโฟลิโอ',
     demoBadge: 'เดโม · ข้อมูลตัวอย่าง ไม่ถูกบันทึก',
+    lockTitle: 'มุมมองส่วนตัว',
+    lockHint: 'ใส่รหัสผ่านเพื่อเปิด Starlit Ledger ของคุณ',
+    lockPh: 'รหัสผ่าน',
+    unlock: 'ปลดล็อก',
+    wrongPass: 'รหัสผ่านไม่ถูกต้อง',
+    viewDemo: 'หรือดูเดโมสาธารณะ →',
     locale: 'th-TH',
   },
   en: {
@@ -142,6 +148,12 @@ const MESSAGES = {
     chartIncome: 'Income', chartExpense: 'Expense',
     backPortfolio: '← Portfolio',
     demoBadge: 'Demo · sample data, nothing is saved',
+    lockTitle: 'Private view',
+    lockHint: 'Enter the password to open your Starlit Ledger',
+    lockPh: 'Password',
+    unlock: 'Unlock',
+    wrongPass: 'Wrong password',
+    viewDemo: 'or view the public demo →',
     locale: 'en-GB',
   },
 };
@@ -193,6 +205,50 @@ const DEMO_DATA = {
     { id: 'db2', name: 'อ่านหนังสือ', dates: [demoDate(-1)] },
   ],
 };
+
+/* ---------------- private-view lock ----------------
+   Client-side gate for the personal view. Only the SHA-256 of the
+   password lives here; change it by hashing a new password and
+   rebuilding (README documents how). */
+const PASS_HASH = '97a8bd17c6824b925afde0ee39d9a9a8ea60a3bc2d61c202fbf67444fe479ccd';
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+function LockScreen({ t, onUnlock }) {
+  const [pw, setPw] = useState('');
+  const [error, setError] = useState(false);
+
+  const tryUnlock = async () => {
+    if ((await sha256Hex(pw)) === PASS_HASH) {
+      sessionStorage.setItem('lm:unlock', PASS_HASH);
+      onUnlock();
+    } else {
+      setError(true);
+      setPw('');
+    }
+  };
+
+  return (
+    <div style={{ background: T.bg, minHeight: '100vh', color: T.ink, fontFamily: BODY_FONT, display: 'grid', placeItems: 'center', padding: 20 }}>
+      <div style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 16, padding: '34px 28px', width: '100%', maxWidth: 360, textAlign: 'center' }}>
+        <Lock size={26} color={T.bronze} style={{ marginBottom: 12 }} />
+        <div style={{ fontFamily: DISPLAY_FONT, fontSize: 24, fontWeight: 600, marginBottom: 6 }}>Starlit Ledger</div>
+        <div style={{ fontSize: 13, color: T.sub, marginBottom: 4 }}>{t.lockTitle}</div>
+        <div style={{ fontSize: 12.5, color: T.faint, marginBottom: 20 }}>{t.lockHint}</div>
+        <Input type="password" value={pw} autoFocus
+          onChange={(e) => { setPw(e.target.value); setError(false); }}
+          onKeyDown={(e) => e.key === 'Enter' && tryUnlock()}
+          placeholder={t.lockPh} style={{ textAlign: 'center', marginBottom: 10 }} />
+        {error && <div style={{ fontSize: 12.5, color: T.red, marginBottom: 10 }}>{t.wrongPass}</div>}
+        <Button onClick={tryUnlock} style={{ width: '100%', justifyContent: 'center' }}>{t.unlock}</Button>
+        <a href="?demo=1" style={{ display: 'inline-block', marginTop: 16, fontSize: 12.5, color: T.faint, textDecoration: 'none' }}>{t.viewDemo}</a>
+      </div>
+    </div>
+  );
+}
 
 /* ---------------- helpers ---------------- */
 function useLocalStorage(key, initial) {
@@ -827,12 +883,17 @@ function HabitTab({ t, habits, setHabits }) {
 function App() {
   const [lang, setLang] = useLocalStorage('lm:lang', 'th');
   const t = MESSAGES[lang] || MESSAGES.th;
+  const [unlocked, setUnlocked] = useState(() => (
+    DEMO || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('lm:unlock') === PASS_HASH)
+  ));
   const [tab, setTab] = useState('dash');
   const [tx, setTx] = useLocalStorage('lm:transactions', []);
   const [debts, setDebts] = useLocalStorage('lm:debts', []);
   const [hw, setHw] = useLocalStorage('lm:assignments', []);
   const [sales, setSales] = useLocalStorage('lm:sales', []);
   const [habits, setHabits] = useLocalStorage('lm:habits', []);
+
+  if (!unlocked) return <LockScreen t={t} onUnlock={() => setUnlocked(true)} />;
 
   const tabs = [
     { id: 'dash', label: t.tabDash, icon: LayoutDashboard },

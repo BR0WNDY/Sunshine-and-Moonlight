@@ -32,8 +32,14 @@ Language choice persists in `localStorage('site:lang')` across pages; the Ledger
 `lm:sales`, `lm:habits`.
 
 **Ledger: personal vs public view.** `/life-management/` is the personal app — data persists in
-the browser's localStorage. `/life-management/?demo=1` is the public view the portfolio links to —
-it loads sample data, shows a Demo badge, and saves nothing.
+the browser's localStorage and a password lock screen guards it (unlock lasts for the browser
+session). `/life-management/?demo=1` is the public view the portfolio links to — it loads sample
+data, shows a Demo badge, saves nothing, and needs no password.
+
+To change the password: hash the new one with
+`python3 -c "import hashlib;print(hashlib.sha256(b'NEW-PASSWORD').hexdigest())"`,
+put the result in `PASS_HASH` in `src/life-management.jsx`, then rebuild. The lock is a
+client-side privacy curtain (data never leaves the browser anyway), not server security.
 
 ## Develop
 
