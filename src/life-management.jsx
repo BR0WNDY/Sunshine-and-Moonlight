@@ -207,45 +207,67 @@ const DEMO_DATA = {
 };
 
 /* ---------------- private-view lock ----------------
-   Client-side gate for the personal view. Only the SHA-256 of the
-   password lives here; change it by hashing a new password and
-   rebuilding (README documents how). */
-const PASS_HASH = '97a8bd17c6824b925afde0ee39d9a9a8ea60a3bc2d61c202fbf67444fe479ccd';
+   Client-side gate for the personal view. Only a PBKDF2-SHA256 key
+   (600k iterations, random salt) lives here; change it by deriving a
+   new key and rebuilding (README documents how). */
+const PASS_KDF = {
+  salt: '0bfcf4f02864271a82b9939ff7237f9b',
+  iterations: 600000,
+  key: '67c883bbeaad63b2b63afa4a653d027f504d1fe95d4691d5a3eb190c70cda6b1',
+};
 
-async function sha256Hex(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, '0')).join('');
+const hexToBytes = (hex) => new Uint8Array(hex.match(/.{2}/g).map((b) => parseInt(b, 16)));
+
+async function deriveKeyHex(password) {
+  const material = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt: hexToBytes(PASS_KDF.salt), iterations: PASS_KDF.iterations },
+    material, 256,
+  );
+  return Array.from(new Uint8Array(bits)).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 function LockScreen({ t, onUnlock }) {
   const [pw, setPw] = useState('');
   const [error, setError] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const attempts = React.useRef(0);
 
   const tryUnlock = async () => {
-    if ((await sha256Hex(pw)) === PASS_HASH) {
-      sessionStorage.setItem('lm:unlock', PASS_HASH);
+    if (busy || !pw) return;
+    setBusy(true);
+    // small growing delay after wrong attempts deters guessing on the device
+    if (attempts.current > 0) await new Promise((r) => setTimeout(r, Math.min(attempts.current * 800, 5000)));
+    const ok = (await deriveKeyHex(pw)) === PASS_KDF.key;
+    if (ok) {
+      sessionStorage.setItem('lm:unlock', PASS_KDF.key);
       onUnlock();
     } else {
+      attempts.current += 1;
       setError(true);
       setPw('');
+      setBusy(false);
     }
   };
 
   return (
     <div style={{ background: T.bg, minHeight: '100vh', color: T.ink, fontFamily: BODY_FONT, display: 'grid', placeItems: 'center', padding: 20 }}>
-      <div style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 16, padding: '34px 28px', width: '100%', maxWidth: 360, textAlign: 'center' }}>
+      <form onSubmit={(e) => { e.preventDefault(); tryUnlock(); }}
+        style={{ background: T.panel, border: `1px solid ${T.border}`, borderRadius: 16, padding: '34px 28px', width: '100%', maxWidth: 360, textAlign: 'center' }}>
         <Lock size={26} color={T.bronze} style={{ marginBottom: 12 }} />
         <div style={{ fontFamily: DISPLAY_FONT, fontSize: 24, fontWeight: 600, marginBottom: 6 }}>Starlit Ledger</div>
         <div style={{ fontSize: 13, color: T.sub, marginBottom: 4 }}>{t.lockTitle}</div>
         <div style={{ fontSize: 12.5, color: T.faint, marginBottom: 20 }}>{t.lockHint}</div>
-        <Input type="password" value={pw} autoFocus
+        <Input type="password" name="password" value={pw} autoFocus
+          autoComplete="current-password" autoCapitalize="off" spellCheck={false}
           onChange={(e) => { setPw(e.target.value); setError(false); }}
-          onKeyDown={(e) => e.key === 'Enter' && tryUnlock()}
           placeholder={t.lockPh} style={{ textAlign: 'center', marginBottom: 10 }} />
         {error && <div style={{ fontSize: 12.5, color: T.red, marginBottom: 10 }}>{t.wrongPass}</div>}
-        <Button onClick={tryUnlock} style={{ width: '100%', justifyContent: 'center' }}>{t.unlock}</Button>
+        <Button type="submit" disabled={busy} style={{ width: '100%', justifyContent: 'center', opacity: busy ? 0.6 : 1 }}>
+          {busy ? '…' : t.unlock}
+        </Button>
         <a href="?demo=1" style={{ display: 'inline-block', marginTop: 16, fontSize: 12.5, color: T.faint, textDecoration: 'none' }}>{t.viewDemo}</a>
-      </div>
+      </form>
     </div>
   );
 }
@@ -884,7 +906,7 @@ function App() {
   const [lang, setLang] = useLocalStorage('lm:lang', 'th');
   const t = MESSAGES[lang] || MESSAGES.th;
   const [unlocked, setUnlocked] = useState(() => (
-    DEMO || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('lm:unlock') === PASS_HASH)
+    DEMO || (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('lm:unlock') === PASS_KDF.key)
   ));
   const [tab, setTab] = useState('dash');
   const [tx, setTx] = useLocalStorage('lm:transactions', []);

@@ -36,9 +36,14 @@ the browser's localStorage and a password lock screen guards it (unlock lasts fo
 session). `/life-management/?demo=1` is the public view the portfolio links to — it loads sample
 data, shows a Demo badge, saves nothing, and needs no password.
 
-To change the password: hash the new one with
-`python3 -c "import hashlib;print(hashlib.sha256(b'NEW-PASSWORD').hexdigest())"`,
-put the result in `PASS_HASH` in `src/life-management.jsx`, then rebuild. The lock is a
+To change the password, derive a new PBKDF2 key:
+
+```bash
+python3 -c "import hashlib,secrets;s=secrets.token_bytes(16);\
+print('salt:',s.hex());print('key:',hashlib.pbkdf2_hmac('sha256',b'NEW-PASSWORD',s,600000).hex())"
+```
+
+then put the salt and key into `PASS_KDF` in `src/life-management.jsx` and rebuild. The lock is a
 client-side privacy curtain (data never leaves the browser anyway), not server security.
 
 ## Develop
