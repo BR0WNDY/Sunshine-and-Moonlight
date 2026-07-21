@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://browndy.vercel.app/sitemap.xml
