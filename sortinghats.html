@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,17 +11,63 @@
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 <style>
-  .sorting-wrap{max-width:900px;margin:0 auto}
-  .terminal-card{margin-top:28px;border-radius:16px;border:1px solid var(--line);
+  .sorting-wrap{max-width:720px;margin:0 auto}
+
+  .hat-card{margin-top:28px;border-radius:16px;border:1px solid var(--line);
     background:rgba(5,11,20,.8);backdrop-filter:blur(10px);
     box-shadow:0 24px 48px -24px rgba(0,0,0,.8);overflow:hidden}
-  .terminal-card .hint{padding:14px 20px;font-family:var(--font-mono);
+
+  .hat-progress{padding:14px 22px;font-family:var(--font-mono);
     font-size:.74rem;letter-spacing:.5px;color:var(--muted);
-    border-bottom:1px solid var(--line)}
-  .terminal-wrapper{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  py-terminal{width:100%;min-width:300px;height:480px;background:transparent!important;
-    display:block;box-sizing:border-box}
-  @media(max-width:600px){ py-terminal{height:400px;font-size:.8rem} }
+    border-bottom:1px solid var(--line);min-height:1.1em}
+
+  .hat-body{padding:26px 22px 30px}
+
+  .hat-line{color:var(--silver);margin:0 0 10px;line-height:1.6}
+  .hat-line:empty{display:none}
+
+  .hat-question{font-family:var(--font-display);font-size:1.3rem;
+    color:var(--parchment);margin:4px 0 18px;line-height:1.4}
+
+  .hat-options{display:grid;grid-template-columns:1fr;gap:12px}
+  @media(min-width:640px){ .hat-options{grid-template-columns:1fr 1fr} }
+
+  .hat-opt{width:100%;min-height:52px;padding:12px 18px;text-align:left;
+    border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);
+    color:var(--silver);font-family:var(--font-body);font-size:.96rem;line-height:1.35;
+    cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .15s;
+    -webkit-tap-highlight-color:transparent}
+  .hat-opt:hover{border-color:var(--bronze);color:var(--bronze-soft)}
+  .hat-opt:active{transform:scale(.98)}
+  .hat-opt-primary{background:var(--bronze);border-color:var(--bronze);
+    color:#1a1405;font-weight:600;grid-column:1/-1;justify-self:start}
+  .hat-opt-primary:hover{background:var(--bronze-soft);color:#1a1405}
+
+  .hat-name-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+  .hat-input{flex:1 1 200px;min-height:52px;padding:12px 16px;border-radius:12px;
+    border:1px solid var(--line);background:rgba(255,255,255,.03);
+    color:var(--parchment);font-family:var(--font-body);font-size:1rem}
+  .hat-input:focus{outline:none;border-color:var(--bronze)}
+
+  .hat-result{padding-top:4px}
+  .hat-house{font-family:var(--font-display);font-size:2.1rem;font-weight:600;
+    margin-bottom:16px;color:var(--house-fg,var(--bronze-soft));
+    padding:6px 16px;display:inline-block;border-radius:10px;
+    background:var(--house-bg,rgba(255,255,255,.05))}
+  .hat-aside{margin:16px 0;padding:14px 16px;border-left:2px solid var(--bronze);
+    background:rgba(255,255,255,.03);border-radius:0 10px 10px 0}
+  .hat-aside .hat-line:last-child{margin-bottom:0}
+  .hat-result .hat-opt-primary{margin-top:8px}
+
+  .hat-toggle{display:flex;gap:8px;margin-top:24px}
+  .hat-toggle-btn{flex:1;min-height:44px;padding:10px 14px;border-radius:10px;
+    border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);
+    font-family:var(--font-mono);font-size:.78rem;letter-spacing:.4px;cursor:pointer;
+    transition:border-color .15s,color .15s,background .15s;-webkit-tap-highlight-color:transparent}
+  .hat-toggle-btn:hover{border-color:var(--bronze);color:var(--bronze-soft)}
+  .hat-toggle-btn.is-active{background:var(--bronze);border-color:var(--bronze);
+    color:#1a1405;font-weight:600}
+  .hat-engine-note{margin-top:10px;font-size:.8rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -47,14 +94,59 @@
   <div class="sorting-wrap">
     <p class="eyebrow" data-en="Projects · Interactive" data-th="ผลงาน · เชิงโต้ตอบ">Projects · Interactive</p>
     <h1 class="page-title" data-en="The Great Hall: Sorting Ceremony" data-th="ห้องโถงใหญ่: พิธีคัดสรร">The Great Hall: Sorting Ceremony</h1>
-    <p class="lead" data-en="An interactive Python app running entirely in your browser via PyScript. Answer the Hat's questions honestly — it always knows." data-th="แอป Python เชิงโต้ตอบที่รันบนเบราว์เซอร์ของคุณทั้งหมดด้วย PyScript ตอบคำถามของหมวกอย่างจริงใจ มันรู้เสมอ">An interactive Python app running entirely in your browser via PyScript. Answer the Hat's questions honestly — it always knows.</p>
+    <p class="lead" data-en="An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript." data-th="แบบทดสอบเชิงโต้ตอบที่จัดคุณเข้าบ้านฮอกวอตส์ — สุ่มชุดคำถามใหม่ทุกครั้ง แตะตอบได้ทั้งบนมือถือและคอมพิวเตอร์ เลือกรันด้วย Python (PyScript) หรือ JavaScript ล้วนก็ได้">An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript.</p>
 
-    <div class="terminal-card">
-      <p class="hint" data-en="PC / Mac recommended · the Hat is gathering its thoughts…" data-th="แนะนำให้ใช้คอมพิวเตอร์ · หมวกกำลังรวบรวมความคิด…">PC / Mac recommended · the Hat is gathering its thoughts…</p>
-      <div class="terminal-wrapper">
-        <script type="py" src="./sorting-hat/sortinghat.py" config="./sorting-hat/pyscript.json" terminal worker></script>
+    <div class="hat-toggle" role="group" aria-label="Choose engine">
+      <button class="hat-toggle-btn is-active" id="enginePyBtn" type="button">Python · PyScript</button>
+      <button class="hat-toggle-btn" id="engineJsBtn" type="button">JavaScript</button>
+    </div>
+    <p class="hat-engine-note">Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser (first switch takes a few seconds).</p>
+
+    <div class="hat-card">
+      <div class="hat-progress" id="hatProgress"></div>
+      <div class="hat-body" id="hatBody">
+        <p class="hat-line">The Hat is gathering its thoughts…</p>
       </div>
     </div>
+
+    <script src="sorting-hat/sortinghat.js"></script>
+    <script type="py" src="./sorting-hat/sortinghat.py" config="./sorting-hat/pyscript.json"></script>
+    <script>
+      (function () {
+        var current = "py";
+        var pyReady = false;
+
+        var jsBtn = document.getElementById("engineJsBtn");
+        var pyBtn = document.getElementById("enginePyBtn");
+
+        function setActive(which) {
+          current = which;
+          jsBtn.classList.toggle("is-active", which === "js");
+          pyBtn.classList.toggle("is-active", which === "py");
+        }
+
+        window.addEventListener("hatpy:ready", function () {
+          pyReady = true;
+          if (current === "py") window.pyStartHat();
+        });
+
+        jsBtn.addEventListener("click", function () {
+          setActive("js");
+          window.jsStartHat();
+        });
+
+        pyBtn.addEventListener("click", function () {
+          setActive("py");
+          if (pyReady) {
+            window.pyStartHat();
+          } else {
+            document.getElementById("hatProgress").textContent = "";
+            document.getElementById("hatBody").innerHTML =
+              '<p class="hat-line">Loading the Python runtime… this can take a few seconds on first load.</p>';
+          }
+        });
+      })();
+    </script>
   </div>
 </main>
 

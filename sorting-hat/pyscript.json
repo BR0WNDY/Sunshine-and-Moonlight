@@ -1,5 +1,4 @@
 {
     "name": "Hogwarts Sorting Hat",
-    "description": "A Python-based sorting ceremony running in the browser",
-    "terminal": true
+    "description": "A Python-based sorting ceremony running in the browser"
 }

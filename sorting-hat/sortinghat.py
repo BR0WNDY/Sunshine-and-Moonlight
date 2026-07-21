@@ -1,358 +1,346 @@
+import random
+
+from pyscript import document, window
+from pyodide.ffi import create_proxy
+
+
 class House:
-    name = ""
-    assigned_house = "Unsorted"
-    gryffindor = 0
-    ravenclaw = 0
-    hufflepuff = 0
-    slytherin = 0
-    muggle = 0
-    force_muggle = False
+    def __init__(self):
+        self.name = ""
+        self.assigned_house = "Unsorted"
+        self.scores = {"gryffindor": 0, "ravenclaw": 0, "hufflepuff": 0, "slytherin": 0, "muggle": 0}
+        self.force_muggle = False
+        self.aside = None
 
-    def add_gryffindor(self):
-        self.gryffindor += 1
+    def add(self, key):
+        self.scores[key] += 1
 
-    def add_ravenclaw(self):
-        self.ravenclaw += 1
-
-    def add_hufflepuff(self):
-        self.hufflepuff += 1
-
-    def add_slytherin(self):
-        self.slytherin += 1
-
-    def add_muggle_and_squib(self):
-        self.muggle += 1
-
-    def set_force_muggle(self, value):
-        self.force_muggle = value
+    def set_force_muggle(self):
+        self.force_muggle = True
 
     def sort_into_house(self):
-        # UNIVERSAL OVERRIDE
         if self.force_muggle:
             self.assigned_house = "Muggle"
             return
 
-        wizard_max = max(self.gryffindor, self.ravenclaw, self.hufflepuff, self.slytherin)
-        max_score = max(wizard_max, self.muggle)
+        wizard_keys = ["gryffindor", "ravenclaw", "hufflepuff", "slytherin"]
+        wizard_max = max(self.scores[k] for k in wizard_keys)
+        max_score = max(wizard_max, self.scores["muggle"])
 
-        # Priority logic
-        if max_score == self.gryffindor:
+        if max_score == self.scores["gryffindor"]:
             self.assigned_house = "Gryffindor"
-        elif max_score == self.ravenclaw:
+        elif max_score == self.scores["ravenclaw"]:
             self.assigned_house = "Ravenclaw"
-        elif max_score == self.hufflepuff:
+        elif max_score == self.scores["hufflepuff"]:
             self.assigned_house = "Hufflepuff"
-        elif max_score == self.slytherin:
+        elif max_score == self.scores["slytherin"]:
             self.assigned_house = "Slytherin"
         else:
             self.assigned_house = "Muggle"
 
-    def announce_house(self):
-        print("\n------------------------------------")
 
-        if self.assigned_house == "Muggle":
-            print("The Sorting Hat sighs…")
-            print("“MUGGLE!”")
-            print(f"{self.name}, you cannot attend Hogwarts. Please return to the train.")
+QUESTIONS = [
+    {
+        "text": "Q1: Which trait do you value most?",
+        "options": [
+            ("Bravery", "gryffindor"),
+            ("Wisdom", "ravenclaw"),
+            ("Loyalty", "hufflepuff"),
+            ("Ambition", "slytherin"),
+            ("You are a freak — why am I wearing a hat that can talk and read my brain!", "muggle"),
+        ],
+    },
+    {
+        "text": "Q2: Where are you most likely to be found at Hogwarts?",
+        "options": [
+            ("Running into danger to help a friend", "gryffindor"),
+            ("In the library reading", "ravenclaw"),
+            ("Helping others with homework", "hufflepuff"),
+            ("Plotting how to get power", "slytherin"),
+            ("Just being a normal struggling student", "muggle"),
+        ],
+    },
+    {
+        "text": "Q3: What kind of friend are you?",
+        "options": [
+            ("Brave protector", "gryffindor"),
+            ("Smart idea generator", "ravenclaw"),
+            ("Loyal supporter", "hufflepuff"),
+            ("Ambitious motivator", "slytherin"),
+            ("Just a normal friend", "muggle"),
+        ],
+    },
+    {
+        "text": "Q4: How do you brush your teeth?",
+        "options": [
+            ("I'm too brave to skip brushing my teeth", "gryffindor"),
+            ("While I'm reading", "ravenclaw"),
+            ("While I'm making a sandwich", "hufflepuff"),
+            ("I'm rich enough to own an electric toothbrush", "slytherin"),
+            ("Just… in the bathroom like normal", "muggle"),
+        ],
+    },
+    {
+        "text": "Q5: What's your favorite subject?",
+        "options": [
+            ("DADA (Defence Against the Dark Arts) and Animagus", "gryffindor"),
+            ("Astronomy and Charms", "ravenclaw"),
+            ("Care of Magical Creatures and Herbology", "hufflepuff"),
+            ("I want motivation… for the Dark Arts", "slytherin"),
+            ("I don't know what that means, freaking hat!!!", "muggle"),
+        ],
+    },
+    {
+        "text": "Q6: What's your dream job in the Wizarding World?",
+        "options": [
+            ("Auror with an Order of Merlin", "gryffindor"),
+            ("Astronomer and Professor at Hogwarts", "ravenclaw"),
+            ("Magizoologist / Mediwizard", "hufflepuff"),
+            ("Rich enough to never need a job", "slytherin"),
+            ("I don't know what that means, freaking hat!!!", "muggle"),
+        ],
+    },
+    {
+        "text": "Q7: What do you do when you find a mysterious glowing door at Hogwarts?",
+        "options": [
+            ("Open it immediately — adventure waits!", "gryffindor"),
+            ("Study the symbols and decode the magic behind it", "ravenclaw"),
+            ("Find a professor — I don't want anyone to get hurt", "hufflepuff"),
+            ("Try to claim whatever power is behind it before anyone else does", "slytherin"),
+            ("WHAT IS THAT?? That's not normal!!", "muggle"),
+        ],
+    },
+    {
+        "text": "Q8: Where are you most likely to be found at Hogwarts?",
+        "options": [
+            ("Running into danger to help a friend", "gryffindor"),
+            ("Reading in the library", "ravenclaw"),
+            ("Helping classmates", "hufflepuff"),
+            ("Plotting success", "slytherin"),
+            ("WHAT IS THAT?? That's not normal!!", "muggle"),
+        ],
+    },
+    {
+        "text": "Q9: Someone drops a bag full of Galleons. What do you do?",
+        "options": [
+            ("Run after them to return it", "gryffindor"),
+            ("Find clues to track down the owner", "ravenclaw"),
+            ("Wait in place until they come back", "hufflepuff"),
+            ("Pocket just a little bit!!!!", "slytherin"),
+            ("Scream because money shouldn't fall from nowhere", "muggle"),
+        ],
+    },
+]
 
-            print()
-            print("[Albus]: Even if Hogwarts says no… your story isn’t over.")
-            print("[Scorpius]: Magic or not, we’re still with you.")
+Q10_ASIDE = (
+    "[Albus]: I think I just doomed myself, Scorpius…\n"
+    "[Scorpius]: Hey… it's okay. Even Muggles deserve magic in their lives.\n"
+    "[Albus]: Really?\n"
+    "[Scorpius]: You said my name once. That's all the magic I ever needed."
+)
 
+RESULT_LINES = {
+    "Muggle": [
+        "The Sorting Hat sighs…",
+        "“MUGGLE!”",
+        "{name}, you cannot attend Hogwarts. Please return to the train.",
+        "",
+        "[Albus]: Even if Hogwarts says no… your story isn't over.",
+        "[Scorpius]: Magic or not, we're still with you.",
+    ],
+    "default": [
+        "The Sorting Hat roars: {house}!",
+        "{name}, welcome to {house}!",
+        "",
+        "[Albus]: See? The Hat knew.",
+        "[Scorpius]: Whatever House you're in… you'll never be alone here.",
+    ],
+}
+
+HOUSE_COLORS = {
+    "Gryffindor": ("#5c0f14", "#f4c86a"),
+    "Ravenclaw": ("#10214a", "#c9a86a"),
+    "Hufflepuff": ("#6b5000", "#fdf2c4"),
+    "Slytherin": ("#0b3d2a", "#cdeecb"),
+    "Muggle": ("#2c3444", "#d7deee"),
+}
+
+MIN_QUESTIONS = 5
+MAX_QUESTIONS = len(QUESTIONS)
+
+player = House()
+state = {"question_index": 0, "questions": QUESTIONS, "total_steps": len(QUESTIONS) + 1}
+_proxies = []  # keep proxy refs alive so listeners aren't garbage-collected
+
+
+def esc(s):
+    return (
+        s.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
+def body_el():
+    return document.getElementById("hatBody")
+
+
+def progress_el():
+    return document.getElementById("hatProgress")
+
+
+def bind(el_id, handler):
+    el = document.getElementById(el_id)
+    proxy = create_proxy(handler)
+    _proxies.append(proxy)
+    el.addEventListener("click", proxy)
+
+
+def set_progress(step):
+    progress_el().innerHTML = f"Question {step} of {state['total_steps']}" if step else ""
+
+
+def render_intro(*_):
+    player.__init__()
+    state["question_index"] = 0
+    set_progress(0)
+    body_el().innerHTML = """
+      <p class="hat-line">Welcome to Hogwarts!</p>
+      <p class="hat-line">You are in a Sorting House Ceremony (or you are a Muggle).</p>
+      <p class="hat-line">You are wearing a sorting hat placed by Headmistress Professor McGonagall.</p>
+      <p class="hat-question">Are you ready?</p>
+      <div class="hat-options">
+        <button class="hat-opt" id="optYes">Yes</button>
+        <button class="hat-opt" id="optNo">No</button>
+      </div>
+    """
+    bind("optYes", lambda e: render_name("The Great Hall falls silent. The Hat awakens…"))
+    bind("optNo", lambda e: render_name("Too bad! The Hat is already on your head…"))
+
+
+def render_name(flavor):
+    body_el().innerHTML = f"""
+      <p class="hat-line">{esc(flavor)}</p>
+      <p class="hat-question">Enter your name:</p>
+      <div class="hat-name-row">
+        <input class="hat-input" id="nameInput" type="text" maxlength="40"
+               placeholder="Your name" autocomplete="off" />
+        <button class="hat-opt hat-opt-primary" id="nameGo">Continue</button>
+      </div>
+    """
+
+    def go(_e):
+        value = document.getElementById("nameInput").value.strip()
+        player.name = value if value else "Traveler"
+        count = random.randint(MIN_QUESTIONS, MAX_QUESTIONS)
+        state["questions"] = random.sample(QUESTIONS, count)
+        state["total_steps"] = count + 1
+        state["question_index"] = 0
+        render_question()
+
+    bind("nameGo", go)
+    document.getElementById("nameInput").focus()
+
+
+def render_question(*_):
+    idx = state["question_index"]
+    q = state["questions"][idx]
+    set_progress(idx + 1)
+
+    opts_html = "".join(
+        f'<button class="hat-opt" id="opt{i}">{esc(label)}</button>'
+        for i, (label, _house) in enumerate(q["options"])
+    )
+    body_el().innerHTML = f"""
+      <p class="hat-question">{esc(q["text"])}</p>
+      <div class="hat-options">{opts_html}</div>
+    """
+
+    for i, (_label, house_key) in enumerate(q["options"]):
+        bind(f"opt{i}", make_choice_handler(house_key))
+
+
+def make_choice_handler(house_key):
+    def handler(_e):
+        if house_key == "muggle":
+            player.set_force_muggle()
+            player.add("muggle")
         else:
-            print(f"The Sorting Hat roars: {self.assigned_house.upper()}!")
-            print(f"{self.name}, welcome to {self.assigned_house}!")
+            player.add(house_key)
+        advance()
 
-            print()
-            print("[Albus]: See? The Hat knew.")
-            print("[Scorpius]: Whatever House you’re in… you’ll never be alone here.")
+    return handler
 
-        print(
-            "\nThe Great Hall: Sorting Ceremony (Python Version)")
-        print("------------------------------------")
-# ---------- INTRODUCTION ---------- #
-print("Welcome to Hogwarts!")
-print("You are in a Sorting House Ceremony (or you are a Muggle).")
-print("You are wearing a sorting hat placed by Headmistress Professor McGonagall.")
 
-while True:
-    sorting = input("Are You Ready? (Yes/No): ").strip().lower()
-
-    if sorting == "yes" or sorting == "y":
-        print("\nThe Great Hall falls silent. The Hat awakens...\n")
-        break
-    elif sorting == "no" or sorting == "n":
-        print("\nToo bad! The Hat is already on your head...\n")
-        break
+def advance():
+    state["question_index"] += 1
+    if state["question_index"] < len(state["questions"]):
+        render_question()
     else:
-        print("wrong input please try again")
+        render_q10()
 
-# ---------- Creat your Characters ----------
-player = House() # Create the player
-player.name = input("Enter your name: ")
-# ---------- Q1 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ1: Which trait do you value most?")
-    print("A) Bravery")
-    print("B) Wisdom")
-    print("C) Loyalty")
-    print("D) Ambition")
-    print("E) You are Freak why's I wear a hat that can talk and read my brain!")
 
-    ans1 = input("Choice : ").strip().upper()
+def render_q10(*_):
+    set_progress(state["total_steps"])
+    body_el().innerHTML = """
+      <p class="hat-question">Q10: Which path calls to you?</p>
+      <div class="hat-options">
+        <button class="hat-opt" id="optA">Forest (wisdom + bravery)</button>
+        <button class="hat-opt" id="optB">River (ambition + loyalty)</button>
+        <button class="hat-opt" id="optC">What???</button>
+      </div>
+    """
 
-    if ans1 == "A":
-        player.add_gryffindor(); break
-    elif ans1 == "B":
-        player.add_ravenclaw(); break
-    elif ans1 == "C":
-        player.add_hufflepuff(); break
-    elif ans1 == "D":
-        player.add_slytherin(); break
-    elif ans1 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
-# ---------- Q2 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ2: Where are you most likely to be found at Hogwarts?")
-    print("A) Running into danger to help a friend")
-    print("B) In the library reading")
-    print("C) Helping others with homework")
-    print("D) Plotting how to get power")
-    print("E) Just being a normal struggling student")
+    def choose_a(_e):
+        player.add("gryffindor")
+        player.add("ravenclaw")
+        finish()
 
-    ans2 = input("Choice : ").strip().upper()
+    def choose_b(_e):
+        player.add("hufflepuff")
+        player.add("slytherin")
+        finish()
 
-    if ans2 == "A":
-        player.add_gryffindor(); break
-    elif ans2 == "B":
-        player.add_ravenclaw(); break
-    elif ans2 == "C":
-        player.add_hufflepuff(); break
-    elif ans2 == "D":
-        player.add_slytherin(); break
-    elif ans2 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
+    def choose_c(_e):
+        player.set_force_muggle()
+        player.aside = Q10_ASIDE
+        finish()
 
-# ---------- Q3 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ3: What kind of friend are you?")
-    print("A) Brave protector")
-    print("B) Smart idea generator")
-    print("C) Loyal supporter")
-    print("D) Ambitious motivator")
-    print("E) Just a normal friend")
+    bind("optA", choose_a)
+    bind("optB", choose_b)
+    bind("optC", choose_c)
 
-    ans3 = input("Choice : ").strip().upper()
 
-    if ans3 == "A":
-        player.add_gryffindor(); break
-    elif ans3 == "B":
-        player.add_ravenclaw(); break
-    elif ans3 == "C":
-        player.add_hufflepuff(); break
-    elif ans3 == "D":
-        player.add_slytherin(); break
-    elif ans3 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
+def finish(*_):
+    player.sort_into_house()
+    house = player.assigned_house
+    template = RESULT_LINES["Muggle"] if house == "Muggle" else RESULT_LINES["default"]
+    lines = [line.format(name=player.name, house=house) for line in template]
+    bg, fg = HOUSE_COLORS.get(house, HOUSE_COLORS["Muggle"])
 
-# ---------- Q4 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ4: How do you brush your teeth?")
-    print("A) I'm too brave to didn't brush my teeth)")
-    print("B) While I'm reading")
-    print("C) While I'm making a sandwich")
-    print("D) I'm rich to buy electric toothbrush")
-    print("E) Just… in the bathroom like normal")
+    aside_html = ""
+    if player.aside:
+        aside_lines = "".join(f'<p class="hat-line">{esc(l)}</p>' for l in player.aside.split("\n"))
+        aside_html = f'<div class="hat-aside">{aside_lines}</div>'
 
-    ans4 = input("Choice : ").strip().upper()
+    lines_html = "".join(f'<p class="hat-line">{esc(l)}</p>' for l in lines if l)
 
-    if ans4 == "A":
-        player.add_gryffindor(); break
-    elif ans4 == "B":
-        player.add_ravenclaw(); break
-    elif ans4 == "C":
-        player.add_hufflepuff(); break
-    elif ans4 == "D":
-        player.add_slytherin(); break
-    elif ans4 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
+    set_progress(0)
+    body_el().innerHTML = f"""
+      <div class="hat-result" style="--house-bg:{bg}; --house-fg:{fg}">
+        <p class="hat-house">{esc(house)}</p>
+        {aside_html}
+        {lines_html}
+        <button class="hat-opt hat-opt-primary" id="restart">Sort me again</button>
+      </div>
+    """
 
-# ---------- Q5 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ5: What's your favorite subjects")
-    print("A) DADA (Defence Against the Dark Arts) and Animagus")
-    print("B) Astronomy and Chrarms")
-    print("C) Care of Magical Creatures and Herbology")
-    print("D) I'm wants motivations to Dark Arts")
-    print("E) I don't know what that meaning a freaking Hats !!!!!")
+    def restart(_e):
+        render_intro()
 
-    ans5 = input("Choice : ").strip().upper()
+    bind("restart", restart)
 
-    if ans5 == "A":
-        player.add_gryffindor(); break
-    elif ans5 == "B":
-        player.add_ravenclaw(); break
-    elif ans5 == "C":
-        player.add_hufflepuff(); break
-    elif ans5 == "D":
-        player.add_slytherin(); break
-    elif ans5 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
 
-# ---------- Q6 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ6: What's your Dream Jobs in Wizarding World")
-    print("A) I'm Aurror and I have Order of Merlin")
-    print("B) I'm Astronomer and I'm Professor at Hogwarts")
-    print("C) I'm Magizoology and I'm Mediwizard/Mediwitch")
-    print("D) I'm Rich to have lifetime without taking a Jobs")
-    print("E) I don't know what that meaning a freaking Hats !!!!!")
-
-    ans6 = input("Choice : ").strip().upper()
-
-    if ans6 == "A":
-        player.add_gryffindor(); break
-    elif ans6 == "B":
-        player.add_ravenclaw(); break
-    elif ans6 == "C":
-        player.add_hufflepuff(); break
-    elif ans6 == "D":
-        player.add_slytherin(); break
-    elif ans6 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
-
-# ---------- Q7 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ7: What do you do when you find a mysterious glowing door at Hogwarts ???")
-    print("A) I'm Open immediately — adventure waits!")
-    print("B) I'm Study the symbols and try to decode the magic behind it.")
-    print("C) I'm must goes to find a professor I'm wants to nobody gets hurt")
-    print(
-        "D) I'm Try to claim whatever power is behind the door before anyone else does like People in HardYai Zone 8 in Telephone line")
-    print("E) WHAT IS THAT?? That’s not normal!!")
-
-    ans7 = input("Choice : ").strip().upper()
-
-    if ans7 == "A":
-        player.add_gryffindor(); break
-    elif ans7 == "B":
-        player.add_ravenclaw(); break
-    elif ans7 == "C":
-        player.add_hufflepuff(); break
-    elif ans7 == "D":
-        player.add_slytherin(); break
-    elif ans7 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
-
-# ---------- Q8 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ8: Where are you most likely to be found at Hogwarts? ???")
-    print("A) Running into danger to help a friend")
-    print("B) Reading in the library")
-    print("C) Helping classmates")
-    print("D) Plotting success")
-    print("E) WHAT IS THAT?? That’s not normal!!")
-
-    ans8 = input("Choice : ").strip().upper()
-
-    if ans8 == "A":
-        player.add_gryffindor(); break
-    elif ans8 == "B":
-        player.add_ravenclaw(); break
-    elif ans8 == "C":
-        player.add_hufflepuff(); break
-    elif ans8 == "D":
-        player.add_slytherin(); break
-    elif ans8 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
-
-# ---------- Q9 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ9: Someone drops a bag full of Galleons. What do you do?")
-    print("A) I'm running after them to return it")
-    print("B) I'm finding a clues to find the owner")
-    print("C) I'm waiting in place until they come back")
-    print("D) Pocket just a little bit !!!!")
-    print("E) Scream because money shouldn’t fall from nowhere")
-
-    ans9 = input("Choice : ").strip().upper()
-
-    if ans9 == "A":
-        player.add_gryffindor(); break
-    elif ans9 == "B":
-        player.add_ravenclaw(); break
-    elif ans9 == "C":
-        player.add_hufflepuff(); break
-    elif ans9 == "D":
-        player.add_slytherin(); break
-    elif ans9 == "E":
-        player.set_force_muggle(True)
-        player.add_muggle_and_squib()
-        break
-    else:
-        print("wrong input please try again")
-
-# ---------- Q10 "if you choose E = Forge to Muggle" ----------
-while True:
-    print("\nQ10: Which path calls to you?")
-    print("A) Forest (wisdom + bravery)")
-    print("B) River (ambition + loyalty)")
-    print("C) What???")
-
-    ans10 = input("Choice : ").strip().upper()
-
-    if ans10 == "A":
-        player.add_gryffindor()
-        player.add_ravenclaw()
-        break
-    elif ans10 == "B":
-        player.add_hufflepuff()
-        player.add_slytherin()
-        break
-    elif ans10 == "C":
-        player.set_force_muggle(True)
-
-        print()
-        print("[Albus]: I think I just doomed myself, Scorpius…")
-        print("[Scorpius]: Hey… it’s okay. Even Muggles deserve magic in their lives.")
-        print("[Albus]: Really?")
-        print("[Scorpius]: You said my name once. That’s all the magic I ever needed.")
-        break
-    else:
-        print("wrong input please try again")
-
-    # ---------- FINAL SORTING FROM YOUR QUESTIONS ----------
-player.sort_into_house()
-player.announce_house()
+window.pyStartHat = create_proxy(render_intro)
+window.dispatchEvent(window.Event.new("hatpy:ready"))

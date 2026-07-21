@@ -1,7 +1,7 @@
 # Sunshine and Moonlight
 
-Personal portfolio of **Suwapat Saelee** ([BR0WNDY](https://github.com/BR0WNDY)) — a bilingual (EN/TH)
-static site with a Ravenclaw / "Starlit Academy" theme, deployed on Vercel.
+Personal portfolio of **Suwapat Saelee** ([BR0WNDY](https://github.com/BR0WNDY)), certified PotterHead —
+a bilingual (EN/TH) static site with a Ravenclaw / "Starlit Academy" theme, deployed on Vercel.
 
 ## Structure
 
