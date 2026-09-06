@@ -52,20 +52,20 @@ The project was archived outside this repo before deletion.
 a calendar, a knowledge hub, reminders, and a Finance tab that tracks one-off bills, monthly
 recurring bills and installment plans (`฿10,000 × 10 งวด`, pay/undo a งวด at a time).
 
-Three files, no build step and no framework: `index.html` + `styles.css` + `app.js`. Data lives
-in this browser only, under `cp:contents`, `cp:goals`, `cp:habits`, `cp:plans`, `cp:notes`,
-`cp:reminders`, `cp:finance`, `cp:payments`, `cp:profile`, `cp:theme`. The first visit seeds
-sample data so the app is never an empty shell; clearing the `cp:*` keys re-seeds it.
+The four areas the Starlit Ledger brought with it — money, debts, homework and sales — sit
+alongside those, eleven pages grouped in the sidebar as Make · Money · Study & work · Keep.
 
-Two themes, switchable in the sidebar and remembered in `cp:theme`:
+No build step and no framework: `planner/index.html` + `planner/styles.css` load
+`src/ravenclaw-planner/` as plain ES modules. Charts are hand-drawn inline SVG, which is why the
+project has no dependencies at all. Data lives in this browser only, under `cp:contents`,
+`cp:goals`, `cp:habits`, `cp:plans`, `cp:notes`, `cp:reminders`, `cp:finance`, `cp:payments`,
+`cp:transactions`, `cp:debts`, `cp:homework`, `cp:sales` and `cp:profile`, with `cp:schema`
+tracking the migration version. Nothing is seeded — a new browser starts empty.
 
-| | |
-|---|---|
-| **Cream** (default) | warm cocoa & parchment, the planner's own look |
-| **Ravenclaw** | the site palette from `docs/DESIGN.md` — midnight blue, bronze CTAs, faint starfield |
-
-Every colour is a CSS custom property; the two theme blocks at the top of `styles.css` are the
-only place hex values live, so a third theme is just another block.
+One theme and no theme switch: the Ravenclaw palette from `docs/DESIGN.md`, midnight blue with
+bronze CTAs and a faint starfield. Every colour is a CSS custom property declared once on
+`:root` at the top of `styles.css`, the only place hex values live. The sidebar keeps just the
+TH/EN language switch.
 
 Dates are shown in the Buddhist era (`4 ก.ย. 69`) and money as `฿56,853.41`.
 Page state is in the URL hash (`/planner/#finance`), so a tab can be bookmarked.

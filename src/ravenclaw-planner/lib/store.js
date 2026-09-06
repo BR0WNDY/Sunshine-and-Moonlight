@@ -171,8 +171,8 @@ export function load() {
   /* v2 — existing Planner data: pull the Ledger's stores in, once. */
   if (schema < 2) migrated = importLedger();
 
-  /* v5 — the app had two themes and stored the choice in `cp:theme`. There is
-     now a single Ravenclaw palette declared on :root, so the key means nothing.
+  /* v5 — `cp:theme` held a palette choice from an earlier build. There is now
+     a single Ravenclaw palette declared on :root, so the key means nothing.
      Retire it rather than leave it in everyone's storage. (Versions 3 and 4
      each cleared a stale value for this same key; one step now covers all of
      them, since anything below 5 wants it gone either way.) */
@@ -222,11 +222,10 @@ export function remove(store, id) {
 }
 
 /* ---------------- preferences ----------------
-   Theme and language live in their own keys rather than inside a store, and
-   are stored as bare strings, not JSON: the inline script in index.html reads
-   `cp:theme` before first paint to avoid a flash of the wrong theme, and it
-   compares the raw value. Quoting it there would break that read and every
-   theme already saved by the standalone Planner. */
+   The language lives in its own key rather than inside a store, and is stored
+   as a bare string, not JSON: the inline script in index.html reads `cp:lang`
+   before first paint to set <html lang>, and it compares the raw value.
+   Quoting it here would break that read. */
 
 export const readPref = (key, fallback) => {
   const v = ls.get(PREFIX + key);

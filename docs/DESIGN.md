@@ -55,9 +55,9 @@ never reference a hex directly and the tokens are the only place hexes live.
 | primary button | bronze `#c8a23a` on ink |
 | display face | Cormorant Garamond |
 
-There is one theme and no theme switch. The planner previously shipped a second "cream" skin
-selected with `data-theme` on `<html>`; it was removed, along with the `cp:theme` preference,
-which a migration deletes from storage. The sidebar keeps only the TH/EN language switch.
+There is one theme and no theme switch: no `data-theme` attribute on `<html>` and no palette
+preference in storage — a migration clears the retired `cp:theme` key from any browser that
+still carries one. The sidebar keeps only the TH/EN language switch.
 
 The house rules below all apply: bronze is the only call-to-action colour, blue stays
 atmosphere, and the starfield is a static CSS layer (no animation to disable).
