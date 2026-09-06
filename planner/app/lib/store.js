@@ -16,12 +16,16 @@ import { ls, uid } from './dom.js';
 import { isISO } from './date.js';
 
 const PREFIX = 'cp:';
-export const SCHEMA_VERSION = 7;
+export const SCHEMA_VERSION = 8;
 
 /** Every list-shaped store, in the order the export writes them. */
 export const STORES = [
   'contents', 'goals', 'habits', 'plans', 'notes', 'reminders',
   'finance', 'payments', 'transactions', 'debts', 'homework', 'sales',
+  /* v8 — the Hogwarts Life System's own shapes. `instalments` is one row per
+     งวด rather than one per creditor, which is what preserves the payment
+     history; `terms` is the House Cup; `months` is the monthly budget. */
+  'subjects', 'lessons', 'instalments', 'subs', 'terms', 'months',
 ];
 
 /** Stores that hold a single object rather than a list. */
@@ -186,6 +190,17 @@ export function load() {
      name the user typed for themselves is left exactly as it is. */
   if (schema < 7 && db.profile && ['bswph', 'demo user'].includes(db.profile.name)) {
     db.profile.name = '';
+  }
+
+  /* v8 — homework gained the assignment fields the Hogwarts system carried:
+     a three-state status, a type, House Points and a term. Existing rows only
+     have the boolean `done`, so derive the status from it and leave every other
+     new field empty. Nothing is discarded — `done` stays the source of truth
+     for the tick box and is kept in step by model/tasks.js. */
+  if (schema < 8) {
+    for (const row of db.homework) {
+      if (!row.status) row.status = row.done ? 'done' : 'todo';
+    }
   }
 
   if (schema < SCHEMA_VERSION) {

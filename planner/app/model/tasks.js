@@ -6,7 +6,7 @@
 
 import { db, insert, update, remove, save } from '../lib/store.js';
 import { todayISO, isISO } from '../lib/date.js';
-import { PRIORITIES } from '../lib/domain.js';
+import { PRIORITIES, TASK_STATUSES, TASK_TYPES } from '../lib/domain.js';
 import { dueState, byDue, isUrgent, SOON_DAYS } from './dueState.js';
 import { daysUntil } from '../lib/date.js';
 
@@ -23,15 +23,46 @@ export const openHomework = () => db.homework.filter((row) => !row.done);
 export const homeworkDueSoon = () =>
   openHomework().filter((row) => row.due && daysUntil(row.due) <= SOON_DAYS);
 
-export function addHomework({ subject, title, due, prio = 'med', generalLabel = 'General' }) {
+export function addHomework({
+  subject, title, due, prio = 'med', generalLabel = 'General',
+  subjectId = '', type = TASK_TYPES[0], term = '', points = 0,
+}) {
   if (!String(title || '').trim() || !isISO(due)) return null;
   return insert('homework', {
     subject: String(subject || '').trim() || generalLabel,
+    subjectId: String(subjectId || ''),
     title: String(title).trim(),
     due,
     prio: PRIORITIES.includes(prio) ? prio : 'med',
+    type: TASK_TYPES.includes(type) ? type : TASK_TYPES[0],
+    term: String(term || ''),
+    points: Number(points) || 0,
+    status: 'todo',
     done: false,
   });
+}
+
+/* `done` and `status` describe the same fact and must never disagree: the tick
+   box writes `done`, the status picker writes `status`, and both go through
+   here. `done` stays the one the dashboard and the due-date machinery read, so
+   older code and older rows keep working untouched. */
+
+export function setHomeworkStatus(id, status) {
+  const row = db.homework.find((r) => r.id === id);
+  if (!row || !TASK_STATUSES.includes(status)) return false;
+  row.status = status;
+  row.done = status === 'done';
+  if (row.done && !row.submitted) row.submitted = todayISO();
+  if (!row.done) row.submitted = '';
+  save('homework');
+  return true;
+}
+
+/** Keeps `status` in step when a row is ticked rather than picked. */
+export function syncHomeworkStatus(row) {
+  row.status = row.done ? 'done' : (row.status === 'doing' ? 'doing' : 'todo');
+  if (row.done && !row.submitted) row.submitted = todayISO();
+  if (!row.done) row.submitted = '';
 }
 
 /* ---------------- reminders ---------------- */
@@ -53,6 +84,7 @@ export function toggleDone(store, id) {
   const row = db[store].find((r) => r.id === id);
   if (!row) return false;
   row.done = !row.done;
+  if (store === 'homework') syncHomeworkStatus(row);
   save(store);
   return true;
 }
