@@ -2,7 +2,7 @@
   "name": "sunshine-and-moonlight",
   "version": "1.0.0",
   "private": true,
-  "description": "Portfolio site of Suwapat Saelee — static pages plus the Starlit Ledger React dashboard",
+  "description": "Portfolio site of Suwapat Saelee — public static pages, plus two private apps: the Starlit Ledger and the Content Life Planner",
   "scripts": {
     "build:ledger": "esbuild src/life-management.jsx --bundle --minify --jsx=automatic --outfile=life-management/bundle.js"
   },

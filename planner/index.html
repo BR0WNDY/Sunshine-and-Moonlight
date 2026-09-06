@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Content Life Planner</title>
+  <meta name="description" content="แพลนเนอร์ส่วนตัว — คอนเทนต์ เป้าหมาย นิสัย ปฏิทิน การเงิน การบ้าน และงานขาย เก็บข้อมูลไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    /* Apply the saved language before first paint. It is stored as a bare
+       string — see the preferences note in src/ravenclaw-planner/lib/store.js.
+       There is nothing to do for the palette: the app has one theme, declared
+       on :root in styles.css. */
+    try {
+      var lang = localStorage.getItem('cp:lang');
+      if (lang === 'th' || lang === 'en') document.documentElement.lang = lang;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <!-- The sign-in gate. While it is up, #app is empty and hidden: the planner
+       is never built into the DOM behind it. -->
+  <div id="gate" hidden></div>
+
+  <div class="app" id="app">
+    <aside class="sidebar" id="side"></aside>
+    <main class="main" id="main"></main>
+  </div>
+  <div id="modal"></div>
+  <noscript style="display:block;padding:40px;text-align:center">
+    แพลนเนอร์นี้ต้องเปิดใช้งาน JavaScript · This planner needs JavaScript enabled
+  </noscript>
+  <script type="module" src="../src/ravenclaw-planner/app.js"></script>
+</body>
+</html>
