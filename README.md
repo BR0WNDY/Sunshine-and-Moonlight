@@ -10,26 +10,25 @@ index.html          the homepage (self-contained: its CSS/JS live inside the fil
 sortinghats.html    page: The Sorting Hat (Python in the browser via PyScript)
 paotang.html        page: Thai Chuay Thai co-payment calculator
 packages.html       page: Fastwork service packages demo (Basic/Standard/Premium)
-life-management/    page: Starlit Ledger React dashboard (index.html + built bundle.js)
-planner/            page: Content Life Planner (plain HTML/CSS/JS — no build step)
+planner/            page: Content Life Planner (private; plain HTML/CSS/JS, no build step)
 
 assets/             shared look & feel for sub-pages (styles.css + site.js)
 sorting-hat/        Python code + config used by sortinghats.html
-src/                React source for the Ledger (edit here, then build)
+src/                ES modules for the planner (loaded directly, nothing compiled)
 images/             photos and project thumbnails
 videos/             media files
 docs/               DESIGN.md (theme rules) and PRODUCT.md (product notes)
 
 server.py           local dev server with the same headers as production
 vercel.json         Vercel deploy headers (needed by PyScript)
-package.json        npm deps + the Ledger build script
+package.json        project metadata only — the site has no dependencies
 ```
 
 Every page you can visit sits at the top level; everything inside a folder is
 supporting material for one of those pages.
 
-Language choice persists in `localStorage('site:lang')` across pages; the Ledger keeps its own
-`lm:lang` (defaults to Thai) plus data keys `lm:transactions`, `lm:debts`, `lm:assignments`,
+Language choice persists in `localStorage('site:lang')` across pages; the planner keeps its own
+`cp:lang` (defaults to Thai) alongside its data keys `cp:contents`, `cp:finance`, `cp:habits`,
 `lm:sales`, `lm:habits`.
 
 **Private vs public views.** The Paotang calculator comes in two flavors:
@@ -40,25 +39,11 @@ Language choice persists in `localStorage('site:lang')` across pages; the Ledger
 
 The demo view loads sample data, shows a Demo badge and saves nothing.
 
-**The Starlit Ledger is no longer public.** It is unlinked from every page, out of the sitemap,
-disallowed in `robots.txt` and served with an `X-Robots-Tag: noindex` header — the same treatment
-as `/planner/`. `/life-management/` is still the personal app: data persists in the browser's
-localStorage behind a password lock screen (unlock expires after 30 minutes, or when the browser
-closes — whichever comes first). `?demo=1` still works if you open it yourself; nothing links to
-it any more.
-
-None of that is access control. The files stay fetchable by anyone who knows the URL; it keeps
-the page out of search results and out of the site's navigation.
-
-To change the password, derive a new PBKDF2 key:
-
-```bash
-python3 -c "import hashlib,secrets;s=secrets.token_bytes(16);\
-print('salt:',s.hex());print('key:',hashlib.pbkdf2_hmac('sha256',b'NEW-PASSWORD',s,600000).hex())"
-```
-
-then put the salt and key into `PASS_KDF` in `src/life-management.jsx` and rebuild. The lock is a
-client-side privacy curtain (data never leaves the browser anyway), not server security.
+**The Starlit Ledger has been removed.** Its four data areas — money, debts, homework and
+sales — were merged into the Content Life Planner, so the React app, its `/life-management/`
+page and the whole React/Recharts toolchain are gone. The planner still imports the Ledger's
+`lm:*` localStorage keys on first run, so a browser that used it carries its records across.
+The project was archived outside this repo before deletion.
 
 ## Content Life Planner
 
@@ -85,9 +70,11 @@ only place hex values live, so a third theme is just another block.
 Dates are shown in the Buddhist era (`4 ก.ย. 69`) and money as `฿56,853.41`.
 Page state is in the URL hash (`/planner/#finance`), so a tab can be bookmarked.
 
-The planner is `noindex` and unlinked from the portfolio, but it is not access-controlled —
-anyone with the URL sees a fresh copy seeded with sample data (never your data, which never
-leaves your browser). Wrap it in the same PBKDF2 lock the Ledger uses if that matters.
+The planner requires sign-in: a browser with no account gets a setup screen, and every load
+after that shows a lock screen. The credential is a PBKDF2-SHA256 salt and hash created in the
+browser — the password is never stored and no credential is in this repo. It is `noindex` and
+unlinked, but that is not access control: records sit unencrypted in `localStorage`, so the gate
+covers the screen, not the data.
 
 ## Develop
 
@@ -97,17 +84,10 @@ Serve locally with the COOP/COEP headers PyScript needs (same headers `vercel.js
 python3 server.py   # http://localhost:8000
 ```
 
-## Build the Starlit Ledger
+## Build
 
-The main site is plain static — only the dashboard is compiled. After editing
-`src/life-management.jsx`:
-
-```bash
-npm install
-npm run build:ledger   # emits life-management/bundle.js (commit it)
-```
-
-The built `bundle.js` is committed, so Vercel needs no build step.
+There is nothing to build. Every page is static and the planner's `src/` is plain ES modules
+served as-is, so Vercel needs no build step and `npm install` installs nothing.
 
 ## Deploy
 

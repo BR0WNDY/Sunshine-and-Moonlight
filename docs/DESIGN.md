@@ -101,10 +101,9 @@ with access to the browser. What actually keeps `/planner/` private is the layer
 
 Four independent layers, so no single mistake exposes it:
 
-- **Unlinked** — no page on the site links to `/planner/` or `/life-management/`; both are
-  reachable only by typing the URL.
-- **Out of the sitemap** — `sitemap.xml` lists the four public pages and neither private app.
-- **`robots.txt`** — `Disallow: /planner/`, `/life-management/` and `/src/`.
+- **Unlinked** — no page on the site links to `/planner/`; it is reachable only by typing the URL.
+- **Out of the sitemap** — `sitemap.xml` lists the four public pages and not the planner.
+- **`robots.txt`** — `Disallow: /planner/` and `/src/`.
 - **`noindex`** — both as a `<meta name="robots">` in the page and as an `X-Robots-Tag` response
   header from `vercel.json`, which also sends `Referrer-Policy: no-referrer` so following the
   "← Portfolio" link does not leak the planner URL, and `Cache-Control: no-store` so no shared

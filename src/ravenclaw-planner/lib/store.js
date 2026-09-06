@@ -6,9 +6,10 @@
    debts, assignments, sales, habits). The merged app owns `cp:*` and imports
    anything it finds under `lm:*` exactly once, guarded by `cp:schema`.
 
-   The import is non-destructive: `lm:*` keys are read and left in place, so
-   the old /life-management/ build keeps working and a half-finished migration
-   can simply be run again. No migration deletes a user record; the only things
+   The import is non-destructive: `lm:*` keys are read and left in place, so a
+   half-finished migration can simply be run again. The Ledger itself has since
+   been removed from the site, but its keys may still sit in a browser that used
+   it, so the import stays. No migration deletes a user record; the only things
    they remove are the app's own leftovers, such as a retired preference. */
 
 import { ls, uid } from './dom.js';
