@@ -69,7 +69,7 @@ calendar, knowledge, reminders, bills & instalments) plus the four the Starlit L
 with it (money, debts, homework, sales). Eleven pages is too many for a flat sidebar, so they
 are grouped by what the user is doing — Make · Money · Study & work · Keep.
 
-Source lives in `src/ravenclaw-planner/` as plain ES modules, loaded directly by
+Source lives in `planner/app/` as plain ES modules, loaded directly by
 `planner/index.html` with `<script type="module">`. There is no build step: `lib/` holds
 formatting, storage and i18n, `model/` holds the rules, `views/` returns HTML strings, and
 `app.js` is the shell. Charts are hand-drawn inline SVG against the same tokens, which is what
@@ -103,7 +103,7 @@ Four independent layers, so no single mistake exposes it:
 
 - **Unlinked** — no page on the site links to `/planner/`; it is reachable only by typing the URL.
 - **Out of the sitemap** — `sitemap.xml` lists the four public pages and not the planner.
-- **`robots.txt`** — `Disallow: /planner/` and `/src/`.
+- **`robots.txt`** — `Disallow: /planner/`, which now covers the source too.
 - **`noindex`** — both as a `<meta name="robots">` in the page and as an `X-Robots-Tag` response
   header from `vercel.json`, which also sends `Referrer-Policy: no-referrer` so following the
   "← Portfolio" link does not leak the planner URL, and `Cache-Control: no-store` so no shared

@@ -1,0 +1,26 @@
+# Normalise line endings. Without this, editing on Windows rewrites whole files
+# as CRLF and every diff looks like the file changed entirely.
+* text=auto eol=lf
+
+# Keep the Windows-native files as they are.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binaries: never touch, never diff as text.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.mp4   binary
+*.mov   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.pdf   binary
+
+# Files GitHub should not count towards the language stats or show in diffs by
+# default: the vendored Python engine is the point of the Sorting Hat, so it is
+# deliberately NOT marked here. Nothing is vendored or generated in this repo.

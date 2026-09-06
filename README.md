@@ -10,11 +10,13 @@ index.html          the homepage (self-contained: its CSS/JS live inside the fil
 sortinghats.html    page: The Sorting Hat (Python in the browser via PyScript)
 paotang.html        page: Thai Chuay Thai co-payment calculator
 packages.html       page: Fastwork service packages demo (Basic/Standard/Premium)
-planner/            page: Content Life Planner (private; plain HTML/CSS/JS, no build step)
+planner/            page: Content Life Planner (private; no build step)
+  index.html          the shell
+  styles.css          one theme, every colour a token on :root
+  app/                35 ES modules, loaded directly — nothing is compiled
 
 assets/             shared look & feel for sub-pages (styles.css + site.js)
 sorting-hat/        Python code + config used by sortinghats.html
-src/                ES modules for the planner (loaded directly, nothing compiled)
 images/             photos and project thumbnails
 videos/             media files
 docs/               DESIGN.md (theme rules) and PRODUCT.md (product notes)
@@ -56,7 +58,7 @@ The four areas the Starlit Ledger brought with it — money, debts, homework and
 alongside those, eleven pages grouped in the sidebar as Make · Money · Study & work · Keep.
 
 No build step and no framework: `planner/index.html` + `planner/styles.css` load
-`src/ravenclaw-planner/` as plain ES modules. Charts are hand-drawn inline SVG, which is why the
+`planner/app/` as plain ES modules. Charts are hand-drawn inline SVG, which is why the
 project has no dependencies at all. Data lives in this browser only, under `cp:contents`,
 `cp:goals`, `cp:habits`, `cp:plans`, `cp:notes`, `cp:reminders`, `cp:finance`, `cp:payments`,
 `cp:transactions`, `cp:debts`, `cp:homework`, `cp:sales` and `cp:profile`, with `cp:schema`
@@ -86,7 +88,7 @@ python3 server.py   # http://localhost:8000
 
 ## Build
 
-There is nothing to build. Every page is static and the planner's `src/` is plain ES modules
+There is nothing to build. Every page is static and the planner's `app/` is plain ES modules
 served as-is, so Vercel needs no build step and `npm install` installs nothing.
 
 ## Deploy

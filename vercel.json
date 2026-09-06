@@ -29,15 +29,6 @@
           "value": "no-store"
         }
       ]
-    },
-    {
-      "source": "/src/:path*",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
     }
   ]
 }

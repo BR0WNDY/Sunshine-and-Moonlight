@@ -1,3 +1,25 @@
-node_modules/
-.DS_Store
+# Editors and tooling
 .claude/
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node — the site has no dependencies, but npm still writes these if it is run
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Python — server.py is run directly; these are only ever byproducts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local scratch
+*.local
+/tmp/

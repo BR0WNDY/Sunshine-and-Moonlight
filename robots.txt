@@ -4,6 +4,5 @@ Allow: /
 # Private. Not linked from anywhere on the site, kept out of the sitemap, served
 # with noindex both in the page and as an X-Robots-Tag header (see vercel.json).
 Disallow: /planner/
-Disallow: /src/
 
 Sitemap: https://browndy.vercel.app/sitemap.xml
