@@ -47,13 +47,15 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;1,400;1,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root{
     --ink:#070d1f;          /* deepest midnight */
     --night:#0c1730;        /* raised panel */
     --night-2:#101f42;      /* card */
+    --term:#050a18;         /* terminal well */
     --line:rgba(200,163,58,.18);
+    --line-soft:rgba(200,163,58,.09);
     --ravenclaw:#2a4a86;    /* house blue */
     --ravenclaw-bright:#4f79c9;
     --bronze:#c8a23a;       /* house metal */
@@ -61,27 +63,25 @@
     --silver:#c3cee0;
     --parchment:#eef2fb;
     --muted:#8fa1c4;
-    --font-display:'Cormorant Garamond', 'IBM Plex Sans Thai', Georgia, serif;
+    --charm:#7fe3f5;        /* Lumos / charm glow, text only */
+    --font-title:'Cinzel','IBM Plex Sans Thai',Georgia,serif;
+    --font-display:'Cormorant Garamond','IBM Plex Sans Thai',Georgia,serif;
     --font-body:'Inter','IBM Plex Sans Thai',system-ui,sans-serif;
     --font-mono:'IBM Plex Mono','IBM Plex Sans Thai',monospace;
-    --maxw:1080px;
+    --maxw:1120px;
   }
   html.lang-th{ --font-display:'IBM Plex Sans Thai',sans-serif; }
   html.lang-th body{ font-family:'IBM Plex Sans Thai',sans-serif; }
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{
-    background:var(--ink);
-    color:var(--parchment);
-    font-family:var(--font-body);
-    line-height:1.65;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
+  body{background:var(--ink);color:var(--parchment);font-family:var(--font-body);
+    line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--bronze);outline-offset:3px;border-radius:4px}
+  ::selection{background:rgba(200,163,58,.35);color:#fff}
 
-  /* ---------- ambient starfield ---------- */
+  /* ---------- atmosphere: stars, house glow, faint scanlines ---------- */
   .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
       radial-gradient(1px 1px at 20% 30%, rgba(220,192,106,.7), transparent),
@@ -90,213 +90,250 @@
       radial-gradient(1px 1px at 85% 25%, rgba(195,206,224,.55), transparent),
       radial-gradient(1px 1px at 55% 15%, rgba(220,192,106,.5), transparent),
       radial-gradient(1px 1px at 12% 70%, rgba(195,206,224,.5), transparent),
+      radial-gradient(1px 1px at 33% 52%, rgba(127,227,245,.4), transparent),
       radial-gradient(1px 1px at 90% 80%, rgba(220,192,106,.45), transparent);
-    background-repeat:no-repeat;
-    animation:twinkle 6s ease-in-out infinite alternate;
-  }
+    background-repeat:no-repeat;animation:twinkle 6s ease-in-out infinite alternate}
   .glow{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(900px 500px at 78% -5%, rgba(42,74,134,.45), transparent 60%),
-      radial-gradient(700px 500px at 5% 100%, rgba(42,74,134,.28), transparent 60%);
-  }
+      radial-gradient(900px 520px at 80% -8%, rgba(42,74,134,.5), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(42,74,134,.3), transparent 60%)}
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(rgba(79,121,201,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,121,201,.05) 1px, transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%);
+    -webkit-mask-image:radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%)}
   @keyframes twinkle{from{opacity:.55}to{opacity:1}}
 
   .wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding-left:24px;padding-right:24px}
 
   /* ---------- nav ---------- */
-  header{position:sticky;top:0;z-index:50;
-    background:rgba(7,13,31,.72);backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line)}
-  .nav{display:flex;align-items:center;justify-content:space-between;height:66px;
+  header{position:sticky;top:0;z-index:50;background:rgba(7,13,31,.78);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px;
     max-width:var(--maxw);margin:0 auto;padding:0 24px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:var(--font-display);
-    font-size:1.28rem;letter-spacing:.3px}
-  .nav-links{display:flex;align-items:center;gap:28px}
-  .nav-links a{font-size:.82rem;letter-spacing:.4px;color:var(--silver);
-    transition:color .2s}
+  .brand{display:flex;align-items:baseline;gap:10px}
+  .brand .name{font-family:var(--font-title);font-weight:600;font-size:1.02rem;letter-spacing:1.5px}
+  .brand .path{font-family:var(--font-mono);font-size:.72rem;color:var(--muted)}
+  .nav-links{display:flex;align-items:center;gap:26px}
+  .nav-links a{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.6px;color:var(--silver);transition:color .2s}
+  .nav-links a::before{content:"./";color:var(--muted);transition:color .2s}
   .nav-links a:hover{color:var(--bronze-soft)}
-  .lang-btn{font-family:var(--font-mono);font-size:.74rem;letter-spacing:1px;
-    color:var(--bronze-soft);border:1px solid var(--line);background:transparent;
-    padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
+  .nav-links a:hover::before{color:var(--bronze)}
+  .lang-btn{font-family:var(--font-mono);font-size:.72rem;letter-spacing:1px;color:var(--bronze-soft);
+    border:1px solid var(--line);background:transparent;padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
   .lang-btn:hover{border-color:var(--bronze);color:var(--bronze)}
-  .menu-toggle{display:none;background:none;border:0;color:var(--parchment);
-    font-size:1.5rem;cursor:pointer}
+  .menu-toggle{display:none;background:none;border:0;color:var(--parchment);font-size:1.5rem;cursor:pointer;padding:6px}
 
   /* ---------- shared ---------- */
-  .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;
-    text-transform:uppercase;color:var(--bronze);display:flex;align-items:center;
-    gap:10px;margin-bottom:18px}
-  .eyebrow::before{content:"✦";color:var(--bronze);font-size:.9rem}
-  section{padding:96px 0;position:relative;z-index:2}
-  h2{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,4vw,2.9rem);
-    line-height:1.1;margin-bottom:22px}
+  section{padding:104px 0;position:relative;z-index:2}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:42px}
+  .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
+    color:var(--bronze);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .eyebrow .no{color:var(--muted);letter-spacing:1px}
+  h2{font-family:var(--font-display);font-weight:500;font-size:clamp(2.1rem,4.4vw,3.1rem);line-height:1.08}
+  .sec-note{font-family:var(--font-mono);font-size:.76rem;color:var(--muted);max-width:34ch}
+  .sec-note b{color:var(--charm);font-weight:500}
   .lead{color:var(--silver);max-width:60ch;font-size:1.05rem}
-  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);
-    max-width:var(--maxw);margin:0 auto}
+  .rule{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:2;
+    display:flex;align-items:center;gap:14px;color:var(--bronze);font-size:.8rem}
+  .rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent)}
 
-  /* ---------- hero ---------- */
-  .hero{padding:clamp(70px,11vw,120px) 0 clamp(60px,8vw,96px)}
-  .hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:center}
-  .motto{font-family:var(--font-display);font-style:italic;color:var(--bronze-soft);
-    font-size:1.05rem;margin-bottom:20px;letter-spacing:.3px}
-  .hero h1{font-family:var(--font-display);font-weight:600;
-    font-size:clamp(2.9rem,7vw,5rem);line-height:1;margin-bottom:10px;
-    background:linear-gradient(180deg,#fff, #cfe0ff 70%);-webkit-background-clip:text;
-    background-clip:text;color:transparent}
-  .hero .role{font-family:var(--font-mono);font-size:.95rem;letter-spacing:1.5px;
-    color:var(--bronze);text-transform:uppercase;margin-bottom:26px}
-  .hero .tagline{color:var(--silver);font-size:1.12rem;max-width:46ch;margin-bottom:34px}
-  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
-  .btn{font-family:var(--font-mono);font-size:.82rem;letter-spacing:.8px;
-    padding:13px 26px;border-radius:8px;transition:.2s;cursor:pointer;border:1px solid transparent}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:.82rem;letter-spacing:.6px;
+    padding:13px 24px;border-radius:8px;transition:.2s;cursor:pointer;border:1px solid transparent}
   .btn-primary{background:var(--bronze);color:#1a1405;font-weight:600}
-  .btn-primary:hover{background:var(--bronze-soft);transform:translateY(-2px)}
+  .btn-primary:hover{background:var(--bronze-soft);transform:translateY(-2px);box-shadow:0 14px 30px -14px rgba(200,162,58,.6)}
   .btn-ghost{border-color:var(--line);color:var(--silver)}
   .btn-ghost:hover{border-color:var(--bronze);color:var(--bronze-soft)}
 
-  .portrait{position:relative;justify-self:center}
-  .portrait-frame{width:270px;height:270px;border-radius:50%;position:relative;
-    display:grid;place-items:center;
+  /* ---------- terminal window ---------- */
+  .term{background:linear-gradient(180deg,rgba(16,31,66,.9),rgba(5,10,24,.95));border:1px solid var(--line);
+    border-radius:14px;box-shadow:0 30px 70px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden}
+  .term-bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line-soft);
+    background:rgba(7,13,31,.6)}
+  .term-bar i{width:10px;height:10px;border-radius:50%;display:block}
+  .term-bar i:nth-child(1){background:var(--bronze)}
+  .term-bar i:nth-child(2){background:var(--silver);opacity:.6}
+  .term-bar i:nth-child(3){background:var(--ravenclaw-bright);opacity:.7}
+  .term-bar span{margin-left:auto;font-family:var(--font-mono);font-size:.7rem;color:var(--muted);letter-spacing:.4px}
+  .term-body{padding:20px 22px 22px;font-family:var(--font-mono);font-size:.88rem;line-height:1.75;color:var(--silver)}
+  .ps{color:var(--bronze)}
+  .ps .loc{color:var(--ravenclaw-bright)}
+  .cmd{color:var(--parchment)}
+  .out{color:var(--silver);padding-left:2px;margin-bottom:8px}
+  .out.motto{font-family:var(--font-display);font-style:italic;font-size:1.12rem;color:var(--bronze-soft);line-height:1.5}
+  .out.lumos{color:var(--charm);text-shadow:0 0 12px rgba(127,227,245,.45)}
+  .caret{display:inline-block;width:.6em;height:1.1em;background:var(--bronze);vertical-align:-.2em;
+    animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* typed commands: width grows one character at a time */
+  .typed{display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;width:0;
+    animation:type var(--dur) steps(var(--n)) var(--at) forwards}
+  @keyframes type{to{width:calc(var(--n) * 1ch)}}
+  .reveal{opacity:0;animation:appear .35s ease-out var(--at) forwards}
+  @keyframes appear{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(56px,9vw,104px) 0 clamp(64px,8vw,96px)}
+  .hero-grid{display:grid;grid-template-columns:1.25fr .85fr;gap:60px;align-items:center}
+  .crest-line{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
+    color:var(--bronze);margin-bottom:18px;display:flex;gap:10px;flex-wrap:wrap}
+  .crest-line span+span::before{content:"·";margin-right:10px;color:var(--muted)}
+  .hero h1{font-family:var(--font-title);font-weight:600;font-size:clamp(2.5rem,6.4vw,4.6rem);
+    line-height:1.02;letter-spacing:1px;margin-bottom:18px;
+    background:linear-gradient(180deg,#fff 10%,#cfe0ff 75%,var(--bronze-soft) 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .tagline{color:var(--silver);font-size:1.1rem;max-width:48ch;margin-bottom:28px}
+  .hero .term{margin-bottom:30px;max-width:560px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+
+  .portrait{position:relative;justify-self:center;display:flex;flex-direction:column;align-items:center;gap:22px}
+  .portrait-frame{width:290px;height:290px;border-radius:50%;position:relative;display:grid;place-items:center;
     background:radial-gradient(circle at 50% 35%, var(--ravenclaw), var(--night) 70%);
-    border:1px solid var(--line);box-shadow:0 0 0 8px rgba(42,74,134,.12),0 30px 60px -20px rgba(0,0,0,.7)}
-  .portrait-frame img{width:246px;height:246px;border-radius:50%;object-fit:cover}
-  .ring{position:absolute;inset:-16px;border-radius:50%;border:1px dashed rgba(200,163,58,.35);
-    animation:spin 40s linear infinite}
+    border:1px solid var(--line);box-shadow:0 0 0 10px rgba(42,74,134,.12),0 0 60px -10px rgba(79,121,201,.45),0 30px 60px -20px rgba(0,0,0,.7)}
+  .portrait-frame img{width:262px;height:262px;border-radius:50%;object-fit:cover}
+  .ring{position:absolute;top:-18px;left:50%;width:326px;height:326px;margin-left:-163px;border-radius:50%;
+    border:1px dashed rgba(200,163,58,.38);animation:spin 50s linear infinite}
+  .ring::after{content:"✦";position:absolute;top:-9px;left:50%;margin-left:-6px;color:var(--bronze);font-size:.8rem}
   @keyframes spin{to{transform:rotate(360deg)}}
+  .badge-card{font-family:var(--font-mono);font-size:.74rem;color:var(--silver);background:rgba(12,23,48,.85);
+    border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+  .badge-card .dot{width:8px;height:8px;border-radius:50%;background:#57b47e;box-shadow:0 0 10px #57b47e}
 
-  /* ---------- about ---------- */
-  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-  .facts{display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--line);
-    padding-left:26px}
-  .fact{display:flex;justify-content:space-between;gap:16px;padding:12px 0;
-    border-bottom:1px solid rgba(200,163,58,.09)}
-  .fact .k{font-family:var(--font-mono);font-size:.75rem;letter-spacing:1px;
-    text-transform:uppercase;color:var(--muted)}
-  .fact .v{color:var(--parchment);text-align:right}
+  /* ---------- about: student record ---------- */
+  .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:start}
+  .about-grid h2{margin-bottom:22px}
+  .record .term-body{padding:8px 22px 14px}
+  .fact{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px dashed var(--line-soft)}
+  .fact:last-child{border-bottom:0}
+  .fact .k{color:var(--muted);font-size:.78rem;white-space:nowrap}
+  .fact .k::after{content:":";color:var(--bronze)}
+  .fact .v{color:var(--parchment);text-align:right;font-family:var(--font-body);font-size:.92rem}
+  .fact .v.ok{color:#7fd4a1}
 
-  /* ---------- skills ---------- */
+  /* ---------- skills: curriculum ---------- */
   .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-  .skill-card{background:var(--night);border:1px solid var(--line);border-radius:14px;
-    padding:24px 22px;transition:.25s}
-  .skill-card:hover{border-color:rgba(200,163,58,.4);transform:translateY(-3px);
-    background:var(--night-2)}
-  .skill-card h3{font-family:var(--font-mono);font-size:.78rem;letter-spacing:1.2px;
-    text-transform:uppercase;color:var(--bronze-soft);margin-bottom:16px}
-  .tags{display:flex;flex-wrap:wrap;gap:8px}
-  .tag{font-size:.82rem;color:var(--silver);background:rgba(42,74,134,.28);
-    border:1px solid rgba(79,121,201,.25);padding:5px 11px;border-radius:7px}
+  .course{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:22px 22px 24px;
+    transition:.25s;position:relative;overflow:hidden}
+  .course::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
+    background:linear-gradient(90deg,var(--bronze),transparent 70%);opacity:.5}
+  .course:hover{border-color:rgba(200,163,58,.42);transform:translateY(-3px);background:var(--night-2)}
+  .course-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+  .course .code{font-family:var(--font-mono);font-size:.72rem;letter-spacing:1.5px;color:var(--bronze)}
+  .course .subject{font-family:var(--font-display);font-style:italic;font-size:.98rem;color:var(--muted)}
+  .course h3{font-family:var(--font-title);font-weight:600;font-size:1.05rem;letter-spacing:.8px;margin-bottom:16px;color:var(--parchment)}
+  .tags{display:flex;flex-wrap:wrap;gap:7px}
+  .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--silver);background:rgba(42,74,134,.26);
+    border:1px solid rgba(79,121,201,.24);padding:4px 10px;border-radius:6px}
 
-  /* ---------- projects ---------- */
-  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
-  .proj{background:linear-gradient(180deg,var(--night-2),var(--night));
-    border:1px solid var(--line);border-radius:16px;padding:28px 26px;
-    display:flex;flex-direction:column;transition:.28s;position:relative;overflow:hidden}
-  .proj::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;
-    background:linear-gradient(90deg,var(--bronze),transparent);opacity:.55}
-  .proj:hover{transform:translateY(-5px);border-color:rgba(200,163,58,.42);
-    box-shadow:0 24px 48px -24px rgba(0,0,0,.8)}
-  .proj .thumb{width:calc(100% + 52px);margin:-28px -26px 18px;aspect-ratio:16/10;
-    object-fit:cover;display:block;border-bottom:1px solid var(--line)}
-  .proj .icon{font-size:1.7rem;margin-bottom:16px}
-  .proj h3{font-family:var(--font-display);font-size:1.5rem;font-weight:600;margin-bottom:10px}
-  .proj p{color:var(--silver);font-size:.94rem;margin-bottom:20px;flex:1}
-  .proj .stack{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.6px;
-    color:var(--muted);margin-bottom:18px}
-  .proj .link{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.8px;
-    color:var(--bronze-soft);display:inline-flex;align-items:center;gap:7px}
-  .proj .link:hover{color:var(--bronze)}
-  .proj .link .arr{transition:.2s}
-  .proj:hover .link .arr{transform:translateX(4px)}
+  /* ---------- projects: spellbook ---------- */
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+  .page{background:linear-gradient(180deg,var(--night-2),var(--night));border:1px solid var(--line);
+    border-radius:4px 16px 16px 4px;display:flex;flex-direction:column;transition:.28s;position:relative;overflow:hidden;
+    box-shadow:inset 6px 0 0 -2px rgba(200,163,58,.25)}
+  .page:hover{transform:translateY(-5px);border-color:rgba(200,163,58,.45);box-shadow:inset 6px 0 0 -2px rgba(200,163,58,.45),0 26px 50px -26px rgba(0,0,0,.85)}
+  .page .thumb{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;display:block;border-bottom:1px solid var(--line);
+    filter:saturate(.9)}
+  .page-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+  .page .folio{font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+  .page h3{font-family:var(--font-display);font-size:1.6rem;font-weight:500;line-height:1.15;margin-bottom:10px}
+  .page p{color:var(--silver);font-size:.94rem;margin-bottom:18px;flex:1}
+  .incant{font-family:var(--font-mono);font-size:.8rem;color:var(--charm);background:var(--term);
+    border:1px solid rgba(127,227,245,.14);border-radius:8px;padding:9px 12px;margin-bottom:16px;
+    overflow-wrap:anywhere;transition:text-shadow .25s,border-color .25s}
+  .incant .kw{color:var(--bronze-soft)}
+  .incant .cm{color:var(--muted)}
+  .page:hover .incant{text-shadow:0 0 10px rgba(127,227,245,.55);border-color:rgba(127,227,245,.32)}
+  .page-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .page .stack{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.6px;color:var(--muted)}
+  .page .link{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.6px;color:var(--bronze-soft);display:inline-flex;align-items:center;gap:7px}
+  .page .link:hover{color:var(--bronze)}
+  .page .link .arr{transition:.2s}
+  .page:hover .link .arr{transform:translateX(4px)}
 
   /* ---------- services ---------- */
   .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
-  .svc{background:var(--night);border:1px solid var(--line);border-radius:16px;
-    padding:30px 26px;position:relative;display:flex;flex-direction:column}
-  .svc.featured{border-color:rgba(200,163,58,.5);
-    background:linear-gradient(180deg,rgba(42,74,134,.25),var(--night))}
-  .svc .badge{position:absolute;top:-11px;right:22px;font-family:var(--font-mono);
-    font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:#1a1405;
-    background:var(--bronze);padding:4px 12px;border-radius:999px}
-  .svc .tier{font-family:var(--font-mono);font-size:.74rem;letter-spacing:2px;
-    text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
-  .svc h3{font-family:var(--font-display);font-size:1.55rem;font-weight:600;
-    margin-bottom:14px;line-height:1.15}
+  .svc{background:var(--night);border:1px solid var(--line);border-radius:16px;padding:30px 26px;position:relative;display:flex;flex-direction:column}
+  .svc.featured{border-color:rgba(200,163,58,.5);background:linear-gradient(180deg,rgba(42,74,134,.28),var(--night))}
+  .svc .badge{position:absolute;top:-11px;right:22px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:1.5px;
+    text-transform:uppercase;color:#1a1405;background:var(--bronze);padding:4px 12px;border-radius:999px}
+  .svc .tier{font-family:var(--font-mono);font-size:.74rem;letter-spacing:2px;text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
+  .svc h3{font-family:var(--font-display);font-size:1.55rem;font-weight:500;margin-bottom:14px;line-height:1.15}
   .svc p.svc-for{color:var(--silver);font-size:.9rem;margin-bottom:20px}
-  .svc-meta{list-style:none;margin:0 0 22px;border-top:1px solid rgba(200,163,58,.12)}
-  .svc-meta li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;
-    border-bottom:1px solid rgba(200,163,58,.10);font-size:.88rem}
-  .svc-meta .k{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.8px;
-    text-transform:uppercase;color:var(--muted)}
+  .svc-meta{list-style:none;margin:0 0 22px;border-top:1px solid var(--line-soft)}
+  .svc-meta li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft);font-size:.88rem}
+  .svc-meta .k{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
   .svc-meta .v{color:var(--parchment);font-weight:500}
-  .svc .price{font-family:var(--font-display);font-size:2.3rem;font-weight:600;
-    color:#fff;margin:auto 0 20px;line-height:1}
-  .svc .price small{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;
-    color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;font-weight:400}
-  .svc .svc-btn{width:100%;text-align:center;justify-content:center}
+  .svc .price{font-family:var(--font-title);font-size:2.1rem;font-weight:600;color:#fff;margin:auto 0 0;line-height:1}
+  .svc .price small{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px;font-weight:400}
   .hire-wrap{text-align:center;margin-top:46px}
-  .hire-btn{display:inline-flex;align-items:center;gap:11px;font-family:var(--font-mono);
-    font-size:.95rem;letter-spacing:.8px;background:var(--bronze);color:#1a1405;font-weight:600;
-    padding:17px 40px;border-radius:11px;transition:.2s;border:1px solid var(--bronze)}
-  .hire-btn:hover{background:var(--bronze-soft);transform:translateY(-2px);
-    box-shadow:0 18px 38px -16px rgba(200,162,58,.65)}
-  .hire-btn .arr{transition:transform .2s}
-  .hire-btn:hover .arr{transform:translate(3px,-3px)}
-  .hire-note{color:var(--muted);font-size:.82rem;margin-top:15px;
-    font-family:var(--font-mono);letter-spacing:.3px}
+  .hire-btn{display:inline-flex;align-items:center;gap:11px;font-family:var(--font-mono);font-size:.95rem;letter-spacing:.8px;
+    background:var(--bronze);color:#1a1405;font-weight:600;padding:17px 40px;border-radius:11px;transition:.2s;border:1px solid var(--bronze)}
+  .hire-btn:hover{background:var(--bronze-soft);transform:translateY(-2px);box-shadow:0 18px 38px -16px rgba(200,162,58,.65)}
+  .hire-note{color:var(--muted);font-size:.8rem;margin-top:15px;font-family:var(--font-mono);letter-spacing:.3px}
 
-  /* ---------- contact ---------- */
+  /* ---------- contact: owl post ---------- */
   .contact{text-align:center}
   .contact h2{margin-bottom:16px}
-  .contact .lead{margin:0 auto 34px}
-  .contact-links{display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .contact .lead{margin:0 auto 30px}
+  .contact .term{max-width:640px;margin:0 auto 30px;text-align:left}
+  .contact-links{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
 
-  footer{border-top:1px solid var(--line);padding:34px 0;position:relative;z-index:2}
+  footer{border-top:1px solid var(--line);padding:30px 0;position:relative;z-index:2}
   .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
-    color:var(--muted);font-size:.82rem;font-family:var(--font-mono);letter-spacing:.4px}
+    color:var(--muted);font-size:.78rem;font-family:var(--font-mono);letter-spacing:.4px}
+  .foot .handle{opacity:.4;color:var(--silver);letter-spacing:2px}
 
   /* ---------- responsive ---------- */
-  section[id]{scroll-margin-top:80px}
-  @media(max-width:860px){
-    .hero{padding-top:44px}
-    .hero-grid{grid-template-columns:1fr;gap:34px}
-    .portrait{order:-1;margin-top:18px}
-    .portrait-frame{width:210px;height:210px}
-    .portrait-frame img{width:190px;height:190px}
-    .hero .motto,.hero h1,.hero .role{text-align:center}
-    .hero .tagline{text-align:center;margin-left:auto;margin-right:auto}
-    .cta-row{justify-content:center}
+  section[id]{scroll-margin-top:78px}
+  @media(max-width:960px){
+    .hero-grid{grid-template-columns:1fr;gap:40px}
+    .portrait{order:-1}
+    .hero .term{max-width:none}
     .about-grid{grid-template-columns:1fr;gap:32px}
     .skills-grid{grid-template-columns:repeat(2,1fr)}
-    .proj-grid,.svc-grid{grid-template-columns:1fr}
-    .nav-links{position:fixed;inset:66px 0 auto 0;flex-direction:column;
-      background:rgba(7,13,31,.97);padding:24px;gap:20px;border-bottom:1px solid var(--line);
-      transform:translateY(-140%);transition:transform .3s;align-items:flex-start}
+    .svc-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:860px){
+    .nav-links{position:fixed;inset:64px 0 auto 0;flex-direction:column;background:rgba(7,13,31,.97);
+      padding:24px;gap:20px;border-bottom:1px solid var(--line);transform:translateY(-140%);transition:transform .3s;align-items:flex-start}
     .nav-links.open{transform:translateY(0)}
     .menu-toggle{display:block}
   }
-  @media(max-width:480px){
+  @media(max-width:560px){
+    .wrap,.nav,.rule{padding-left:16px;padding-right:16px}
+    section{padding:72px 0}
+    .brand .path{display:none}
+    .portrait-frame{width:210px;height:210px}
+    .portrait-frame img{width:190px;height:190px}
+    .ring{width:242px;height:242px;margin-left:-121px;top:-16px}
     .skills-grid{grid-template-columns:1fr}
-    section{padding:70px 0}
-    .hero h1{font-size:2.6rem}
-    .hero .role{font-size:.84rem;letter-spacing:1px}
+    .term-body{padding:16px 16px 18px;font-size:.8rem}
     .cta-row{flex-direction:column;align-items:stretch}
-    .btn{text-align:center}
+    .btn{justify-content:center}
+    .hire-btn{padding:16px 24px}
     .foot{justify-content:center;text-align:center}
   }
 
   @media(prefers-reduced-motion:reduce){
-    *{animation:none!important;scroll-behavior:auto}
+    *{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+    .typed{width:auto}
+    .reveal{opacity:1}
   }
 </style>
 </head>
 <body>
 <div class="stars" aria-hidden="true"></div>
 <div class="glow" aria-hidden="true"></div>
+<div class="grid-bg" aria-hidden="true"></div>
 
 <header>
   <nav class="nav">
     <a class="brand" href="#top">
-      <span>Suwapat Saelee</span>
+      <span class="name">Suwapat Saelee</span>
+      <span class="path">~/hogwarts/ravenclaw</span>
     </a>
     <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
     <div class="nav-links">
@@ -315,119 +352,172 @@
   <section class="hero wrap">
     <div class="hero-grid">
       <div>
-        <p class="motto" data-en="“Wit beyond measure is man's greatest treasure.”" data-th="“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”">“Wit beyond measure is man's greatest treasure.”</p>
+        <p class="crest-line"><span>Ravenclaw</span><span data-en="Computer Science" data-th="วิทยาการคอมพิวเตอร์">Computer Science</span><span>Bangkok</span></p>
         <h1>Suwapat Saelee</h1>
-        <p class="role" data-en="Front-End Developer · Computer Science" data-th="นักพัฒนา Front-End · วิทยาการคอมพิวเตอร์">Front-End Developer · Computer Science</p>
         <p class="tagline" data-en="I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail." data-th="ผมสร้างเว็บที่สะอาด เรียบง่าย และใช้งานได้จริง ด้วยความละเอียดในแบบเรเวนคลอว์">I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail.</p>
+
+        <div class="term" role="img" aria-label="Terminal: whoami — Suwapat Saelee, Front-End Developer and Computer Science student. Motto: Wit beyond measure is man's greatest treasure.">
+          <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>ravenclaw@hogwarts: ~/portfolio</span></div>
+          <div class="term-body" aria-hidden="true">
+            <div><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:6;--dur:.5s;--at:.3s">whoami</span></div>
+            <div class="out reveal" style="--at:.95s" data-en="Front-End Developer · Computer Science student" data-th="นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์">Front-End Developer · Computer Science student</div>
+            <div class="reveal" style="--at:1.2s"><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:13;--dur:.9s;--at:1.3s">cat motto.txt</span></div>
+            <div class="out motto reveal" style="--at:2.35s" data-en="“Wit beyond measure is man's greatest treasure.”" data-th="“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”">“Wit beyond measure is man's greatest treasure.”</div>
+            <div class="reveal" style="--at:2.6s"><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:17;--dur:1s;--at:2.7s">lumos --portfolio</span></div>
+            <div class="out lumos reveal" style="--at:3.85s" data-en="✦ Lumos. The path ahead is lit — scroll to explore." data-th="✦ ลูมอส ทางข้างหน้าสว่างแล้ว — เลื่อนลงเพื่อสำรวจ">✦ Lumos. The path ahead is lit — scroll to explore.</div>
+            <div class="reveal" style="--at:4.1s"><span class="ps"><span class="loc">~</span> $</span> <span class="caret"></span></div>
+          </div>
+        </div>
+
         <div class="cta-row">
           <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me" data-th="จ้างงานผม">Hire Me</a>
-          <a class="btn btn-ghost" href="#projects" data-en="View Projects" data-th="ดูผลงาน">View Projects</a>
+          <a class="btn btn-ghost" href="#projects" data-en="Open the Spellbook" data-th="เปิดตำราผลงาน">Open the Spellbook</a>
         </div>
       </div>
+
       <div class="portrait">
-        <div class="ring"></div>
+        <div class="ring" aria-hidden="true"></div>
         <div class="portrait-frame">
           <img src="images/Me.jpeg" alt="Suwapat Saelee" onerror="this.style.display='none'" />
         </div>
+        <div class="badge-card"><span class="dot" aria-hidden="true"></span><span data-en="Open to work · freelance &amp; internships" data-th="เปิดรับงาน · ฟรีแลนซ์และฝึกงาน">Open to work · freelance &amp; internships</span></div>
       </div>
     </div>
   </section>
 
-  <div class="divider"></div>
+  <div class="rule" aria-hidden="true">✦</div>
 
   <!-- ABOUT -->
   <section id="about" class="wrap">
-    <p class="eyebrow" data-en="About" data-th="เกี่ยวกับ">About</p>
     <div class="about-grid">
       <div>
+        <p class="eyebrow"><span class="no">01</span><span data-en="About" data-th="เกี่ยวกับ">About</span></p>
         <h2 data-en="A developer who thinks before casting the spell." data-th="นักพัฒนาที่คิดให้รอบคอบก่อนลงมือ">A developer who thinks before casting the spell.</h2>
         <p class="lead" data-en="I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software — from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project." data-th="ผมเป็นนักศึกษาวิทยาการคอมพิวเตอร์ในกรุงเทพฯ และรับงานพัฒนาเว็บแบบฟรีแลนซ์ ผมชอบเปลี่ยนไอเดียให้กลายเป็นซอฟต์แวร์ที่ใช้งานได้จริง ตั้งแต่เว็บไซต์ที่รองรับทุกหน้าจอ ไปจนถึงเครื่องมือเล็ก ๆ ที่ช่วยแก้ปัญหา ผมใส่ใจโค้ดที่สะอาด โครงสร้างที่ดี และเรียนรู้สิ่งใหม่ในทุกโปรเจกต์">I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software — from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project.</p>
       </div>
-      <div class="facts">
-        <div class="fact"><span class="k" data-en="Location" data-th="ที่ตั้ง">Location</span><span class="v" data-en="Bangkok, Thailand" data-th="กรุงเทพฯ ประเทศไทย">Bangkok, Thailand</span></div>
-        <div class="fact"><span class="k" data-en="Focus" data-th="สายงาน">Focus</span><span class="v" data-en="Web Development" data-th="พัฒนาเว็บ">Web Development</span></div>
-        <div class="fact"><span class="k" data-en="Studying" data-th="กำลังศึกษา">Studying</span><span class="v" data-en="Computer Science" data-th="วิทยาการคอมพิวเตอร์">Computer Science</span></div>
-        <div class="fact"><span class="k" data-en="Harry Potter House" data-th="บ้านแฮร์รี่ พอตเตอร์">Harry Potter House</span><span class="v" data-en="Ravenclaw 🦅" data-th="เรเวนคลอว์ 🦅">Ravenclaw 🦅</span></div>
-        <div class="fact"><span class="k" data-en="Availability" data-th="สถานะ">Availability</span><span class="v" data-en="Open to work" data-th="เปิดรับงาน">Open to work</span></div>
+      <div class="term record">
+        <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>student_record.json</span></div>
+        <div class="term-body">
+          <div class="fact"><span class="k" data-en="Location" data-th="ที่ตั้ง">Location</span><span class="v" data-en="Bangkok, Thailand" data-th="กรุงเทพฯ ประเทศไทย">Bangkok, Thailand</span></div>
+          <div class="fact"><span class="k" data-en="Focus" data-th="สายงาน">Focus</span><span class="v" data-en="Web Development" data-th="พัฒนาเว็บ">Web Development</span></div>
+          <div class="fact"><span class="k" data-en="Studying" data-th="กำลังศึกษา">Studying</span><span class="v" data-en="Computer Science" data-th="วิทยาการคอมพิวเตอร์">Computer Science</span></div>
+          <div class="fact"><span class="k" data-en="Harry Potter House" data-th="บ้านแฮร์รี่ พอตเตอร์">Harry Potter House</span><span class="v" data-en="Ravenclaw 🦅" data-th="เรเวนคลอว์ 🦅">Ravenclaw 🦅</span></div>
+          <div class="fact"><span class="k" data-en="Availability" data-th="สถานะ">Availability</span><span class="v ok" data-en="Open to work" data-th="เปิดรับงาน">Open to work</span></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="divider"></div>
+  <div class="rule" aria-hidden="true">✦</div>
 
   <!-- SKILLS -->
   <section id="skills" class="wrap">
-    <p class="eyebrow" data-en="Skills" data-th="ทักษะ">Skills</p>
-    <h2 data-en="What I work with" data-th="เครื่องมือที่ผมใช้">What I work with</h2>
-    <div class="skills-grid" style="margin-top:36px">
-      <div class="skill-card">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow"><span class="no">02</span><span data-en="Skills · Curriculum" data-th="ทักษะ · หลักสูตร">Skills · Curriculum</span></p>
+        <h2 data-en="What I work with" data-th="เครื่องมือที่ผมใช้">What I work with</h2>
+      </div>
+      <p class="sec-note" data-en="Every CS class has a Hogwarts equivalent. Mine are listed on each card." data-th="ทุกวิชา CS มีวิชาคู่กันที่ฮอกวอตส์ ดูได้บนการ์ดแต่ละใบ">Every CS class has a Hogwarts equivalent. Mine are listed on each card.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="course">
+        <div class="course-top"><span class="code">CS 101</span><span class="subject" data-en="Incantations" data-th="วิชามนตร์คาถา">Incantations</span></div>
         <h3 data-en="Languages" data-th="ภาษาโปรแกรม">Languages</h3>
         <div class="tags"><span class="tag">Java</span><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">SQL</span></div>
       </div>
-      <div class="skill-card">
+      <div class="course">
+        <div class="course-top"><span class="code">CS 204</span><span class="subject" data-en="Charms" data-th="วิชาคาถา">Charms</span></div>
         <h3 data-en="Web" data-th="เว็บ">Web</h3>
         <div class="tags"><span class="tag" data-en="Responsive Design" data-th="รองรับทุกจอ">Responsive Design</span><span class="tag">PyScript</span><span class="tag">REST APIs</span><span class="tag">Git</span></div>
       </div>
-      <div class="skill-card">
+      <div class="course">
+        <div class="course-top"><span class="code">DS 310</span><span class="subject" data-en="Divination" data-th="วิชาพยากรณ์">Divination</span></div>
         <h3 data-en="Data & ML" data-th="ข้อมูล & ML">Data & ML</h3>
         <div class="tags"><span class="tag" data-en="Data Analysis" data-th="วิเคราะห์ข้อมูล">Data Analysis</span><span class="tag">pandas</span><span class="tag">NumPy</span><span class="tag">scikit-learn</span><span class="tag">Jupyter</span><span class="tag" data-en="Clustering" data-th="Clustering">Clustering</span><span class="tag" data-en="Algorithms" data-th="อัลกอริทึม">Algorithms</span></div>
       </div>
-      <div class="skill-card">
+      <div class="course">
+        <div class="course-top"><span class="code">CC 320</span><span class="subject" data-en="Astronomy" data-th="วิชาดาราศาสตร์">Astronomy</span></div>
         <h3 data-en="Cloud" data-th="คลาวด์">Cloud</h3>
         <div class="tags"><span class="tag">AWS</span><span class="tag" data-en="Cloud Architecture" data-th="สถาปัตยกรรมคลาวด์">Cloud Architecture</span><span class="tag" data-en="Security" data-th="ความปลอดภัย">Security</span><span class="tag" data-en="Networking" data-th="เครือข่าย">Networking</span></div>
       </div>
-      <div class="skill-card">
+      <div class="course">
+        <div class="course-top"><span class="code">SE 330</span><span class="subject" data-en="Arithmancy" data-th="วิชาเลขมนตร์">Arithmancy</span></div>
         <h3 data-en="Software Engineering" data-th="วิศวกรรมซอฟต์แวร์">Software Engineering</h3>
         <div class="tags"><span class="tag">UML</span><span class="tag" data-en="Agile" data-th="Agile">Agile</span><span class="tag" data-en="Requirements Analysis" data-th="วิเคราะห์ความต้องการ">Requirements Analysis</span><span class="tag" data-en="Testing" data-th="การทดสอบ">Testing</span></div>
       </div>
-      <div class="skill-card">
+      <div class="course">
+        <div class="course-top"><span class="code">LAB</span><span class="subject" data-en="Potions" data-th="วิชาปรุงยา">Potions</span></div>
         <h3 data-en="Tools" data-th="เครื่องมือ">Tools</h3>
         <div class="tags"><span class="tag">Docker</span><span class="tag">Linux (Ubuntu)</span><span class="tag">macOS</span><span class="tag">Windows</span><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Eclipse</span><span class="tag">IntelliJ</span><span class="tag">PyCharm</span><span class="tag">VS Code</span><span class="tag">Xcode</span><span class="tag">Android Studio</span><span class="tag">Packet Tracer</span></div>
       </div>
     </div>
   </section>
 
-  <div class="divider"></div>
+  <div class="rule" aria-hidden="true">✦</div>
 
   <!-- PROJECTS -->
   <section id="projects" class="wrap">
-    <p class="eyebrow" data-en="Projects" data-th="ผลงาน">Projects</p>
-    <h2 data-en="Things I've built" data-th="ผลงานที่ผมสร้าง">Things I've built</h2>
-    <div class="proj-grid" style="margin-top:36px">
-      <article class="proj">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow"><span class="no">03</span><span data-en="Projects · The Spellbook" data-th="ผลงาน · ตำราเวท">Projects · The Spellbook</span></p>
+        <h2 data-en="Things I've built" data-th="ผลงานที่ผมสร้าง">Things I've built</h2>
+      </div>
+      <p class="sec-note" data-en="Each page carries its incantation — the one line of code at its heart." data-th="แต่ละหน้ามีคาถาประจำ — โค้ดหนึ่งบรรทัดที่เป็นหัวใจของงาน">Each page carries its incantation — the one line of code at its heart.</p>
+    </div>
+    <div class="proj-grid">
+      <article class="page">
         <img class="thumb" src="images/thumb-portfolio.jpg" alt="" loading="lazy" width="640" height="400" />
-        <div class="icon">🌙</div>
-        <h3 data-en="Portfolio Website" data-th="เว็บพอร์ตโฟลิโอ">Portfolio Website</h3>
-        <p data-en="This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive." data-th="เว็บนี้เอง — พอร์ตโฟลิโอสองภาษาธีมเรเวนคลอว์ สร้างเองทั้งหมดและรองรับทุกหน้าจอ">This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive.</p>
-        <div class="stack">HTML · CSS · JavaScript</div>
-        <a class="link" href="#top" data-en="View" data-th="ดูผลงาน">View <span class="arr">→</span></a>
+        <div class="page-body">
+          <p class="folio" data-en="Spell I" data-th="คาถาที่ I">Spell I</p>
+          <h3 data-en="Portfolio Website" data-th="เว็บพอร์ตโฟลิโอ">Portfolio Website</h3>
+          <p data-en="This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive." data-th="เว็บนี้เอง — พอร์ตโฟลิโอสองภาษาธีมเรเวนคลอว์ สร้างเองทั้งหมดและรองรับทุกหน้าจอ">This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive.</p>
+          <div class="incant"><span class="kw">lumos</span>(<span class="cm">'portfolio'</span>, { lang })</div>
+          <div class="page-foot">
+            <span class="stack">HTML · CSS · JavaScript</span>
+            <a class="link" href="#top" data-en="View" data-th="ดูผลงาน">View <span class="arr">→</span></a>
+          </div>
+        </div>
       </article>
-      <article class="proj">
+      <article class="page">
         <img class="thumb" src="images/thumb-sortinghat.jpg" alt="" loading="lazy" width="640" height="400" />
-        <div class="icon">🧙</div>
-        <h3 data-en="The Sorting Hat" data-th="หมวกคัดสรร">The Sorting Hat</h3>
-        <p data-en="An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house." data-th="แอป Python เชิงโต้ตอบที่รันบนเบราว์เซอร์ด้วย PyScript เพื่อจัดคุณเข้าบ้านฮอกวอตส์">An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house.</p>
-        <div class="stack">Python · PyScript</div>
-        <a class="link" href="sortinghats.html" data-en="Launch App" data-th="เปิดใช้งาน">Launch App <span class="arr">→</span></a>
+        <div class="page-body">
+          <p class="folio" data-en="Spell II" data-th="คาถาที่ II">Spell II</p>
+          <h3 data-en="The Sorting Hat" data-th="หมวกคัดสรร">The Sorting Hat</h3>
+          <p data-en="An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house." data-th="แอป Python เชิงโต้ตอบที่รันบนเบราว์เซอร์ด้วย PyScript เพื่อจัดคุณเข้าบ้านฮอกวอตส์">An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house.</p>
+          <div class="incant">house = <span class="kw">sorting_hat</span>.sort(you)  <span class="cm"># 🦅?</span></div>
+          <div class="page-foot">
+            <span class="stack">Python · PyScript</span>
+            <a class="link" href="sortinghats.html" data-en="Launch App" data-th="เปิดใช้งาน">Launch App <span class="arr">→</span></a>
+          </div>
+        </div>
       </article>
-      <article class="proj">
+      <article class="page">
         <img class="thumb" src="images/thumb-paotang.jpg" alt="" loading="lazy" width="640" height="400" />
-        <div class="icon">📱</div>
-        <h3 data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h3>
-        <p data-en="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60 : ประชาชน 40) ช่วยประเมินยอดที่ต้องจ่าย">A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share.</p>
-        <div class="stack">HTML · CSS · JavaScript</div>
-        <a class="link" href="paotang.html?demo=1" data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo <span class="arr">→</span></a>
+        <div class="page-body">
+          <p class="folio" data-en="Spell III" data-th="คาถาที่ III">Spell III</p>
+          <h3 data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h3>
+          <p data-en="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60 : ประชาชน 40) ช่วยประเมินยอดที่ต้องจ่าย">A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share.</p>
+          <div class="incant">you = amount - <span class="kw">Math.min</span>(amount * 0.6, quota)</div>
+          <div class="page-foot">
+            <span class="stack">HTML · CSS · JavaScript</span>
+            <a class="link" href="paotang.html?demo=1" data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo <span class="arr">→</span></a>
+          </div>
+        </div>
       </article>
     </div>
   </section>
 
-  <div class="divider"></div>
+  <div class="rule" aria-hidden="true">✦</div>
 
   <!-- SERVICES -->
   <section id="services" class="wrap">
-    <p class="eyebrow" data-en="Freelance Services · Fastwork" data-th="บริการฟรีแลนซ์ · Fastwork">Freelance Services · Fastwork</p>
-    <h2 data-en="Web development, three packages" data-th="รับพัฒนาเว็บ สามแพ็กเกจ">Web development, three packages</h2>
-    <div class="svc-grid" style="margin-top:36px">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow"><span class="no">04</span><span data-en="Freelance Services · Fastwork" data-th="บริการฟรีแลนซ์ · Fastwork">Freelance Services · Fastwork</span></p>
+        <h2 data-en="Web development, three packages" data-th="รับพัฒนาเว็บ สามแพ็กเกจ">Web development, three packages</h2>
+      </div>
+    </div>
+    <div class="svc-grid">
 
       <div class="svc">
         <p class="tier">Basic</p>
@@ -471,13 +561,20 @@
     </div>
   </section>
 
-  <div class="divider"></div>
+  <div class="rule" aria-hidden="true">✦</div>
 
   <!-- CONTACT -->
   <section id="contact" class="wrap contact">
-    <p class="eyebrow" style="justify-content:center" data-en="Contact" data-th="ติดต่อ">Contact</p>
+    <p class="eyebrow" style="justify-content:center"><span class="no">05</span><span data-en="Contact · Owl Post" data-th="ติดต่อ · ไปรษณีย์นกฮูก">Contact · Owl Post</span></p>
     <h2 data-en="Send a scroll" data-th="ส่งข้อความหาผม">Send a scroll</h2>
     <p class="lead" data-en="Looking for a developer, or want to talk about a project? I'd be glad to hear from you." data-th="กำลังมองหานักพัฒนา หรืออยากคุยเรื่องโปรเจกต์? ยินดีรับฟังเสมอครับ">Looking for a developer, or want to talk about a project? I'd be glad to hear from you.</p>
+    <div class="term" aria-hidden="true">
+      <div class="term-bar"><i></i><i></i><i></i><span>owl-post</span></div>
+      <div class="term-body">
+        <div><span class="ps"><span class="loc">~</span> $</span> <span class="cmd">owl send --to suwapat --priority high</span></div>
+        <div class="out lumos" data-en="🦉 Owl ready. Choose a route below." data-th="🦉 นกฮูกพร้อมแล้ว เลือกช่องทางด้านล่างได้เลย">🦉 Owl ready. Choose a route below.</div>
+      </div>
+    </div>
     <div class="contact-links">
       <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me on Fastwork" data-th="จ้างงานผมบน Fastwork">Hire Me on Fastwork</a>
       <a class="btn btn-ghost" href="mailto:browndy_moconi@icloud.com">Email</a>
@@ -492,6 +589,7 @@
 <footer>
   <div class="wrap foot">
     <span>© <span id="year"></span> Suwapat Saelee</span>
+    <span class="handle">@Browndy_moconi</span>
     <span data-en="Built with code, coffee & Ravenclaw wit." data-th="สร้างด้วยโค้ด กาแฟ และไหวพริบแบบเรเวนคลอว์">Built with code, coffee & Ravenclaw wit.</span>
   </div>
 </footer>
