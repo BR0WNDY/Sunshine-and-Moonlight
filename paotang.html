@@ -336,7 +336,7 @@ const itemNameInput = document.getElementById('item-name');
 let currentMonthlyQuota = 1000;
 let transactions = DEMO ? demoTransactions() : (JSON.parse(localStorage.getItem('paotangHistory')) || []);
 function persist() {
-  if (!DEMO) persist();
+  if (!DEMO) localStorage.setItem('paotangHistory', JSON.stringify(transactions));
 }
 
 function renderHistory() {
