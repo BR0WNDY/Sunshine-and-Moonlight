@@ -167,6 +167,33 @@
   .caret{display:inline-block;width:.6em;height:1.1em;background:var(--bronze);vertical-align:-.2em;
     animation:blink 1s steps(1) infinite}
   @keyframes blink{50%{opacity:0}}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  /* ---------- interactive hero terminal ---------- */
+  .hero .term-body{max-height:420px;overflow-y:auto;cursor:text;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .out.hint{color:var(--muted)}
+  .term-input{display:flex;align-items:center;gap:8px}
+  .term-input input{flex:1;min-width:0;background:transparent;border:0;outline:0;padding:0;
+    color:var(--parchment);font:inherit;caret-color:var(--bronze)}
+  .term-input input:focus-visible{outline:0}
+  .hero .term:focus-within{border-color:rgba(200,163,58,.42)}
+  #term-log .echo{color:var(--parchment)}
+  #term-log .out{white-space:pre-wrap;overflow-wrap:anywhere}
+  #term-log .err{color:#e07a6b}
+  #term-log a{color:var(--bronze-soft);text-decoration:underline;text-underline-offset:3px}
+  #term-log a:hover{color:var(--bronze)}
+  .spell{display:inline-block;font-family:var(--font-title);font-size:1.5em;font-weight:700;letter-spacing:1px;
+    color:#fff;margin:4px 0;animation:cast .45s ease-out}
+  .spell.charm{text-shadow:0 0 10px #00f2fe,0 0 25px #0077fe}
+  .spell.dark{text-shadow:0 0 10px #00ff87,0 0 25px #10b981}
+  .spell.patronus{text-shadow:0 0 14px #fff,0 0 30px #b0e0e6}
+  @keyframes cast{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
+  body.lit .glow{background:
+      radial-gradient(900px 560px at 80% -8%, rgba(79,121,201,.65), transparent 60%),
+      radial-gradient(800px 560px at 0% 100%, rgba(127,227,245,.22), transparent 60%)}
+  body.lit .stars{filter:brightness(1.8)}
+  body.dim .glow{opacity:.25}
+  body.dim .stars{opacity:.35}
 
   /* typed commands: width grows one character at a time */
   .typed{display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;width:0;
@@ -311,6 +338,7 @@
     .ring{width:242px;height:242px;margin-left:-121px;top:-16px}
     .skills-grid{grid-template-columns:1fr}
     .term-body{padding:16px 16px 18px;font-size:.8rem}
+    .term-input input{font-size:16px}  /* stops iOS zooming in on focus */
     .cta-row{flex-direction:column;align-items:stretch}
     .btn{justify-content:center}
     .hire-btn{padding:16px 24px}
@@ -321,6 +349,7 @@
     *{animation:none!important;scroll-behavior:auto!important;transition:none!important}
     .typed{width:auto}
     .reveal{opacity:1}
+    .caret{opacity:1}
   }
 </style>
 </head>
@@ -356,16 +385,24 @@
         <h1>Suwapat Saelee</h1>
         <p class="tagline" data-en="I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail." data-th="ผมสร้างเว็บที่สะอาด เรียบง่าย และใช้งานได้จริง ด้วยความละเอียดในแบบเรเวนคลอว์">I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail.</p>
 
-        <div class="term" role="img" aria-label="Terminal: whoami — Suwapat Saelee, Front-End Developer and Computer Science student. Motto: Wit beyond measure is man's greatest treasure.">
+        <div class="term" id="hero-term">
           <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>ravenclaw@hogwarts: ~/portfolio</span></div>
-          <div class="term-body" aria-hidden="true">
+          <div class="term-body" id="term-body">
+            <p class="sr-only" data-en="Interactive terminal. Suwapat Saelee, Front-End Developer and Computer Science student. Type help and press Enter to see commands." data-th="เทอร์มินัลแบบโต้ตอบ ศุภวัฒน์ แซ่ลี้ นักพัฒนา Front-End และนักศึกษาวิทยาการคอมพิวเตอร์ พิมพ์ help แล้วกด Enter เพื่อดูคำสั่ง">Interactive terminal. Suwapat Saelee, Front-End Developer and Computer Science student. Type help and press Enter to see commands.</p>
+            <div aria-hidden="true">
             <div><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:6;--dur:.5s;--at:.3s">whoami</span></div>
             <div class="out reveal" style="--at:.95s" data-en="Front-End Developer · Computer Science student" data-th="นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์">Front-End Developer · Computer Science student</div>
             <div class="reveal" style="--at:1.2s"><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:13;--dur:.9s;--at:1.3s">cat motto.txt</span></div>
             <div class="out motto reveal" style="--at:2.35s" data-en="“Wit beyond measure is man's greatest treasure.”" data-th="“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”">“Wit beyond measure is man's greatest treasure.”</div>
             <div class="reveal" style="--at:2.6s"><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:17;--dur:1s;--at:2.7s">lumos --portfolio</span></div>
             <div class="out lumos reveal" style="--at:3.85s" data-en="✦ Lumos. The path ahead is lit — scroll to explore." data-th="✦ ลูมอส ทางข้างหน้าสว่างแล้ว — เลื่อนลงเพื่อสำรวจ">✦ Lumos. The path ahead is lit — scroll to explore.</div>
-            <div class="reveal" style="--at:4.1s"><span class="ps"><span class="loc">~</span> $</span> <span class="caret"></span></div>
+            <div class="out hint reveal" style="--at:4.1s" data-en="Psst — this terminal is real. Type help and press Enter." data-th="ความลับนะ — เทอร์มินัลนี้ใช้ได้จริง พิมพ์ help แล้วกด Enter">Psst — this terminal is real. Type help and press Enter.</div>
+            </div>
+            <div id="term-log" aria-live="polite"></div>
+            <form class="term-input reveal" id="term-form" style="--at:4.3s" autocomplete="off">
+              <label for="term-in" class="ps"><span class="loc">~</span> $</label>
+              <input id="term-in" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="send" aria-label="Terminal command" />
+            </form>
           </div>
         </div>
 
@@ -612,6 +649,198 @@
     a.addEventListener('click', function(){ document.querySelector('.nav-links').classList.remove('open'); });
   });
   applyLang();
+
+  // ---------- interactive hero terminal ----------
+  (function(){
+    var body = document.getElementById('term-body');
+    var log = document.getElementById('term-log');
+    var form = document.getElementById('term-form');
+    var input = document.getElementById('term-in');
+    var FASTWORK = 'https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service';
+    var history = [], hIdx = 0;
+
+    function T(en, th){ return lang === 'th' ? th : en; }
+    function line(text, cls){
+      var d = document.createElement('div');
+      d.className = 'out' + (cls ? ' ' + cls : '');
+      d.textContent = text;
+      log.appendChild(d);
+      return d;
+    }
+    function link(label, href, external){
+      var d = line('', '');
+      var a = document.createElement('a');
+      a.href = href; a.textContent = label;
+      if(external){ a.target = '_blank'; a.rel = 'noopener'; }
+      d.appendChild(a);
+    }
+    function spell(text, kind){
+      var d = line('', '');
+      var s = document.createElement('span');
+      s.className = 'spell ' + kind; s.textContent = text;
+      d.appendChild(s);
+    }
+    function go(id){
+      var el = document.getElementById(id);
+      if(!el) return false;
+      el.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+      return true;
+    }
+
+    var SECTIONS = ['about','skills','projects','services','contact'];
+    var APPS = {
+      'sorting-hat': 'sortinghats.html', 'sortinghat': 'sortinghats.html',
+      'paotang': 'paotang.html?demo=1', 'thai-chuay-thai': 'paotang.html?demo=1'
+    };
+    var HOUSES = ['Gryffindor 🦁','Hufflepuff 🦡','Ravenclaw 🦅','Slytherin 🐍'];
+
+    var commands = {
+      help: function(){
+        line(T('Commands:', 'คำสั่งที่ใช้ได้:'));
+        [['whoami', T('who is behind this terminal', 'เจ้าของเทอร์มินัลนี้คือใคร')],
+         ['ls', T('list sections', 'ดูรายการหมวด')],
+         ['cd <section>', T('jump to a section, e.g. cd projects', 'ไปยังหมวด เช่น cd projects')],
+         ['projects', T('list my projects', 'ดูผลงาน')],
+         ['open <app>', T('open sorting-hat or paotang', 'เปิด sorting-hat หรือ paotang')],
+         ['skills', T('what I work with', 'ทักษะของผม')],
+         ['contact', T('ways to reach me', 'ช่องทางติดต่อ')],
+         ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
+         ['sort', T('let the Hat sort you', 'ให้หมวกคัดสรรเลือกบ้าน')],
+         ['lang', T('switch TH / EN', 'สลับภาษา TH / EN')],
+         ['clear', T('clear the screen', 'ล้างหน้าจอ')]
+        ].forEach(function(c){ line('  ' + (c[0] + '                  ').slice(0, 18) + c[1]); });
+        line(T('…and a few spells, if you know any.', '…และคาถาอีกนิดหน่อย ถ้าคุณรู้จัก'), 'hint');
+      },
+      whoami: function(){
+        line('Suwapat Saelee — ' + T('Front-End Developer · Computer Science student · Ravenclaw 🦅', 'นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์ · เรเวนคลอว์ 🦅'));
+      },
+      ls: function(){ line(SECTIONS.map(function(s){ return s + '/'; }).join('  ') + '  motto.txt'); },
+      cd: function(args){
+        var t = (args[0] || '').replace(/\/$/, '').toLowerCase();
+        if(!t || t === '~'){ window.scrollTo({top:0}); return; }
+        if(SECTIONS.indexOf(t) === -1 || !go(t)) line(T('cd: no such section: ', 'cd: ไม่มีหมวดนี้: ') + t, 'err');
+      },
+      projects: function(){
+        line(T('Spell I    Portfolio Website — this site', 'คาถา I    เว็บพอร์ตโฟลิโอ — เว็บนี้เอง'));
+        line(T('Spell II   The Sorting Hat — Python in the browser', 'คาถา II   หมวกคัดสรร — Python บนเบราว์เซอร์'));
+        line(T('Spell III  Thai Chuay Thai Calculator', 'คาถา III  เครื่องคำนวณไทยช่วยไทย'));
+        line(T('Try: open sorting-hat', 'ลองพิมพ์: open sorting-hat'), 'hint');
+      },
+      open: function(args){
+        var t = (args[0] || '').toLowerCase();
+        if(APPS[t]){ line(T('Opening ', 'กำลังเปิด ') + t + '…'); location.href = APPS[t]; }
+        else line(T('open: try sorting-hat or paotang', 'open: ลอง sorting-hat หรือ paotang'), 'err');
+      },
+      skills: function(){
+        line('CS 101  Languages   Java · Python · JavaScript · HTML · CSS · SQL');
+        line('CS 204  Web         Responsive Design · PyScript · REST APIs · Git');
+        line('DS 310  Data & ML   pandas · NumPy · scikit-learn · Jupyter');
+        line('CC 320  Cloud       AWS · Security · Networking');
+        line('SE 330  SE          UML · Agile · Testing');
+      },
+      contact: function(){
+        link('✉  browndy_moconi@icloud.com', 'mailto:browndy_moconi@icloud.com');
+        link('⌂  github.com/BR0WNDY', 'https://github.com/BR0WNDY', true);
+        link('in linkedin.com/in/browndy-moconi', 'https://www.linkedin.com/in/browndy-moconi/', true);
+        link('▶  youtube.com/@Browndy_Moconi', 'https://www.youtube.com/@Browndy_Moconi', true);
+      },
+      hire: function(){
+        line(T('Excellent choice. A Ravenclaw never refuses a good problem.', 'ตัดสินใจได้ดีมาก เรเวนคลอว์ไม่เคยปฏิเสธโจทย์ดี ๆ'));
+        link(T('→ Hire me on Fastwork', '→ จ้างงานผมบน Fastwork'), FASTWORK, true);
+      },
+      sudo: function(args){
+        if(args.join(' ').toLowerCase() === 'hire suwapat'){
+          line(T('[sudo] password for muggle: ********', '[sudo] รหัสผ่านของมักเกิ้ล: ********'), 'hint');
+          line(T('Permission granted ✦', 'อนุญาตแล้ว ✦'), 'lumos');
+          commands.hire();
+        } else line(T('Nice try. Only the Headmaster has sudo here.', 'ไม่ได้หรอก มีแค่อาจารย์ใหญ่ที่ใช้ sudo ได้'), 'err');
+      },
+      sort: function(){
+        var h = HOUSES[Math.floor(Math.random() * HOUSES.length)];
+        line(T('Hmm… difficult. Very difficult…', 'อืม… ยากนะ ยากมาก…'), 'hint');
+        var name = h.split(' ')[0];
+        spell(name.toUpperCase() + '! ' + h.split(' ')[1], name === 'Slytherin' ? 'dark' : 'charm');
+        line(T('For the full ceremony: open sorting-hat', 'อยากได้พิธีเต็ม ๆ พิมพ์: open sorting-hat'), 'hint');
+      },
+      lang: function(args){
+        var want = (args[0] || '').toLowerCase();
+        if(want !== lang) toggleLang();
+        line(T('Language: English', 'ภาษา: ไทย'));
+      },
+      date: function(){ line(new Date().toLocaleString(lang === 'th' ? 'th-TH' : 'en-GB')); },
+      echo: function(args){ line(args.join(' ')); },
+      history: function(){ history.forEach(function(h, i){ line(String(i + 1).padStart(3) + '  ' + h); }); },
+      clear: function(){ log.textContent = ''; },
+      // spells
+      lumos: function(){
+        document.body.classList.remove('dim'); document.body.classList.add('lit');
+        spell('Lumos!', 'charm'); line(T('The castle brightens.', 'ปราสาทสว่างขึ้นแล้ว'));
+      },
+      nox: function(){
+        document.body.classList.remove('lit'); document.body.classList.add('dim');
+        spell('Nox.', 'charm'); line(T('The lights dim. Type lumos to bring them back.', 'แสงดับลง พิมพ์ lumos เพื่อเปิดไฟ'));
+      },
+      'expecto patronum': function(){
+        spell('Expecto Patronum!', 'patronus');
+        line(T('A silver eagle bursts from your wand. 🦅 Of course it does.', 'นกอินทรีสีเงินพุ่งออกจากไม้กายสิทธิ์ 🦅 แน่นอนอยู่แล้ว'));
+      },
+      'avada kedavra': function(){
+        spell('Avada Kedavra!', 'dark');
+        line(T('Unforgivable Curse blocked. Process not killed. 😐', 'คำสาปต้องห้ามถูกสกัดไว้ โปรเซสยังไม่ตาย 😐'), 'err');
+      },
+      alohomora: function(){
+        spell('Alohomora!', 'charm');
+        line(T('Unlocked: a secret. I debug with print() more than I admit.', 'ปลดล็อกความลับ: ผมดีบักด้วย print() บ่อยกว่าที่ยอมรับ'));
+      },
+      'wingardium leviosa': function(){
+        spell('Wingardium Leviosa!', 'charm');
+        line(T("It's Levi-O-sa, not Levio-SA.", 'ต้องเป็น เลวี-โอ-ซา ไม่ใช่ เลวิโอ-ซ้า'));
+        window.scrollBy({top:-60});
+      },
+      'mischief managed': function(){ log.textContent = ''; line(T('Map cleared.', 'แผนที่ถูกลบแล้ว'), 'hint'); },
+      'rm -rf /': function(){
+        spell('Protego!', 'charm');
+        line(T('The castle is protected. Nothing was deleted.', 'ปราสาทได้รับการปกป้อง ไม่มีอะไรถูกลบ'));
+      }
+    };
+    commands.about = commands.whoami;
+    commands['cat'] = function(args){
+      if(args[0] === 'motto.txt') line(T('“Wit beyond measure is man\'s greatest treasure.”', '“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”'), 'motto');
+      else line('cat: ' + (args[0] || '') + T(': no such file', ': ไม่มีไฟล์นี้'), 'err');
+    };
+    commands['sorting-hat'] = commands.sort;
+
+    function run(raw){
+      var text = raw.trim();
+      var echo = line('', 'echo');
+      echo.innerHTML = '<span class="ps"><span class="loc">~</span> $</span> ';
+      echo.appendChild(document.createTextNode(text));
+      if(!text) return;
+      history.push(text); hIdx = history.length;
+      var lower = text.toLowerCase().replace(/[!.]+$/, '').replace(/\s+/g, ' ');
+      if(lower.indexOf(' ') !== -1 && Object.prototype.hasOwnProperty.call(commands, lower)) return commands[lower]([]);   // multi-word spells
+      var parts = text.split(/\s+/), name = parts[0].toLowerCase().replace(/[!.]+$/, '');
+      if(Object.prototype.hasOwnProperty.call(commands, name)) commands[name](parts.slice(1));
+      else line(name + T(': command not found — try help', ': ไม่พบคำสั่งนี้ — ลองพิมพ์ help'), 'err');
+    }
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      run(input.value);
+      input.value = '';
+      body.scrollTop = body.scrollHeight;
+    });
+    input.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowUp' && hIdx > 0){ e.preventDefault(); input.value = history[--hIdx]; }
+      else if(e.key === 'ArrowDown'){ e.preventDefault(); hIdx = Math.min(history.length, hIdx + 1); input.value = history[hIdx] || ''; }
+      else if(e.key === 'l' && e.ctrlKey){ e.preventDefault(); log.textContent = ''; }
+    });
+    // clicking anywhere in the terminal focuses the prompt (but not when selecting text or following a link)
+    body.addEventListener('click', function(e){
+      if(e.target.closest('a') || String(window.getSelection())) return;
+      input.focus({preventScroll:true});
+    });
+  })();
 </script>
 </body>
 </html>
