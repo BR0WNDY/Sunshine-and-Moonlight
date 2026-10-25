@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ขนมบ้านดาว — เดโมร้านค้าออนไลน์ + ระบบหลังบ้าน</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="เดโมร้านค้าออนไลน์พร้อมระบบหลังบ้านและแจ้งเตือนออเดอร์แบบ LINE ของร้านสมมติ โดย Suwapat Saelee" />
+<!--
+  Demo for the Premium package: a fictional bakery's online shop with a cart
+  and checkout, plus the owner's back office — orders, statuses, stock — and a
+  mock of the LINE order alert a real build would push. Orders live in this
+  browser only (localStorage, with an in-memory fallback); nothing is sent.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="demo-bar.css" />
+<style>
+  :root{
+    --bg:#fff8f4; --card:#fff; --rose:#e2566f; --rose-d:#c03d56; --peach:#ffe3d6; --butter:#fff1c7;
+    --ink:#2b1d22; --muted:#7a6268; --line:#f1dfd8; --green:#06c755; --side:#1f1720;
+    --font:'Anuphan',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.6;overflow-x:hidden}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  :focus-visible{outline:3px solid #f7a8b6;outline-offset:2px;border-radius:8px}
+
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
+  .logo{font-weight:700;font-size:1.3rem;display:flex;align-items:center;gap:8px}
+  .logo i{width:34px;height:34px;border-radius:10px;background:var(--rose);display:grid;place-items:center;color:#fff;font-style:normal}
+  .switch{display:flex;background:var(--peach);border-radius:999px;padding:4px}
+  .switch button{border:0;background:transparent;padding:8px 18px;border-radius:999px;color:var(--muted);font-weight:500}
+  .switch button[aria-pressed="true"]{background:var(--card);color:var(--rose-d);box-shadow:0 4px 14px -6px rgba(192,61,86,.4)}
+  .cart-btn{border:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:500;position:relative}
+  .cart-btn b{background:var(--rose);border-radius:999px;padding:0 8px;margin-left:6px}
+
+  /* ---------- storefront ---------- */
+  .banner{background:linear-gradient(120deg,var(--rose),#f0866b);color:#fff;border-radius:26px;padding:38px;margin:6px 0 30px;
+    display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden;position:relative}
+  .banner h1{font-size:clamp(1.6rem,4vw,2.5rem);line-height:1.2;margin-bottom:8px}
+  .banner p{opacity:.92}
+  .banner .big{font-size:5rem;line-height:1;filter:drop-shadow(0 10px 20px rgba(0,0,0,.2))}
+  .cats{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+  .cats button{border:1.5px solid var(--line);background:var(--card);padding:7px 16px;border-radius:999px;color:var(--muted)}
+  .cats button[aria-pressed="true"]{border-color:var(--rose);color:var(--rose-d);background:#fff0f2}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding-bottom:60px}
+  .prod{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:.2s}
+  .prod:hover{transform:translateY(-3px);box-shadow:0 20px 34px -24px rgba(43,29,34,.45)}
+  .pic{aspect-ratio:4/3;display:grid;place-items:center;font-size:3.4rem}
+  .pbody{padding:14px 16px 16px;display:flex;flex-direction:column;flex:1}
+  .pbody h3{font-size:1rem;font-weight:600}
+  .pbody p{color:var(--muted);font-size:.85rem;flex:1;margin-bottom:10px}
+  .pfoot{display:flex;justify-content:space-between;align-items:center}
+  .price{font-weight:700;color:var(--rose-d)}
+  .add{border:0;background:var(--rose);color:#fff;width:38px;height:38px;border-radius:12px;font-size:1.3rem;line-height:1}
+  .add:hover{background:var(--rose-d)}
+  .add:disabled{background:#d8c9cc;cursor:not-allowed}
+  .stock{font-size:.75rem;color:var(--muted)}
+  .stock.low{color:var(--rose-d);font-weight:600}
+
+  /* cart drawer */
+  .scrim{position:fixed;inset:0;background:rgba(31,23,32,.45);opacity:0;pointer-events:none;transition:.25s;z-index:80}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--card);z-index:90;transform:translateX(100%);
+    transition:.3s;display:flex;flex-direction:column}
+  body.cart-open .scrim{opacity:1;pointer-events:auto}
+  body.cart-open .drawer{transform:none}
+  .d-head{display:flex;justify-content:space-between;align-items:center;padding:20px;border-bottom:1px solid var(--line)}
+  .d-head button{border:0;background:none;font-size:1.4rem}
+  .d-body{flex:1;overflow:auto;padding:16px 20px}
+  .line-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .line-item .ic{font-size:1.8rem}
+  .qty{display:flex;align-items:center;gap:8px}
+  .qty button{width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg)}
+  .d-foot{padding:18px 20px;border-top:1px solid var(--line)}
+  .d-foot .sum{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;margin-bottom:12px}
+  .d-foot input,.d-foot select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;font:inherit;margin-bottom:10px;background:var(--bg)}
+  .d-foot input.bad{border-color:var(--rose)}
+  .primary{width:100%;border:0;background:var(--rose);color:#fff;padding:14px;border-radius:14px;font-weight:600;font-size:1rem}
+  .primary:disabled{background:#d8c9cc;cursor:not-allowed}
+  .empty{color:var(--muted);text-align:center;padding:40px 0}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,calc(100% + 60px));background:var(--ink);color:#fff;padding:13px 20px;border-radius:14px;
+    z-index:100;transition:.3s;max-width:calc(100% - 32px);text-align:center;font-size:.92rem}
+  .toast.show{transform:translate(-50%,0)}
+
+  /* ---------- admin ---------- */
+  .admin{display:none;grid-template-columns:1fr 330px;gap:22px;padding-bottom:60px}
+  body.mode-admin .admin{display:grid}
+  body.mode-admin .store{display:none}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+  .kpi span{color:var(--muted);font-size:.82rem}
+  .kpi b{display:block;font-size:1.5rem;line-height:1.3}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:20px}
+  .panel h2{font-size:1.1rem;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+  .panel h2 small{font-weight:400;color:var(--muted);font-size:.8rem}
+  .tbl{width:100%;border-collapse:collapse;font-size:.9rem}
+  .tbl th{text-align:left;color:var(--muted);font-weight:500;font-size:.8rem;padding:8px 6px;border-bottom:1px solid var(--line)}
+  .tbl td{padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .tbl select{font:inherit;font-size:.85rem;padding:5px 8px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg)}
+  .st-new{color:#b45309} .st-bake{color:#2563eb} .st-done{color:#15803d}
+  .scroll-x{overflow-x:auto}
+  .stock-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .stock-row .qty b{min-width:26px;text-align:center}
+  .bar{height:6px;border-radius:6px;background:var(--peach);overflow:hidden;margin-top:4px;width:120px}
+  .bar i{display:block;height:100%;background:var(--rose)}
+
+  /* LINE mock */
+  .phone{background:var(--side);border-radius:30px;padding:12px;position:sticky;top:60px}
+  .phone-top{color:#fff;display:flex;align-items:center;gap:10px;padding:8px 10px 12px}
+  .phone-top i{width:34px;height:34px;border-radius:50%;background:var(--green);display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.75rem}
+  .phone-top small{display:block;color:#a99ea6;font-size:.72rem}
+  .chat{background:#8cabd9;border-radius:20px;padding:14px;height:440px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+  .msg{background:#fff;border-radius:4px 16px 16px 16px;padding:10px 12px;font-size:.84rem;max-width:92%;white-space:pre-line;animation:pop .35s ease}
+  .msg time{display:block;color:#8b8b8b;font-size:.7rem;margin-top:4px}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+  .note{color:#a99ea6;font-size:.75rem;text-align:center;padding:10px 6px 4px}
+
+  @media(max-width:1000px){
+    .grid{grid-template-columns:repeat(3,1fr)}
+    .admin{grid-template-columns:1fr}
+    .phone{position:static}
+  }
+  @media(max-width:700px){
+    .grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .banner{padding:26px}
+    .banner .big{font-size:3.4rem}
+    .top .logo{flex:1}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body class="mode-store">
+<div class="demo-bar">
+  <span><b>เดโมผลงาน</b> · ร้านสมมติ ออเดอร์เก็บในเบราว์เซอร์นี้เท่านั้น</span>
+  <a href="/work">← กลับหน้าผลงาน</a>
+</div>
+
+<div class="wrap">
+  <div class="top">
+    <div class="logo"><i>ด</i>ขนมบ้านดาว</div>
+    <div class="switch" role="group" aria-label="มุมมอง">
+      <button aria-pressed="true" data-mode="store">หน้าร้าน</button>
+      <button aria-pressed="false" data-mode="admin">หลังบ้าน (Admin)</button>
+    </div>
+    <button class="cart-btn" id="cart-btn">ตะกร้า<b id="cart-count">0</b></button>
+  </div>
+
+  <!-- STOREFRONT -->
+  <div class="store">
+    <div class="banner">
+      <div>
+        <h1>ขนมอบโฮมเมด<br>ส่งถึงบ้านทุกวัน</h1>
+        <p>สั่งก่อน 14:00 ส่งภายในวัน · ลองกดสั่งแล้วสลับไปดู "หลังบ้าน" ได้เลย</p>
+      </div>
+      <div class="big" aria-hidden="true">🧁</div>
+    </div>
+    <div class="cats" id="cats"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="admin">
+    <div>
+      <div class="kpis">
+        <div class="kpi"><span>ยอดขายวันนี้</span><b id="k-sales">0</b></div>
+        <div class="kpi"><span>ออเดอร์วันนี้</span><b id="k-orders">0</b></div>
+        <div class="kpi"><span>รอดำเนินการ</span><b id="k-pending">0</b></div>
+        <div class="kpi"><span>สินค้าใกล้หมด</span><b id="k-low">0</b></div>
+      </div>
+      <div class="panel">
+        <h2>ออเดอร์ล่าสุด <small>เปลี่ยนสถานะได้จากตาราง</small></h2>
+        <div class="scroll-x">
+          <table class="tbl">
+            <thead><tr><th>เลขที่</th><th>ลูกค้า</th><th>รายการ</th><th>ยอด</th><th>สถานะ</th></tr></thead>
+            <tbody id="orders"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>สต็อกสินค้า <small>ปรับจำนวนแล้วหน้าร้านอัปเดตทันที</small></h2>
+        <div id="stock"></div>
+      </div>
+      <button class="primary" id="reset" style="background:var(--ink);max-width:260px">รีเซ็ตข้อมูลเดโม</button>
+    </div>
+    <aside class="phone" aria-label="ตัวอย่างการแจ้งเตือนผ่าน LINE">
+      <div class="phone-top"><i>LINE</i><div>แจ้งเตือนร้าน<small>ตัวอย่างข้อความที่เจ้าของร้านจะได้รับ</small></div></div>
+      <div class="chat" id="chat"></div>
+      <p class="note">จำลองหน้าจอเท่านั้น ในงานจริงเชื่อมผ่าน LINE Messaging API</p>
+    </aside>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" aria-label="ตะกร้าสินค้า">
+  <div class="d-head"><b>ตะกร้าของคุณ</b><button id="close" aria-label="ปิด">×</button></div>
+  <div class="d-body" id="cart"></div>
+  <div class="d-foot">
+    <div class="sum"><span>รวม</span><span id="total">0</span></div>
+    <input id="cname" placeholder="ชื่อผู้สั่ง" autocomplete="off" />
+    <select id="ship"><option value="ส่งถึงบ้าน">ส่งถึงบ้าน</option><option value="รับที่ร้าน">รับที่ร้าน</option></select>
+    <button class="primary" id="checkout">ยืนยันการสั่งซื้อ</button>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const PRODUCTS = [
+    {id:'p1', name:'ครัวซองต์เนยสด', cat:'ขนมปัง', price:65, ic:'🥐', bg:'#fff1c7', desc:'อบใหม่ทุกเช้า กรอบนอกนุ่มใน'},
+    {id:'p2', name:'คัพเค้กสตรอว์เบอร์รี', cat:'เค้ก', price:55, ic:'🧁', bg:'#ffe0e6', desc:'ครีมชีสสตรอว์เบอร์รีสด'},
+    {id:'p3', name:'ช็อกโกแลตบราวนี่', cat:'เค้ก', price:70, ic:'🍫', bg:'#efe1d6', desc:'เข้มข้น หนึบหนับ'},
+    {id:'p4', name:'คุกกี้เนยถั่ว', cat:'คุกกี้', price:45, ic:'🍪', bg:'#fbe7cf', desc:'กล่องละ 6 ชิ้น'},
+    {id:'p5', name:'ขนมปังโฮลวีต', cat:'ขนมปัง', price:89, ic:'🍞', bg:'#f3e6d3', desc:'ไฟเบอร์สูง หอมนุ่ม'},
+    {id:'p6', name:'ทาร์ตไข่', cat:'ขนมไทย-ฝรั่ง', price:35, ic:'🥧', bg:'#fff4d1', desc:'ไส้ไข่ละมุน แป้งพายร่วน'},
+    {id:'p7', name:'เค้กส้มหน้านิ่ม', cat:'เค้ก', price:95, ic:'🍰', bg:'#ffe6d1', desc:'ส้มสายน้ำผึ้งแท้'},
+    {id:'p8', name:'มาการองรวมรส', cat:'คุกกี้', price:120, ic:'🍬', bg:'#e9e3ff', desc:'กล่องละ 5 ชิ้น 5 รส'},
+  ];
+  const STATUS = {new:'รับออเดอร์', bake:'กำลังเตรียม', done:'ส่งแล้ว'};
+  const baht = n => '฿' + n.toLocaleString('th-TH');
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const hhmm = d => new Date(d).toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
+
+  // ---- state (localStorage when available, memory otherwise) ----
+  const KEY = 'demo-shop:v1';
+  function seed(){
+    const now = Date.now();
+    return {
+      stock: {p1:14, p2:6, p3:3, p4:20, p5:9, p6:2, p7:5, p8:11},
+      orders: [
+        {no:1003, name:'คุณมินตรา', ship:'ส่งถึงบ้าน', items:[['p2',2],['p6',4]], at: now - 35*60e3, status:'bake'},
+        {no:1002, name:'คุณภูมิ', ship:'รับที่ร้าน', items:[['p1',3]], at: now - 80*60e3, status:'done'},
+        {no:1001, name:'คุณเฟิร์น', ship:'ส่งถึงบ้าน', items:[['p7',1],['p4',2]], at: now - 140*60e3, status:'done'},
+      ],
+      cart: {},
+    };
+  }
+  let S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || seed(); } catch { S = seed(); }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} };
+  const P = id => PRODUCTS.find(p => p.id === id);
+  const orderTotal = o => o.items.reduce((s, [id, q]) => s + P(id).price * q, 0);
+
+  // ---- storefront ----
+  let cat = 'ทั้งหมด';
+  function renderCats(){
+    const cats = ['ทั้งหมด', ...new Set(PRODUCTS.map(p => p.cat))];
+    document.getElementById('cats').innerHTML = cats.map(c => `<button aria-pressed="${c === cat}" data-cat="${c}">${c}</button>`).join('');
+  }
+  document.getElementById('cats').addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    cat = b.dataset.cat; renderCats(); renderGrid();
+  });
+  function renderGrid(){
+    document.getElementById('grid').innerHTML = PRODUCTS.filter(p => cat === 'ทั้งหมด' || p.cat === cat).map(p => {
+      const left = S.stock[p.id] - (S.cart[p.id] || 0);
+      return `<article class="prod">
+        <div class="pic" style="background:${p.bg}" aria-hidden="true">${p.ic}</div>
+        <div class="pbody"><h3>${p.name}</h3><p>${p.desc}</p>
+          <div class="pfoot"><div><div class="price">${baht(p.price)}</div>
+            <div class="stock ${left <= 3 ? 'low' : ''}">${left > 0 ? 'เหลือ ' + left + ' ชิ้น' : 'หมดแล้ว'}</div></div>
+            <button class="add" data-add="${p.id}" aria-label="เพิ่ม ${p.name} ลงตะกร้า" ${left <= 0 ? 'disabled' : ''}>+</button></div>
+        </div></article>`;
+    }).join('');
+  }
+  document.getElementById('grid').addEventListener('click', e => {
+    const b = e.target.closest('[data-add]'); if(!b) return;
+    S.cart[b.dataset.add] = (S.cart[b.dataset.add] || 0) + 1;
+    save(); renderAll(); toast('เพิ่ม ' + P(b.dataset.add).name + ' ลงตะกร้าแล้ว');
+  });
+
+  // ---- cart ----
+  const cartLines = () => Object.entries(S.cart).filter(([, q]) => q > 0);
+  function renderCart(){
+    const lines = cartLines();
+    document.getElementById('cart-count').textContent = lines.reduce((s, [, q]) => s + q, 0);
+    document.getElementById('total').textContent = baht(lines.reduce((s, [id, q]) => s + P(id).price * q, 0));
+    document.getElementById('checkout').disabled = !lines.length;
+    document.getElementById('cart').innerHTML = lines.length ? lines.map(([id, q]) => `
+      <div class="line-item"><span class="ic" aria-hidden="true">${P(id).ic}</span>
+        <div><b>${P(id).name}</b><div class="stock">${baht(P(id).price)} × ${q}</div></div>
+        <div class="qty"><button data-dec="${id}" aria-label="ลด">−</button><b>${q}</b><button data-inc="${id}" aria-label="เพิ่ม" ${q >= S.stock[id] ? 'disabled' : ''}>+</button></div>
+      </div>`).join('') : '<p class="empty">ยังไม่มีสินค้าในตะกร้า</p>';
+  }
+  document.getElementById('cart').addEventListener('click', e => {
+    const inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]');
+    if(inc) S.cart[inc.dataset.inc]++;
+    if(dec) S.cart[dec.dataset.dec]--;
+    save(); renderAll();
+  });
+  const openCart = on => document.body.classList.toggle('cart-open', on);
+  document.getElementById('cart-btn').onclick = () => openCart(true);
+  document.getElementById('close').onclick = () => openCart(false);
+  document.getElementById('scrim').onclick = () => openCart(false);
+  addEventListener('keydown', e => { if(e.key === 'Escape') openCart(false); });
+
+  document.getElementById('checkout').onclick = () => {
+    const nameEl = document.getElementById('cname');
+    const name = nameEl.value.trim();
+    nameEl.classList.toggle('bad', !name);
+    if(!name){ nameEl.focus(); toast('กรุณากรอกชื่อผู้สั่ง'); return; }
+    const items = cartLines();
+    items.forEach(([id, q]) => S.stock[id] -= q);
+    const no = Math.max(...S.orders.map(o => o.no), 1000) + 1;
+    const order = {no, name, ship: document.getElementById('ship').value, items, at: Date.now(), status:'new'};
+    S.orders.unshift(order); S.cart = {};
+    save(); nameEl.value = ''; openCart(false); renderAll();
+    pushLine(order, true);
+    toast(`สั่งซื้อสำเร็จ ออเดอร์ #${no} · ลองสลับไปดูหลังบ้าน`);
+  };
+
+  // ---- admin ----
+  function renderAdmin(){
+    const today = new Date().toDateString();
+    const todays = S.orders.filter(o => new Date(o.at).toDateString() === today);
+    document.getElementById('k-sales').textContent = baht(todays.reduce((s, o) => s + orderTotal(o), 0));
+    document.getElementById('k-orders').textContent = todays.length;
+    document.getElementById('k-pending').textContent = S.orders.filter(o => o.status !== 'done').length;
+    document.getElementById('k-low').textContent = PRODUCTS.filter(p => S.stock[p.id] <= 3).length;
+    document.getElementById('orders').innerHTML = S.orders.map(o => `<tr>
+      <td>#${o.no}<div class="stock">${hhmm(o.at)}</div></td>
+      <td>${esc(o.name)}<div class="stock">${o.ship}</div></td>
+      <td>${o.items.map(([id, q]) => `${P(id).ic}×${q}`).join(' ')}</td>
+      <td><b>${baht(orderTotal(o))}</b></td>
+      <td><select data-order="${o.no}" class="st-${o.status}" aria-label="สถานะออเดอร์ #${o.no}">${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${k === o.status ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
+    </tr>`).join('');
+    const max = Math.max(...Object.values(S.stock), 20);
+    document.getElementById('stock').innerHTML = PRODUCTS.map(p => `<div class="stock-row">
+      <div>${p.ic} ${p.name}<div class="bar"><i style="width:${S.stock[p.id] / max * 100}%"></i></div></div>
+      <div class="qty"><button data-sdec="${p.id}" aria-label="ลดสต็อก ${p.name}">−</button><b>${S.stock[p.id]}</b><button data-sinc="${p.id}" aria-label="เพิ่มสต็อก ${p.name}">+</button></div>
+    </div>`).join('');
+  }
+  document.getElementById('orders').addEventListener('change', e => {
+    const o = S.orders.find(x => x.no === Number(e.target.dataset.order)); if(!o) return;
+    o.status = e.target.value; save(); renderAdmin();
+    addMsg(`📦 ออเดอร์ #${o.no} เปลี่ยนสถานะเป็น "${STATUS[o.status]}"`, Date.now(), true);
+  });
+  document.getElementById('stock').addEventListener('click', e => {
+    const inc = e.target.closest('[data-sinc]'), dec = e.target.closest('[data-sdec]');
+    if(inc) S.stock[inc.dataset.sinc]++;
+    if(dec && S.stock[dec.dataset.sdec] > 0) S.stock[dec.dataset.sdec]--;
+    save(); renderAll();
+  });
+  document.getElementById('reset').onclick = () => {
+    S = seed(); save(); document.getElementById('chat').innerHTML = '';
+    S.orders.slice().reverse().forEach(o => pushLine(o, false)); renderAll(); toast('รีเซ็ตข้อมูลเดโมแล้ว');
+  };
+
+  // ---- LINE mock ----
+  function addMsg(text, at, scroll){
+    const chat = document.getElementById('chat');
+    const m = document.createElement('div'); m.className = 'msg';
+    m.textContent = text;
+    const t = document.createElement('time'); t.textContent = hhmm(at); m.append(t);
+    chat.append(m); if(scroll) chat.scrollTop = chat.scrollHeight;
+  }
+  function pushLine(o, scroll){
+    addMsg(`🛎️ ออเดอร์ใหม่ #${o.no}\nลูกค้า: ${o.name} (${o.ship})\n` +
+      o.items.map(([id, q]) => `• ${P(id).name} × ${q}`).join('\n') + `\nยอดรวม ${baht(orderTotal(o))}`, o.at, scroll);
+  }
+  S.orders.slice().reverse().forEach(o => pushLine(o, false));
+
+  // ---- mode switch ----
+  document.querySelectorAll('.switch button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.switch button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    document.body.className = 'mode-' + b.dataset.mode;
+    if(b.dataset.mode === 'admin'){ const c = document.getElementById('chat'); c.scrollTop = c.scrollHeight; }
+  }));
+  if(location.hash === '#admin') document.querySelector('[data-mode="admin"]').click();
+
+  let tt; function toast(msg){
+    const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+  function renderAll(){ renderGrid(); renderCart(); renderAdmin(); }
+  renderCats(); renderAll();
+</script>
+</body>
+</html>

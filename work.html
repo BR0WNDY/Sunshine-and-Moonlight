@@ -39,7 +39,8 @@
   .sec-sub{color:var(--muted);font-size:.92rem;margin-bottom:28px}
 
   /* ---------- work cards: the homepage's spellbook pages ---------- */
-  .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+  .kind{font-family:var(--font-mono);font-size:.68rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
   .spell{background:linear-gradient(180deg,var(--night-2),var(--night));border:1px solid var(--line);
     border-radius:4px 16px 16px 4px;display:flex;flex-direction:column;overflow:hidden;transition:.28s;
     box-shadow:inset 6px 0 0 -2px rgba(200,163,58,.25)}
@@ -108,12 +109,46 @@
 
     <section class="sec" aria-labelledby="work-title">
       <h2 class="sec-title" id="work-title" data-en="Projects" data-th="ผลงาน">Projects</h2>
-      <p class="sec-sub" data-en="Live demos with sample data. Nothing you enter is saved." data-th="เดโมใช้งานจริงพร้อมข้อมูลตัวอย่าง ข้อมูลที่กรอกจะไม่ถูกบันทึก">Live demos with sample data. Nothing you enter is saved.</p>
+      <p class="sec-sub" data-en="Every card opens a live demo. The businesses are made up; nothing you enter is sent anywhere." data-th="ทุกการ์ดเปิดเดโมที่ใช้งานได้จริง ธุรกิจในเดโมเป็นธุรกิจสมมติ ข้อมูลที่กรอกจะไม่ถูกส่งไปไหน">Every card opens a live demo. The businesses are made up; nothing you enter is sent anywhere.</p>
       <div class="work-grid">
+
+        <article class="spell">
+          <img src="/images/thumb-demo-shop.jpg" alt="Screenshot of the bakery shop's admin dashboard with a LINE order alert" loading="lazy" width="640" height="400" />
+          <div class="spell-body">
+            <p class="kind" data-en="Demo · Online shop + admin" data-th="เดโม · ร้านค้าออนไลน์ + หลังบ้าน">Demo · Online shop + admin</p>
+            <h3 data-en="Bakery Shop with Back Office" data-th="ร้านขนมออนไลน์พร้อมระบบหลังบ้าน">Bakery Shop with Back Office</h3>
+            <p data-en="Customers fill a cart and check out; the owner tracks orders, changes their status and edits stock, with each new order shown as a LINE alert." data-th="ลูกค้าเลือกสินค้าลงตะกร้าและสั่งซื้อ เจ้าของร้านดูออเดอร์ เปลี่ยนสถานะ ปรับสต็อก และเห็นตัวอย่างแจ้งเตือนออเดอร์ใหม่ผ่าน LINE">Customers fill a cart and check out; the owner tracks orders, changes their status and edits stock, with each new order shown as a LINE alert.</p>
+            <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>LINE alert mock</li></ul>
+            <a class="btn btn-ghost" href="/demos/shop.html">Live Demo →</a>
+          </div>
+        </article>
+
+        <article class="spell">
+          <img src="/images/thumb-demo-clinic.jpg" alt="Screenshot of the dental clinic website" loading="lazy" width="640" height="400" />
+          <div class="spell-body">
+            <p class="kind" data-en="Demo · Multi-page business site" data-th="เดโม · เว็บธุรกิจหลายหน้า">Demo · Multi-page business site</p>
+            <h3 data-en="Dental Clinic Website" data-th="เว็บคลินิกทันตกรรม">Dental Clinic Website</h3>
+            <p data-en="Home, services, about and online booking pages, with a booking form that checks every field and shows only open time slots." data-th="หน้าแรก บริการ เกี่ยวกับเรา และระบบจองคิวออนไลน์ ฟอร์มตรวจข้อมูลทุกช่องและแสดงเฉพาะเวลาที่ยังว่าง">Home, services, about and online booking pages, with a booking form that checks every field and shows only open time slots.</p>
+            <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+            <a class="btn btn-ghost" href="/demos/clinic.html">Live Demo →</a>
+          </div>
+        </article>
+
+        <article class="spell">
+          <img src="/images/thumb-demo-cafe.jpg" alt="Screenshot of the café landing page" loading="lazy" width="640" height="400" />
+          <div class="spell-body">
+            <p class="kind" data-en="Demo · Landing page" data-th="เดโม · Landing Page">Demo · Landing page</p>
+            <h3 data-en="Café Landing Page" data-th="Landing Page ร้านกาแฟ">Café Landing Page</h3>
+            <p data-en="A one-page site for a coffee shop: hero, tabbed menu, story and opening hours, tuned to read well on a phone." data-th="เว็บหน้าเดียวสำหรับร้านกาแฟ มีหน้าแรก เมนูแยกหมวด เรื่องราวร้าน และเวลาเปิด จัดให้อ่านง่ายบนมือถือ">A one-page site for a coffee shop: hero, tabbed menu, story and opening hours, tuned to read well on a phone.</p>
+            <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+            <a class="btn btn-ghost" href="/demos/cafe.html">Live Demo →</a>
+          </div>
+        </article>
 
         <article class="spell">
           <img src="/images/thumb-paotang.jpg" alt="Screenshot of the Thai Chuay Thai calculator" loading="lazy" width="640" height="400" />
           <div class="spell-body">
+            <p class="kind" data-en="Project · Web app" data-th="โปรเจกต์ · เว็บแอป">Project · Web app</p>
             <h3 data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h3>
             <p data-en="A co-payment calculator for the Thai government scheme (state 60 : citizen 40) that works out your share and keeps a running history." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60 : ประชาชน 40) คำนวณยอดที่ต้องจ่ายเอง พร้อมประวัติรายการย้อนหลัง">A co-payment calculator for the Thai government scheme (state 60 : citizen 40) that works out your share and keeps a running history.</p>
             <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
@@ -124,6 +159,7 @@
         <article class="spell">
           <img src="/images/thumb-sortinghat.jpg" alt="Screenshot of the Sorting Hat quiz" loading="lazy" width="640" height="400" />
           <div class="spell-body">
+            <p class="kind" data-en="Project · Python in the browser" data-th="โปรเจกต์ · Python บนเบราว์เซอร์">Project · Python in the browser</p>
             <h3 data-en="The Sorting Hat" data-th="หมวกคัดสรร">The Sorting Hat</h3>
             <p data-en="An interactive quiz written in Python that runs entirely in the browser with PyScript, no server needed." data-th="แบบทดสอบเชิงโต้ตอบที่เขียนด้วย Python และรันบนเบราว์เซอร์ทั้งหมดผ่าน PyScript โดยไม่ต้องใช้เซิร์ฟเวอร์">An interactive quiz written in Python that runs entirely in the browser with PyScript, no server needed.</p>
             <ul class="stack" aria-label="Tech stack"><li>Python</li><li>PyScript</li><li>JavaScript</li></ul>

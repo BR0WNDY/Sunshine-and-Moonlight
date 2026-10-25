@@ -1,0 +1,9 @@
+/* The strip across the top of every demo: says it is a made-up business and
+   offers the one way out, back to /work. Neutral colours so it sits on any
+   demo's palette without borrowing from it. */
+.demo-bar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  flex-wrap:wrap;padding:9px 18px;background:#0f172a;color:#cbd5e1;
+  font:500 13px/1.4 'IBM Plex Sans Thai','Sarabun',system-ui,sans-serif}
+.demo-bar b{color:#fde68a;font-weight:600}
+.demo-bar a{color:#fff;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.demo-bar a:hover{color:#fde68a}

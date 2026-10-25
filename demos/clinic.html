@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ยิ้มใส ทันตกรรม — เดโมเว็บธุรกิจหลายหน้า</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="เดโมเว็บธุรกิจหลายหน้าของคลินิกทันตกรรมสมมติ โดย Suwapat Saelee" />
+<!--
+  Demo for the Standard package: a multi-page business site for a fictional
+  dental clinic. The pages are hash routes (#/services, #/booking) so the demo
+  is one file; the booking form validates and confirms but sends nothing.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="demo-bar.css" />
+<style>
+  :root{
+    --bg:#f6fbfb; --white:#fff; --teal:#0f8b8d; --teal-d:#0b6668; --teal-l:#d9f1f1; --mint:#a8e0d8;
+    --ink:#12303a; --muted:#5d7780; --line:#dbe9ea; --warn:#c2410c; --ok:#15803d;
+    --font:'Prompt',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.7;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+  :focus-visible{outline:3px solid var(--mint);outline-offset:2px;border-radius:6px}
+
+  header{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:38px;z-index:40}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:1.2rem;color:var(--teal-d)}
+  .logo svg{width:36px;height:36px}
+  .menu{display:flex;gap:6px;list-style:none}
+  .menu a{padding:8px 16px;border-radius:999px;color:var(--muted);font-size:.95rem;transition:.2s}
+  .menu a:hover{color:var(--teal)}
+  .menu a[aria-current="page"]{background:var(--teal-l);color:var(--teal-d);font-weight:500}
+  .nav .cta{background:var(--teal);color:#fff;padding:10px 20px;border-radius:999px;font-weight:500;font-size:.95rem}
+  .nav .cta:hover{background:var(--teal-d)}
+  .burger{display:none;background:none;border:0;font-size:1.6rem;color:var(--ink);cursor:pointer}
+
+  main{min-height:70vh}
+  .page{display:none;animation:in .35s ease}
+  .page.active{display:block}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:12px;
+    font:500 1rem var(--font);cursor:pointer;border:2px solid var(--teal);transition:.2s}
+  .btn-p{background:var(--teal);color:#fff}
+  .btn-p:hover{background:var(--teal-d);border-color:var(--teal-d)}
+  .btn-o{background:transparent;color:var(--teal-d)}
+  .btn-o:hover{background:var(--teal-l)}
+
+  /* home */
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:64px 0}
+  .pill{display:inline-flex;gap:8px;align-items:center;background:var(--teal-l);color:var(--teal-d);padding:6px 14px;border-radius:999px;font-size:.85rem;margin-bottom:16px}
+  .hero h1{font-size:clamp(2rem,4.8vw,3.2rem);line-height:1.2;font-weight:600;margin-bottom:16px}
+  .hero h1 span{color:var(--teal)}
+  .hero p{color:var(--muted);max-width:46ch;margin-bottom:28px}
+  .hero .acts{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-card{background:linear-gradient(150deg,var(--teal),var(--teal-d));border-radius:28px;padding:34px;color:#fff;position:relative;overflow:hidden}
+  .hero-card::after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.08);right:-70px;top:-70px}
+  .hero-card svg{width:120px;height:120px;margin-bottom:12px}
+  .hero-card h3{font-weight:500;font-size:1.25rem;margin-bottom:12px}
+  .hero-card ul{list-style:none}
+  .hero-card li{padding:7px 0;border-top:1px solid rgba(255,255,255,.18);display:flex;gap:10px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:70px}
+  .stat{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px;text-align:center}
+  .stat b{display:block;font-size:1.8rem;color:var(--teal);font-weight:600;line-height:1.2}
+  .stat span{color:var(--muted);font-size:.9rem}
+
+  .sec-h{margin:0 0 28px}
+  .sec-h small{color:var(--teal);font-weight:500;letter-spacing:1px}
+  .sec-h h2{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:600;line-height:1.25}
+
+  /* services */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding-bottom:70px}
+  .svc{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:26px;transition:.2s}
+  .svc:hover{border-color:var(--mint);transform:translateY(-3px);box-shadow:0 20px 40px -26px rgba(15,139,141,.5)}
+  .svc .ic{width:48px;height:48px;border-radius:14px;background:var(--teal-l);display:grid;place-items:center;margin-bottom:14px;font-size:1.4rem}
+  .svc h3{font-weight:500;font-size:1.12rem;margin-bottom:6px}
+  .svc p{color:var(--muted);font-size:.93rem;margin-bottom:12px}
+  .svc .dur{font-size:.82rem;color:var(--teal-d);background:var(--teal-l);padding:3px 10px;border-radius:999px}
+
+  /* about */
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:64px 0 70px;align-items:start}
+  .about p{color:var(--muted);margin-bottom:14px}
+  .steps{list-style:none;counter-reset:s}
+  .steps li{counter-increment:s;background:var(--white);border:1px solid var(--line);border-radius:16px;padding:18px 18px 18px 64px;position:relative;margin-bottom:12px}
+  .steps li::before{content:counter(s);position:absolute;left:18px;top:18px;width:32px;height:32px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-weight:600}
+  .steps b{display:block;font-weight:500}
+  .steps span{color:var(--muted);font-size:.9rem}
+
+  /* booking */
+  .book{display:grid;grid-template-columns:1.3fr .7fr;gap:28px;padding:56px 0 70px;align-items:start}
+  form{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:30px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  label{display:block;font-size:.9rem;font-weight:500;margin-bottom:6px}
+  .field{margin-bottom:18px}
+  input,select,textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:.98rem;background:var(--bg);color:var(--ink)}
+  input:focus,select:focus,textarea:focus{outline:0;border-color:var(--teal);background:#fff}
+  .field.bad input,.field.bad select{border-color:var(--warn)}
+  .err{color:var(--warn);font-size:.82rem;margin-top:4px;display:none}
+  .field.bad .err{display:block}
+  .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .slots label{margin:0}
+  .slots input{position:absolute;opacity:0;width:1px;height:1px}
+  .slots span{display:block;text-align:center;padding:10px 0;border:1.5px solid var(--line);border-radius:10px;font-size:.9rem;cursor:pointer;font-weight:400}
+  .slots input:checked + span{background:var(--teal);border-color:var(--teal);color:#fff}
+  .slots input:focus-visible + span{outline:3px solid var(--mint)}
+  .slots input:disabled + span{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+  .side{background:var(--teal-l);border-radius:22px;padding:26px}
+  .side h3{font-weight:500;margin-bottom:10px}
+  .side li{margin:0 0 8px 18px;color:var(--teal-d);font-size:.93rem}
+  .done{display:none;text-align:center;padding:40px 20px}
+  .done .check{width:72px;height:72px;border-radius:50%;background:var(--teal-l);color:var(--ok);display:grid;place-items:center;font-size:2rem;margin:0 auto 16px}
+  .done h3{font-weight:600;font-size:1.4rem;margin-bottom:8px}
+  .done p{color:var(--muted)}
+  .ticket{display:inline-block;margin:18px 0;background:var(--bg);border:1.5px dashed var(--mint);border-radius:14px;padding:14px 22px;text-align:left;font-size:.95rem}
+
+  footer{background:var(--ink);color:#b8cdd2;padding:40px 0;font-size:.9rem}
+  .foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot b{color:#fff;font-weight:500}
+
+  @media(max-width:900px){
+    .menu{position:absolute;top:70px;left:0;right:0;background:#fff;flex-direction:column;padding:14px 22px;border-bottom:1px solid var(--line);display:none}
+    .menu.open{display:flex}
+    .burger{display:block}
+    .nav .cta{display:none}
+    .hero,.about,.book{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .svc-grid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:560px){
+    .svc-grid,.row{grid-template-columns:1fr}
+    .slots{grid-template-columns:repeat(3,1fr)}
+    form{padding:22px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="demo-bar">
+  <span><b>เดโมผลงาน</b> · คลินิกสมมติ ฟอร์มนัดหมายไม่ส่งข้อมูลไปไหน</span>
+  <a href="/work">← กลับหน้าผลงาน</a>
+</div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#/">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="12" fill="#0f8b8d"/><path d="M13 12c3-2 5 0 7 0s4-2 7 0c3 3 1 9 0 13-1 3-2 5-3 5-2 0-1-6-4-6s-2 6-4 6c-1 0-2-2-3-5-1-4-3-10 0-13z" fill="#fff"/></svg>
+      ยิ้มใส ทันตกรรม
+    </a>
+    <ul class="menu" id="menu">
+      <li><a href="#/">หน้าแรก</a></li>
+      <li><a href="#/services">บริการ</a></li>
+      <li><a href="#/about">เกี่ยวกับเรา</a></li>
+      <li><a href="#/booking">นัดหมาย</a></li>
+    </ul>
+    <a class="cta" href="#/booking">จองคิวออนไลน์</a>
+    <button class="burger" id="burger" aria-label="เมนู" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section class="page" data-route="/">
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <span class="pill">✦ เปิดทุกวัน 10:00 – 20:00</span>
+          <h1>ดูแลรอยยิ้มของคุณ<br><span>อย่างอ่อนโยน</span></h1>
+          <p>คลินิกทันตกรรมครบวงจร ตั้งแต่ขูดหินปูน อุดฟัน จนถึงจัดฟันและฟันเทียม ด้วยเครื่องมือมาตรฐานและการฆ่าเชื้อทุกขั้นตอน</p>
+          <div class="acts">
+            <a class="btn btn-p" href="#/booking">จองคิวออนไลน์</a>
+            <a class="btn btn-o" href="#/services">ดูบริการทั้งหมด</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="rgba(255,255,255,.12)"/><path d="M34 36c9-6 16 0 26 0s17-6 26 0c9 9 3 27 0 39-3 9-6 15-9 15-6 0-3-18-17-18S49 90 43 90c-3 0-6-6-9-15-3-12-9-30 0-39z" fill="#fff"/><path d="M48 50q12 8 24 0" stroke="#0f8b8d" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+          <h3>ทำไมต้องยิ้มใส</h3>
+          <ul>
+            <li>✓ ปรึกษาก่อนรักษา แจ้งค่าใช้จ่ายชัดเจน</li>
+            <li>✓ จองคิวออนไลน์ ไม่ต้องรอนาน</li>
+            <li>✓ ห้องทำฟันแยกเป็นสัดส่วน</li>
+          </ul>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>12+</b><span>ปีที่เปิดให้บริการ</span></div>
+        <div class="stat"><b>8</b><span>ทันตแพทย์เฉพาะทาง</span></div>
+        <div class="stat"><b>4</b><span>ห้องทำฟัน</span></div>
+        <div class="stat"><b>7</b><span>วันต่อสัปดาห์</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="page" data-route="/services">
+    <div class="wrap" style="padding-top:56px">
+      <div class="sec-h"><small>SERVICES</small><h2>บริการของเรา</h2></div>
+      <div class="svc-grid" id="svc-grid"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="page" data-route="/about">
+    <div class="wrap about">
+      <div>
+        <div class="sec-h"><small>ABOUT US</small><h2>คลินิกที่ทำให้การทำฟัน<br>ไม่น่ากลัวอีกต่อไป</h2></div>
+        <p>เราเชื่อว่าทุกคนควรได้รับการดูแลสุขภาพช่องปากอย่างใส่ใจ ทีมทันตแพทย์จะอธิบายทุกขั้นตอนก่อนเริ่มรักษา เพื่อให้คุณสบายใจที่สุด</p>
+        <p>คลินิกผ่านมาตรฐานการฆ่าเชื้อ และใช้อุปกรณ์แบบใช้ครั้งเดียวทิ้งในทุกงานที่ทำได้</p>
+      </div>
+      <div>
+        <h3 style="font-weight:500;margin-bottom:14px">ขั้นตอนเมื่อมาที่คลินิก</h3>
+        <ol class="steps">
+          <li><b>จองคิวออนไลน์</b><span>เลือกวัน เวลา และบริการที่ต้องการ</span></li>
+          <li><b>ตรวจและปรึกษา</b><span>ทันตแพทย์ตรวจ พร้อมแจ้งแผนและค่าใช้จ่าย</span></li>
+          <li><b>รักษาตามแผน</b><span>เริ่มรักษาเมื่อคุณพร้อม ไม่มีการบังคับ</span></li>
+          <li><b>ติดตามผล</b><span>ระบบแจ้งเตือนนัดครั้งถัดไปให้อัตโนมัติ</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="page" data-route="/booking">
+    <div class="wrap book">
+      <div>
+        <div class="sec-h"><small>BOOKING</small><h2>จองคิวออนไลน์</h2></div>
+        <form id="form" novalidate>
+          <div class="row">
+            <div class="field"><label for="name">ชื่อ-นามสกุล</label><input id="name" autocomplete="off" /><p class="err">กรุณากรอกชื่อ-นามสกุล</p></div>
+            <div class="field"><label for="service">บริการ</label><select id="service"><option value="">เลือกบริการ</option></select><p class="err">กรุณาเลือกบริการ</p></div>
+          </div>
+          <div class="field"><label for="date">วันที่</label><input id="date" type="date" /><p class="err">กรุณาเลือกวันที่ตั้งแต่พรุ่งนี้เป็นต้นไป</p></div>
+          <div class="field" id="slot-field"><label>เวลา</label><div class="slots" id="slots"></div><p class="err">กรุณาเลือกเวลา</p></div>
+          <div class="field"><label for="note">อาการเบื้องต้น (ไม่บังคับ)</label><textarea id="note" rows="3"></textarea></div>
+          <button class="btn btn-p" type="submit" style="width:100%">ยืนยันการนัดหมาย</button>
+        </form>
+        <div class="done" id="done">
+          <div class="check">✓</div>
+          <h3>นัดหมายสำเร็จ (เดโม)</h3>
+          <p>ในเว็บจริง ระบบจะส่งการยืนยันและแจ้งเตือนก่อนวันนัด</p>
+          <div class="ticket" id="ticket"></div>
+          <div><button class="btn btn-o" id="again">จองคิวใหม่</button></div>
+        </div>
+      </div>
+      <aside class="side">
+        <h3>ก่อนมาตามนัด</h3>
+        <ul>
+          <li>มาก่อนเวลานัด 10 นาที</li>
+          <li>นำรายการยาที่ใช้ประจำมาด้วย</li>
+          <li>เลื่อนนัดได้ล่วงหน้า 24 ชั่วโมง</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><b>ยิ้มใส ทันตกรรม</b> (คลินิกสมมติ)<br>เปิดทุกวัน 10:00 – 20:00</div>
+    <div>เดโมเว็บธุรกิจหลายหน้า โดย Suwapat Saelee</div>
+  </div>
+</footer>
+
+<script>
+  const SERVICES = [
+    ['🪥', 'ขูดหินปูน', 'ทำความสะอาดคราบหินปูน ขัดฟันให้เรียบ', '30 นาที'],
+    ['🦷', 'อุดฟัน', 'อุดด้วยวัสดุสีเหมือนฟัน แข็งแรง สวยเป็นธรรมชาติ', '30–45 นาที'],
+    ['✨', 'ฟอกสีฟัน', 'ฟอกในคลินิก เห็นผลภายในครั้งเดียว', '60 นาที'],
+    ['😁', 'จัดฟัน', 'ทั้งแบบโลหะและแบบใส พร้อมวางแผนด้วยภาพจำลอง', 'ปรึกษา 45 นาที'],
+    ['🩺', 'รักษารากฟัน', 'รักษาฟันที่อักเสบ เก็บฟันธรรมชาติไว้ได้นาน', '60–90 นาที'],
+    ['👶', 'ทันตกรรมเด็ก', 'ดูแลฟันน้ำนม เคลือบฟลูออไรด์ บรรยากาศเป็นมิตร', '30 นาที'],
+  ];
+  document.getElementById('svc-grid').innerHTML = SERVICES.map(([ic, t, d, dur]) =>
+    `<div class="svc"><div class="ic" aria-hidden="true">${ic}</div><h3>${t}</h3><p>${d}</p><span class="dur">⏱ ${dur}</span></div>`).join('');
+  const sel = document.getElementById('service');
+  SERVICES.forEach(([, t]) => sel.add(new Option(t, t)));
+
+  // ---- hash router: #/services, #/booking ... ----
+  const pages = document.querySelectorAll('.page');
+  const links = document.querySelectorAll('.menu a');
+  function route(){
+    const path = location.hash.replace(/^#/, '') || '/';
+    let found = false;
+    pages.forEach(p => { const on = p.dataset.route === path; p.classList.toggle('active', on); found ||= on; });
+    if(!found) pages[0].classList.add('active');
+    links.forEach(a => {
+      if(a.getAttribute('href') === '#' + path) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    document.getElementById('menu').classList.remove('open');
+    window.scrollTo(0, 0);
+  }
+  addEventListener('hashchange', route);
+  route();
+  const burger = document.getElementById('burger');
+  burger.addEventListener('click', () => {
+    const open = document.getElementById('menu').classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+  });
+
+  // ---- booking ----
+  const date = document.getElementById('date');
+  const pad = n => String(n).padStart(2, '0');
+  const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+  date.min = iso(tomorrow);
+
+  const TIMES = ['10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'];
+  const slots = document.getElementById('slots');
+  function renderSlots(){
+    // pretend some slots are taken, varying by date so the demo feels alive
+    const seed = date.value ? Number(date.value.replaceAll('-', '')) : 0;
+    slots.innerHTML = TIMES.map((t, i) => {
+      const taken = seed && (seed + i * 7) % 5 === 0;
+      return `<label><input type="radio" name="slot" value="${t}" ${taken ? 'disabled' : ''}><span>${t}</span></label>`;
+    }).join('');
+  }
+  date.addEventListener('change', renderSlots);
+  renderSlots();
+
+  const form = document.getElementById('form');
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('name');
+    const slot = form.querySelector('input[name="slot"]:checked');
+    const checks = [
+      [name.closest('.field'), name.value.trim().length > 1],
+      [sel.closest('.field'), !!sel.value],
+      [date.closest('.field'), !!date.value && date.value >= date.min],
+      [document.getElementById('slot-field'), !!slot],
+    ];
+    checks.forEach(([f, ok]) => f.classList.toggle('bad', !ok));
+    if(checks.some(([, ok]) => !ok)){ checks.find(([, ok]) => !ok)[0].querySelector('input,select')?.focus(); return; }
+    const d = new Date(date.value + 'T00:00');
+    const thDate = d.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const ticket = document.getElementById('ticket');
+    ticket.replaceChildren();
+    [['ชื่อ', name.value.trim()], ['บริการ', sel.value], ['วันที่', thDate], ['เวลา', slot.value + ' น.']].forEach(([k, v]) => {
+      const row = document.createElement('div');
+      const b = document.createElement('b'); b.textContent = k + ': ';
+      row.append(b, v);
+      ticket.append(row);
+    });
+    form.style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+  });
+  document.getElementById('again').addEventListener('click', () => {
+    form.reset(); renderSlots();
+    form.querySelectorAll('.bad').forEach(f => f.classList.remove('bad'));
+    form.style.display = ''; document.getElementById('done').style.display = 'none';
+  });
+</script>
+</body>
+</html>

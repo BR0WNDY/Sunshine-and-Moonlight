@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ละมุน คาเฟ่ — เดโม Landing Page</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="เดโม Landing Page ร้านกาแฟสมมติ โดย Suwapat Saelee" />
+<!--
+  Demo for the Basic package: a one-page landing site for a fictional café.
+  Everything here is invented and nothing links out; the "order" buttons only
+  show a note, since a real shop's LINE OA would go there. The single link
+  leaves for /work, the page Fastwork points at.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="demo-bar.css" />
+<style>
+  :root{
+    --cream:#f7efe3; --paper:#fffaf2; --latte:#e7d3b8; --mocha:#8a5a3b; --espresso:#3b2418;
+    --sage:#7d8f69; --ink:#2a1d15; --muted:#7b6656;
+    --display:'Mitr',sans-serif; --body:'Sarabun',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.7;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--display);font-weight:500;
+    padding:14px 28px;border-radius:999px;border:2px solid var(--espresso);cursor:pointer;font-size:1rem;transition:.2s}
+  .btn-dark{background:var(--espresso);color:var(--paper)}
+  .btn-dark:hover{background:var(--mocha);border-color:var(--mocha)}
+  .btn-line{background:transparent;color:var(--espresso)}
+  .btn-line:hover{background:var(--espresso);color:var(--paper)}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+  .logo{font-family:var(--display);font-size:1.45rem;font-weight:600;color:var(--espresso);display:flex;align-items:center;gap:10px}
+  .logo svg{width:34px;height:34px}
+  .nav ul{display:flex;gap:28px;list-style:none;font-family:var(--display);font-size:.95rem}
+  .nav ul a:hover{color:var(--mocha)}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:40px 0 80px}
+  .tag{display:inline-block;background:var(--latte);color:var(--espresso);font-family:var(--display);font-size:.85rem;
+    padding:6px 14px;border-radius:999px;margin-bottom:18px}
+  .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(2.3rem,5.5vw,3.8rem);line-height:1.15;color:var(--espresso);margin-bottom:18px}
+  .hero h1 em{font-style:normal;color:var(--mocha)}
+  .hero p{color:var(--muted);max-width:44ch;margin-bottom:30px;font-size:1.08rem}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-art{position:relative;aspect-ratio:1;max-width:440px;justify-self:center;width:100%}
+  .blob{position:absolute;inset:6%;border-radius:46% 54% 42% 58%/52% 44% 56% 48%;
+    background:radial-gradient(circle at 30% 30%,#c99a6b,var(--mocha) 60%,var(--espresso));box-shadow:0 40px 80px -30px rgba(59,36,24,.6)}
+  .hero-art svg{position:absolute;inset:18%;width:64%;height:64%}
+  .sticker{position:absolute;background:var(--paper);border-radius:16px;padding:12px 16px;font-family:var(--display);
+    box-shadow:0 14px 30px -12px rgba(59,36,24,.35);font-size:.9rem;line-height:1.3}
+  .sticker b{display:block;font-size:1.25rem;color:var(--mocha)}
+  .s1{left:-4%;bottom:14%} .s2{right:-2%;top:10%}
+
+  /* sections */
+  section{padding:80px 0}
+  .head{text-align:center;margin-bottom:46px}
+  .head small{font-family:var(--display);color:var(--sage);letter-spacing:2px;font-size:.85rem}
+  .head h2{font-family:var(--display);font-weight:600;font-size:clamp(1.8rem,4vw,2.6rem);color:var(--espresso)}
+  .menu{background:var(--paper)}
+  .tabs{display:flex;justify-content:center;gap:10px;margin-bottom:34px;flex-wrap:wrap}
+  .tabs button{font-family:var(--display);font-size:.95rem;padding:9px 20px;border-radius:999px;border:1.5px solid var(--latte);
+    background:transparent;color:var(--muted);cursor:pointer;transition:.2s}
+  .tabs button[aria-selected="true"]{background:var(--espresso);border-color:var(--espresso);color:var(--paper)}
+  .items{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 40px;max-width:860px;margin:0 auto}
+  .item{display:flex;align-items:baseline;gap:10px;padding:14px 0;border-bottom:1px dashed var(--latte)}
+  .item h3{font-family:var(--display);font-weight:500;font-size:1.08rem}
+  .item p{color:var(--muted);font-size:.9rem;line-height:1.5}
+  .item .dots{flex:1}
+  .item .price{font-family:var(--display);color:var(--mocha);font-weight:600;white-space:nowrap}
+  .badge{font-size:.7rem;background:var(--sage);color:#fff;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+  .story-art{aspect-ratio:4/3;border-radius:28px;background:
+    linear-gradient(160deg,rgba(125,143,105,.85),rgba(59,36,24,.9)),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.06) 0 12px,transparent 12px 24px);
+    display:grid;place-items:center;color:var(--paper);font-family:var(--display);font-size:1.4rem;text-align:center;padding:30px}
+  .story h2{font-family:var(--display);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.4rem);color:var(--espresso);margin-bottom:16px}
+  .story p{color:var(--muted);margin-bottom:14px}
+  .facts{display:flex;gap:30px;margin-top:24px}
+  .facts b{font-family:var(--display);font-size:1.8rem;color:var(--mocha);display:block;line-height:1}
+  .facts span{font-size:.85rem;color:var(--muted)}
+
+  .visit{background:var(--espresso);color:var(--paper);border-radius:32px;padding:56px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+  .visit h2{font-family:var(--display);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.4rem);margin-bottom:12px}
+  .visit p{color:var(--latte)}
+  .hours{list-style:none;background:rgba(255,250,242,.08);border-radius:20px;padding:22px 26px}
+  .hours li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(231,211,184,.15)}
+  .hours li:last-child{border:0}
+  .visit .btn{margin-top:24px;background:var(--paper);color:var(--espresso);border-color:var(--paper)}
+  .visit .btn:hover{background:var(--latte);border-color:var(--latte)}
+
+  footer{text-align:center;padding:40px 0 60px;color:var(--muted);font-size:.9rem}
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,calc(100% + 60px));background:var(--espresso);color:var(--paper);
+    padding:14px 22px;border-radius:14px;font-size:.92rem;box-shadow:0 18px 40px -16px rgba(0,0,0,.5);transition:transform .3s;z-index:60;
+    max-width:calc(100% - 32px);text-align:center}
+  .toast.show{transform:translate(-50%,0)}
+
+  @media(max-width:860px){
+    .nav ul{display:none}
+    .hero,.story,.visit{grid-template-columns:1fr}
+    .hero{padding-top:10px;text-align:center}
+    .hero p{margin-left:auto;margin-right:auto}
+    .hero-cta{justify-content:center}
+    .items{grid-template-columns:1fr}
+    .visit{padding:36px 24px}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="demo-bar">
+  <span><b>เดโมผลงาน</b> · ร้านสมมติ ทุกอย่างในหน้านี้เป็นตัวอย่าง</span>
+  <a href="/work">← กลับหน้าผลงาน</a>
+</div>
+
+<div class="wrap">
+  <nav class="nav">
+    <a class="logo" href="#top">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#3b2418"/><path d="M12 17h14v6a7 7 0 0 1-14 0z" fill="#f7efe3"/><path d="M26 18h2.5a3 3 0 0 1 0 6H26" fill="none" stroke="#f7efe3" stroke-width="2"/><path d="M16 9c-1 2 1 3 0 5M20 9c-1 2 1 3 0 5" stroke="#e7d3b8" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+      ละมุน คาเฟ่
+    </a>
+    <ul>
+      <li><a href="#menu">เมนู</a></li>
+      <li><a href="#story">เรื่องราว</a></li>
+      <li><a href="#visit">เวลาเปิด</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <span class="tag">☕ โรงคั่วเล็กๆ ใจกลางเมือง</span>
+      <h1>กาแฟที่<em>ละมุน</em><br>ตั้งแต่แก้วแรก</h1>
+      <p>เมล็ดคั่วสดทุกสัปดาห์จากดอยทางเหนือ ชงทีละแก้วด้วยความใส่ใจ พร้อมขนมอบใหม่ทุกเช้า</p>
+      <div class="hero-cta">
+        <a class="btn btn-dark" href="#menu">ดูเมนู</a>
+        <button class="btn btn-line" data-demo="สั่งกลับบ้าน">สั่งกลับบ้าน</button>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="blob"></div>
+      <svg viewBox="0 0 200 200"><ellipse cx="100" cy="150" rx="70" ry="12" fill="rgba(0,0,0,.2)"/><path d="M45 70h100v45a50 50 0 0 1-100 0z" fill="#fffaf2"/><path d="M145 82h12a18 18 0 0 1 0 36h-14" fill="none" stroke="#fffaf2" stroke-width="10"/><ellipse cx="95" cy="70" rx="50" ry="10" fill="#c99a6b"/><path d="M80 62c8-6 22-6 30 0-8 5-22 5-30 0z" fill="#fffaf2" opacity=".85"/><path d="M75 30c-6 9 6 13 0 22M95 24c-6 9 6 13 0 22M115 30c-6 9 6 13 0 22" stroke="#fffaf2" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/></svg>
+      <div class="sticker s1"><b>4.9 ★</b>ลูกค้าให้คะแนน</div>
+      <div class="sticker s2"><b>คั่วสด</b>ทุกวันจันทร์</div>
+    </div>
+  </header>
+</div>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="head"><small>OUR MENU</small><h2>เมนูประจำร้าน</h2></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-cat="coffee">กาแฟ</button>
+      <button role="tab" aria-selected="false" data-cat="tea">ชา &amp; อื่นๆ</button>
+      <button role="tab" aria-selected="false" data-cat="bake">ขนมอบ</button>
+    </div>
+    <div class="items" id="items"></div>
+  </div>
+</section>
+
+<section id="story">
+  <div class="wrap story">
+    <div class="story-art">"ทุกแก้ว<br>เริ่มจากเมล็ดที่ดี"</div>
+    <div>
+      <h2>จากดอย สู่แก้วของคุณ</h2>
+      <p>เราเลือกเมล็ดจากเกษตรกรรายย่อยโดยตรง คั่วเองในร้านทุกสัปดาห์ เพื่อให้ได้รสที่สดและกลมกล่อมที่สุด</p>
+      <p>ร้านเล็กๆ ที่อยากให้ทุกคนได้นั่งพัก จิบกาแฟดีๆ และกลับไปพร้อมรอยยิ้ม</p>
+      <div class="facts">
+        <div><b>6</b><span>สายพันธุ์เมล็ด</span></div>
+        <div><b>12</b><span>เมนูซิกเนเจอร์</span></div>
+        <div><b>7</b><span>วันต่อสัปดาห์</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <div class="visit">
+      <div>
+        <h2>แวะมานั่งเล่นกันนะ</h2>
+        <p>ที่นั่งในร้าน 24 ที่ มีปลั๊กและ Wi-Fi ให้ทุกโต๊ะ เหมาะกับการนั่งทำงานหรือนัดเพื่อน</p>
+        <button class="btn" data-demo="ดูแผนที่ร้าน">ดูแผนที่ร้าน</button>
+      </div>
+      <ul class="hours">
+        <li><span>จันทร์ – ศุกร์</span><span>07:30 – 18:00</span></li>
+        <li><span>เสาร์ – อาทิตย์</span><span>08:30 – 20:00</span></li>
+        <li><span>วันหยุดนักขัตฤกษ์</span><span>09:00 – 17:00</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>© ละมุน คาเฟ่ (ร้านสมมติ) · เดโมโดย Suwapat Saelee</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const MENU = {
+    coffee: [
+      ['เอสเปรสโซ่', 'ช็อตเข้ม จากเมล็ดคั่วกลาง', 55],
+      ['ละมุนลาเต้', 'นมสดฟองนุ่ม หวานน้อย', 75, 'ขายดี'],
+      ['อเมริกาโน่ส้ม', 'กาแฟดำกับน้ำส้มคั้นสด', 85, 'ใหม่'],
+      ['ดริปตามฤดูกาล', 'เมล็ดเดี่ยว ชงมือทีละแก้ว', 95],
+    ],
+    tea: [
+      ['มัทฉะลาเต้', 'มัทฉะเกรดพิธีกับนมสด', 85],
+      ['ชาไทยไฟเย็น', 'สูตรเข้มข้น หอมใบชา', 65],
+      ['โกโก้ดาร์ก', 'โกโก้ 70% ไม่หวานมาก', 75],
+      ['โซดาน้ำผึ้งมะนาว', 'สดชื่น ดื่มง่าย', 60],
+    ],
+    bake: [
+      ['ครัวซองต์เนยสด', 'อบใหม่ทุกเช้า', 65, 'ขายดี'],
+      ['บานอฟฟี่พาย', 'กล้วยหอม คาราเมลโฮมเมด', 95],
+      ['ชีสเค้กหน้าไหม้', 'เนื้อนุ่ม ละลายในปาก', 110],
+      ['คุกกี้ช็อกชิพ', 'กรอบนอก นุ่มใน', 45],
+    ],
+  };
+  const items = document.getElementById('items');
+  function show(cat){
+    items.innerHTML = MENU[cat].map(([name, desc, price, badge]) => `
+      <div class="item">
+        <div><h3>${name}${badge ? `<span class="badge">${badge}</span>` : ''}</h3><p>${desc}</p></div>
+        <span class="dots"></span><span class="price">${price}.-</span>
+      </div>`).join('');
+  }
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+    show(b.dataset.cat);
+  }));
+  show('coffee');
+
+  const toast = document.getElementById('toast');
+  let timer;
+  document.querySelectorAll('[data-demo]').forEach(b => b.addEventListener('click', () => {
+    toast.textContent = `เดโม: ปุ่ม "${b.dataset.demo}" ในเว็บจริงจะพาไปยังช่องทางของร้าน`;
+    toast.classList.add('show');
+    clearTimeout(timer); timer = setTimeout(() => toast.classList.remove('show'), 2600);
+  }));
+</script>
+</body>
+</html>

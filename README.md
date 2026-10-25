@@ -10,6 +10,8 @@ index.html          the homepage (self-contained: its CSS/JS live inside the fil
 sortinghats.html    page: The Sorting Hat (Python in the browser via PyScript)
 paotang.html        page: Thai Chuay Thai co-payment calculator
 packages.html       page: Fastwork service packages demo (Basic/Standard/Premium)
+work.html           page: /work, the contact-free portfolio the Fastwork listing links to
+demos/              pages: fictional-business demos shown on /work (cafe, clinic, shop + admin)
 planner/            page: Content Life Planner (private; no build step)
   index.html          the shell
   styles.css          one theme, every colour a token on :root
