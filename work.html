@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Work — Suwapat Saelee</title>
+<meta name="description" content="Selected work by Suwapat Saelee, Front-End / Full-Stack Web Developer (React / Next.js): live demos and the services on offer." />
+<link rel="canonical" href="https://browndy.vercel.app/work" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://browndy.vercel.app/work" />
+<meta property="og:title" content="Work — Suwapat Saelee" />
+<meta property="og:description" content="Selected work by Suwapat Saelee, Front-End / Full-Stack Web Developer (React / Next.js)." />
+<meta property="og:image" content="https://browndy.vercel.app/images/thumb-paotang.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="/assets/styles.css?v=5" />
+<!--
+  The page Fastwork links to. Fastwork forbids taking clients off-platform, so
+  this page carries no contact channel of any kind and no link to a page that
+  does: the header is just the name and the language switch, the footer has no
+  links, and the demos open with ?from=work, which closes their own nav (see
+  assets/site.js). No prices either; those live on the Fastwork listing.
+-->
+<style>
+  .work{max-width:var(--maxw);margin:0 auto}
+  .brand{cursor:default}
+
+  /* ---------- intro ---------- */
+  .intro{text-align:center;padding-bottom:12px}
+  .intro .eyebrow{justify-content:center}
+  .intro h1.page-title{margin-bottom:10px}
+  .role{font-family:var(--font-mono);font-size:clamp(.82rem,2.2vw,.95rem);letter-spacing:.6px;
+    color:var(--bronze-soft);margin-bottom:18px}
+  .intro .lead{margin:0 auto 30px}
+  .hire{font-size:.92rem;padding:15px 34px}
+
+  .sec{margin-top:clamp(56px,9vw,88px)}
+  .sec-title{font-family:var(--font-display);font-weight:500;font-size:clamp(1.7rem,3.6vw,2.3rem);
+    line-height:1.1;margin-bottom:8px}
+  .sec-sub{color:var(--muted);font-size:.92rem;margin-bottom:28px}
+
+  /* ---------- work cards: the homepage's spellbook pages ---------- */
+  .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .spell{background:linear-gradient(180deg,var(--night-2),var(--night));border:1px solid var(--line);
+    border-radius:4px 16px 16px 4px;display:flex;flex-direction:column;overflow:hidden;transition:.28s;
+    box-shadow:inset 6px 0 0 -2px rgba(200,163,58,.25)}
+  .spell:hover{transform:translateY(-5px);border-color:rgba(200,163,58,.45);
+    box-shadow:inset 6px 0 0 -2px rgba(200,163,58,.45),0 26px 50px -26px rgba(0,0,0,.85)}
+  .spell img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;display:block;
+    border-bottom:1px solid var(--line);filter:saturate(.9)}
+  .spell-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+  .spell h3{font-family:var(--font-display);font-size:1.55rem;font-weight:500;line-height:1.15;margin-bottom:10px}
+  .spell p{color:var(--silver);font-size:.94rem;margin-bottom:18px;flex:1}
+  .stack{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px;list-style:none}
+  .stack li{font-family:var(--font-mono);font-size:.72rem;color:var(--silver);background:rgba(42,74,134,.26);
+    border:1px solid rgba(79,121,201,.24);padding:4px 10px;border-radius:6px}
+  .spell .btn{align-self:flex-start}
+
+  /* ---------- services ---------- */
+  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .svc{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:24px 22px;
+    position:relative;overflow:hidden;transition:.25s}
+  .svc::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
+    background:linear-gradient(90deg,var(--bronze),transparent 70%);opacity:.5}
+  .svc:hover{border-color:rgba(200,163,58,.42);background:var(--night-2)}
+  .svc .no{font-family:var(--font-mono);font-size:.72rem;letter-spacing:1.5px;color:var(--bronze);margin-bottom:10px}
+  .svc h3{font-family:var(--font-display);font-size:1.3rem;font-weight:500;line-height:1.2;margin-bottom:8px}
+  .svc p{color:var(--silver);font-size:.88rem}
+
+  .closing{text-align:center}
+  .closing .sec-sub{margin-bottom:22px}
+
+  footer .foot{justify-content:center}
+
+  @media(max-width:960px){ .svc-grid{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:700px){ .work-grid{grid-template-columns:1fr} }
+  @media(max-width:480px){
+    .svc-grid{grid-template-columns:1fr}
+    .spell .btn,.hire{width:100%}
+  }
+  /* the nav keeps only the language switch, so it never collapses into a menu */
+  .nav-links{position:static!important;transform:none!important;flex-direction:row!important;
+    background:none!important;padding:0!important;border:0!important}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+
+<header>
+  <nav class="nav">
+    <span class="brand">Suwapat Saelee</span>
+    <div class="nav-links">
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
+    </div>
+  </nav>
+</header>
+
+<main class="page wrap">
+  <div class="work">
+
+    <section class="intro">
+      <p class="eyebrow" data-en="Selected Work" data-th="ตัวอย่างผลงาน">Selected Work</p>
+      <h1 class="page-title">Suwapat Saelee</h1>
+      <p class="role">Front-End / Full-Stack Web Developer (React / Next.js)</p>
+      <p class="lead" data-en="Responsive, fast websites and web apps, built from scratch with clean code. Every demo below is live; open it and try it yourself." data-th="รับทำเว็บไซต์และเว็บแอปที่รองรับทุกหน้าจอ โหลดเร็ว เขียนโค้ดเองทั้งหมดอย่างเป็นระเบียบ ทุกผลงานด้านล่างเปิดใช้งานได้จริง ลองกดเข้าไปใช้ได้เลย">Responsive, fast websites and web apps, built from scratch with clean code. Every demo below is live; open it and try it yourself.</p>
+      <a class="btn btn-primary hire" href="https://fastwork.co/user/browndy/web-development-97015042" target="_blank" rel="noopener" data-en="Hire me on Fastwork" data-th="จ้างงานผ่าน Fastwork">Hire me on Fastwork</a>
+    </section>
+
+    <section class="sec" aria-labelledby="work-title">
+      <h2 class="sec-title" id="work-title" data-en="Projects" data-th="ผลงาน">Projects</h2>
+      <p class="sec-sub" data-en="Live demos with sample data. Nothing you enter is saved." data-th="เดโมใช้งานจริงพร้อมข้อมูลตัวอย่าง ข้อมูลที่กรอกจะไม่ถูกบันทึก">Live demos with sample data. Nothing you enter is saved.</p>
+      <div class="work-grid">
+
+        <article class="spell">
+          <img src="/images/thumb-paotang.jpg" alt="Screenshot of the Thai Chuay Thai calculator" loading="lazy" width="640" height="400" />
+          <div class="spell-body">
+            <h3 data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h3>
+            <p data-en="A co-payment calculator for the Thai government scheme (state 60 : citizen 40) that works out your share and keeps a running history." data-th="เครื่องคำนวณเงินสมทบโครงการรัฐ (รัฐ 60 : ประชาชน 40) คำนวณยอดที่ต้องจ่ายเอง พร้อมประวัติรายการย้อนหลัง">A co-payment calculator for the Thai government scheme (state 60 : citizen 40) that works out your share and keeps a running history.</p>
+            <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+            <a class="btn btn-ghost" href="/paotang.html?demo=1&amp;from=work">Live Demo →</a>
+          </div>
+        </article>
+
+        <article class="spell">
+          <img src="/images/thumb-sortinghat.jpg" alt="Screenshot of the Sorting Hat quiz" loading="lazy" width="640" height="400" />
+          <div class="spell-body">
+            <h3 data-en="The Sorting Hat" data-th="หมวกคัดสรร">The Sorting Hat</h3>
+            <p data-en="An interactive quiz written in Python that runs entirely in the browser with PyScript, no server needed." data-th="แบบทดสอบเชิงโต้ตอบที่เขียนด้วย Python และรันบนเบราว์เซอร์ทั้งหมดผ่าน PyScript โดยไม่ต้องใช้เซิร์ฟเวอร์">An interactive quiz written in Python that runs entirely in the browser with PyScript, no server needed.</p>
+            <ul class="stack" aria-label="Tech stack"><li>Python</li><li>PyScript</li><li>JavaScript</li></ul>
+            <a class="btn btn-ghost" href="/sortinghats.html?from=work">Live Demo →</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="svc-title">
+      <h2 class="sec-title" id="svc-title" data-en="Services" data-th="บริการที่รับ">Services</h2>
+      <p class="sec-sub" data-en="Every job is responsive on phones, tablets and desktops." data-th="ทุกงานรองรับมือถือ แท็บเล็ต และคอมพิวเตอร์">Every job is responsive on phones, tablets and desktops.</p>
+      <div class="svc-grid">
+        <div class="svc">
+          <p class="no">01</p>
+          <h3>Landing Page</h3>
+          <p data-en="A single page that sells one thing: a campaign, a product, or you." data-th="หน้าเดียวที่ขายของได้ชัด เหมาะกับแคมเปญ สินค้า หรือโปรไฟล์ส่วนตัว">A single page that sells one thing: a campaign, a product, or you.</p>
+        </div>
+        <div class="svc">
+          <p class="no">02</p>
+          <h3 data-en="Multi-page Business Website" data-th="เว็บธุรกิจหลายหน้า">Multi-page Business Website</h3>
+          <p data-en="Home, services, portfolio and about, organised so customers find what they need." data-th="หน้าแรก บริการ ผลงาน และเกี่ยวกับเรา จัดหมวดหมู่ให้ลูกค้าหาข้อมูลได้ง่าย">Home, services, portfolio and about, organised so customers find what they need.</p>
+        </div>
+        <div class="svc">
+          <p class="no">03</p>
+          <h3 data-en="Back Office / Admin" data-th="ระบบหลังบ้าน / Admin">Back Office / Admin</h3>
+          <p data-en="A dashboard where you manage your own products, bookings and content." data-th="หน้าแอดมินให้คุณจัดการสินค้า การจอง และเนื้อหาได้เอง">A dashboard where you manage your own products, bookings and content.</p>
+        </div>
+        <div class="svc">
+          <p class="no">04</p>
+          <h3 data-en="LINE Integration" data-th="เชื่อมต่อ LINE">LINE Integration</h3>
+          <p data-en="Connect your site to LINE: sign in with LINE, and order or booking alerts sent to your LINE." data-th="เชื่อมเว็บกับ LINE เช่น ล็อกอินด้วย LINE และแจ้งเตือนออเดอร์หรือการจองเข้า LINE">Connect your site to LINE: sign in with LINE, and order or booking alerts sent to your LINE.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec closing">
+      <h2 class="sec-title" data-en="Have a project in mind?" data-th="มีโปรเจกต์ในใจอยู่ไหม?">Have a project in mind?</h2>
+      <p class="sec-sub" data-en="Packages, prices and secure payment are all on Fastwork." data-th="ดูแพ็กเกจ ราคา และชำระเงินอย่างปลอดภัยได้บน Fastwork">Packages, prices and secure payment are all on Fastwork.</p>
+      <a class="btn btn-primary hire" href="https://fastwork.co/user/browndy/web-development-97015042" target="_blank" rel="noopener" data-en="Hire me on Fastwork" data-th="จ้างงานผ่าน Fastwork">Hire me on Fastwork</a>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Suwapat Saelee</span>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

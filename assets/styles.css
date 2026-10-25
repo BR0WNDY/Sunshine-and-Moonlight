@@ -108,6 +108,12 @@ footer{border-top:1px solid var(--line);padding:30px 0;position:relative;z-index
   gap:12px;color:var(--muted);font-size:.82rem;font-family:var(--font-mono);
   letter-spacing:.4px}
 
+/* ---------- work view: a demo opened from /work keeps only the language switch ---------- */
+html.from-work .nav-links a,
+html.from-work .menu-toggle{display:none}
+html.from-work .nav-links{position:static;transform:none;flex-direction:row;
+  background:none;padding:0;border:0}
+
 /* ---------- responsive ---------- */
 @media(max-width:860px){
   .nav-links{position:fixed;inset:66px 0 auto 0;flex-direction:column;
