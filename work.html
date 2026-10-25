@@ -57,7 +57,7 @@
   .spell .btn{align-self:flex-start}
 
   /* ---------- services ---------- */
-  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .svc{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:24px 22px;
     position:relative;overflow:hidden;transition:.25s}
   .svc::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
@@ -72,7 +72,7 @@
 
   footer .foot{justify-content:center}
 
-  @media(max-width:960px){ .svc-grid{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:860px){ .svc-grid{grid-template-columns:1fr} }
   @media(max-width:700px){ .work-grid{grid-template-columns:1fr} }
   @media(max-width:480px){
     .svc-grid{grid-template-columns:1fr}
@@ -113,12 +113,12 @@
       <div class="work-grid">
 
         <article class="spell">
-          <img src="/images/thumb-demo-shop.jpg" alt="Screenshot of the bakery shop's admin dashboard with a LINE order alert" loading="lazy" width="640" height="400" />
+          <img src="/images/thumb-demo-shop.jpg" alt="Screenshot of the bakery shop's admin dashboard" loading="lazy" width="640" height="400" />
           <div class="spell-body">
             <p class="kind" data-en="Demo · Online shop + admin" data-th="เดโม · ร้านค้าออนไลน์ + หลังบ้าน">Demo · Online shop + admin</p>
             <h3 data-en="Bakery Shop with Back Office" data-th="ร้านขนมออนไลน์พร้อมระบบหลังบ้าน">Bakery Shop with Back Office</h3>
-            <p data-en="Customers fill a cart and check out; the owner tracks orders, changes their status and edits stock, with each new order shown as a LINE alert." data-th="ลูกค้าเลือกสินค้าลงตะกร้าและสั่งซื้อ เจ้าของร้านดูออเดอร์ เปลี่ยนสถานะ ปรับสต็อก และเห็นตัวอย่างแจ้งเตือนออเดอร์ใหม่ผ่าน LINE">Customers fill a cart and check out; the owner tracks orders, changes their status and edits stock, with each new order shown as a LINE alert.</p>
-            <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>LINE alert mock</li></ul>
+            <p data-en="Customers fill a cart and check out; the owner tracks orders, changes their status and edits stock, with every new order flagged the moment it arrives." data-th="ลูกค้าเลือกสินค้าลงตะกร้าและสั่งซื้อ เจ้าของร้านดูออเดอร์ เปลี่ยนสถานะ ปรับสต็อก และเห็นการแจ้งเตือนทันทีเมื่อมีออเดอร์ใหม่">Customers fill a cart and check out; the owner tracks orders, changes their status and edits stock, with every new order flagged the moment it arrives.</p>
+            <ul class="stack" aria-label="Tech stack"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
             <a class="btn btn-ghost" href="/demos/shop.html">Live Demo →</a>
           </div>
         </article>
@@ -188,11 +188,6 @@
           <p class="no">03</p>
           <h3 data-en="Back Office / Admin" data-th="ระบบหลังบ้าน / Admin">Back Office / Admin</h3>
           <p data-en="A dashboard where you manage your own products, bookings and content." data-th="หน้าแอดมินให้คุณจัดการสินค้า การจอง และเนื้อหาได้เอง">A dashboard where you manage your own products, bookings and content.</p>
-        </div>
-        <div class="svc">
-          <p class="no">04</p>
-          <h3 data-en="LINE Integration" data-th="เชื่อมต่อ LINE">LINE Integration</h3>
-          <p data-en="Connect your site to LINE: sign in with LINE, and order or booking alerts sent to your LINE." data-th="เชื่อมเว็บกับ LINE เช่น ล็อกอินด้วย LINE และแจ้งเตือนออเดอร์หรือการจองเข้า LINE">Connect your site to LINE: sign in with LINE, and order or booking alerts sent to your LINE.</p>
         </div>
       </div>
     </section>

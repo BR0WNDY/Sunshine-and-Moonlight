@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ขนมบ้านดาว — เดโมร้านค้าออนไลน์ + ระบบหลังบ้าน</title>
 <meta name="robots" content="noindex" />
-<meta name="description" content="เดโมร้านค้าออนไลน์พร้อมระบบหลังบ้านและแจ้งเตือนออเดอร์แบบ LINE ของร้านสมมติ โดย Suwapat Saelee" />
+<meta name="description" content="เดโมร้านค้าออนไลน์พร้อมระบบหลังบ้านและแจ้งเตือนออเดอร์ของร้านสมมติ โดย Suwapat Saelee" />
 <!--
   Demo for the Premium package: a fictional bakery's online shop with a cart
   and checkout, plus the owner's back office — orders, statuses, stock — and a
-  mock of the LINE order alert a real build would push. Orders live in this
+  live feed of order alerts in the dashboard. Orders live in this
   browser only (localStorage, with an in-memory fallback); nothing is sent.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,7 +19,7 @@
 <style>
   :root{
     --bg:#fff8f4; --card:#fff; --rose:#e2566f; --rose-d:#c03d56; --peach:#ffe3d6; --butter:#fff1c7;
-    --ink:#2b1d22; --muted:#7a6268; --line:#f1dfd8; --green:#06c755; --side:#1f1720;
+    --ink:#2b1d22; --muted:#7a6268; --line:#f1dfd8;
     --font:'Anuphan',system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -108,21 +108,21 @@
   .bar{height:6px;border-radius:6px;background:var(--peach);overflow:hidden;margin-top:4px;width:120px}
   .bar i{display:block;height:100%;background:var(--rose)}
 
-  /* LINE mock */
-  .phone{background:var(--side);border-radius:30px;padding:12px;position:sticky;top:60px}
-  .phone-top{color:#fff;display:flex;align-items:center;gap:10px;padding:8px 10px 12px}
-  .phone-top i{width:34px;height:34px;border-radius:50%;background:var(--green);display:grid;place-items:center;font-style:normal;font-weight:700;font-size:.75rem}
-  .phone-top small{display:block;color:#a99ea6;font-size:.72rem}
-  .chat{background:#8cabd9;border-radius:20px;padding:14px;height:440px;overflow:auto;display:flex;flex-direction:column;gap:10px}
-  .msg{background:#fff;border-radius:4px 16px 16px 16px;padding:10px 12px;font-size:.84rem;max-width:92%;white-space:pre-line;animation:pop .35s ease}
+  /* notification feed: every new order or status change lands here */
+  .feed{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;position:sticky;top:60px;align-self:start}
+  .feed-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .feed-top i{width:34px;height:34px;border-radius:50%;background:var(--peach);display:grid;place-items:center;font-style:normal;font-size:1rem}
+  .feed-top small{display:block;color:var(--muted);font-size:.75rem}
+  .chat{background:var(--bg);border-radius:14px;padding:12px;height:440px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+  .msg{background:#fff;border:1px solid var(--line);border-left:3px solid var(--rose);border-radius:10px;padding:10px 12px;font-size:.84rem;max-width:92%;white-space:pre-line;animation:pop .35s ease}
   .msg time{display:block;color:#8b8b8b;font-size:.7rem;margin-top:4px}
   @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
-  .note{color:#a99ea6;font-size:.75rem;text-align:center;padding:10px 6px 4px}
+  .note{color:var(--muted);font-size:.75rem;text-align:center;padding:10px 6px 4px}
 
   @media(max-width:1000px){
     .grid{grid-template-columns:repeat(3,1fr)}
     .admin{grid-template-columns:1fr}
-    .phone{position:static}
+    .feed{position:static}
   }
   @media(max-width:700px){
     .grid{grid-template-columns:repeat(2,1fr);gap:12px}
@@ -187,10 +187,10 @@
       </div>
       <button class="primary" id="reset" style="background:var(--ink);max-width:260px">รีเซ็ตข้อมูลเดโม</button>
     </div>
-    <aside class="phone" aria-label="ตัวอย่างการแจ้งเตือนผ่าน LINE">
-      <div class="phone-top"><i>LINE</i><div>แจ้งเตือนร้าน<small>ตัวอย่างข้อความที่เจ้าของร้านจะได้รับ</small></div></div>
-      <div class="chat" id="chat"></div>
-      <p class="note">จำลองหน้าจอเท่านั้น ในงานจริงเชื่อมผ่าน LINE Messaging API</p>
+    <aside class="feed" aria-label="การแจ้งเตือนของร้าน">
+      <div class="feed-top"><i aria-hidden="true">🔔</i><div><b>การแจ้งเตือน</b><small>ออเดอร์ใหม่และการเปลี่ยนสถานะ</small></div></div>
+      <div class="chat" id="chat" aria-live="polite"></div>
+      <p class="note">อัปเดตทันทีเมื่อมีออเดอร์เข้า</p>
     </aside>
   </div>
 </div>
@@ -349,7 +349,7 @@
     S.orders.slice().reverse().forEach(o => pushLine(o, false)); renderAll(); toast('รีเซ็ตข้อมูลเดโมแล้ว');
   };
 
-  // ---- LINE mock ----
+  // ---- notification feed ----
   function addMsg(text, at, scroll){
     const chat = document.getElementById('chat');
     const m = document.createElement('div'); m.className = 'msg';
