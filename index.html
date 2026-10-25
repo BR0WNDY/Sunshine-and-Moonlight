@@ -121,6 +121,8 @@
   .nav-links a::before{content:"./";color:var(--muted);transition:color .2s}
   .nav-links a:hover{color:var(--bronze-soft)}
   .nav-links a:hover::before{color:var(--bronze)}
+  .nav-links a.nav-work{color:var(--bronze-soft);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+  .nav-links a.nav-work:hover{border-color:var(--bronze);color:var(--bronze)}
   .lang-btn{font-family:var(--font-mono);font-size:.72rem;letter-spacing:1px;color:var(--bronze-soft);
     border:1px solid var(--line);background:transparent;padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
   .lang-btn:hover{border-color:var(--bronze);color:var(--bronze)}
@@ -280,6 +282,8 @@
   .page .link .arr{transition:.2s}
   .page:hover .link .arr{transform:translateX(4px)}
 
+  .more-work{text-align:center;margin-top:36px}
+
   /* ---------- services ---------- */
   .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
   .svc{background:var(--night);border:1px solid var(--line);border-radius:16px;padding:30px 26px;position:relative;display:flex;flex-direction:column}
@@ -369,6 +373,7 @@
       <a href="#about" data-en="About" data-th="เกี่ยวกับ">About</a>
       <a href="#skills" data-en="Skills" data-th="ทักษะ">Skills</a>
       <a href="#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+      <a class="nav-work" href="/work" data-en="Work" data-th="ตัวอย่างงาน">Work</a>
       <a href="#services" data-en="Services" data-th="บริการ">Services</a>
       <a href="#contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
       <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
@@ -409,6 +414,7 @@
         <div class="cta-row">
           <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me" data-th="จ้างงานผม">Hire Me</a>
           <a class="btn btn-ghost" href="#projects" data-en="Open the Spellbook" data-th="เปิดตำราผลงาน">Open the Spellbook</a>
+          <a class="btn btn-ghost" href="/work" data-en="Live demos →" data-th="ดูเดโมผลงาน →">Live demos →</a>
         </div>
       </div>
 
@@ -541,6 +547,9 @@
           </div>
         </div>
       </article>
+    </div>
+    <div class="more-work">
+      <a class="btn btn-primary" href="/work" data-en="See all work &amp; live demos →" data-th="ดูผลงานและเดโมทั้งหมด →">See all work &amp; live demos →</a>
     </div>
   </section>
 
@@ -690,7 +699,8 @@
     var SECTIONS = ['about','skills','projects','services','contact'];
     var APPS = {
       'sorting-hat': 'sortinghats.html', 'sortinghat': 'sortinghats.html',
-      'paotang': 'paotang.html?demo=1', 'thai-chuay-thai': 'paotang.html?demo=1'
+      'paotang': 'paotang.html?demo=1', 'thai-chuay-thai': 'paotang.html?demo=1',
+      'work': '/work'
     };
     var HOUSES = ['Gryffindor 🦁','Hufflepuff 🦡','Ravenclaw 🦅','Slytherin 🐍'];
 
@@ -701,7 +711,7 @@
          ['ls', T('list sections', 'ดูรายการหมวด')],
          ['cd <section>', T('jump to a section, e.g. cd projects', 'ไปยังหมวด เช่น cd projects')],
          ['projects', T('list my projects', 'ดูผลงาน')],
-         ['open <app>', T('open sorting-hat or paotang', 'เปิด sorting-hat หรือ paotang')],
+         ['open <app>', T('open work, sorting-hat or paotang', 'เปิด work, sorting-hat หรือ paotang')],
          ['skills', T('what I work with', 'ทักษะของผม')],
          ['contact', T('ways to reach me', 'ช่องทางติดต่อ')],
          ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
@@ -724,12 +734,12 @@
         line(T('Spell I    Portfolio Website — this site', 'คาถา I    เว็บพอร์ตโฟลิโอ — เว็บนี้เอง'));
         line(T('Spell II   The Sorting Hat — Python in the browser', 'คาถา II   หมวกคัดสรร — Python บนเบราว์เซอร์'));
         line(T('Spell III  Thai Chuay Thai Calculator', 'คาถา III  เครื่องคำนวณไทยช่วยไทย'));
-        line(T('Try: open sorting-hat', 'ลองพิมพ์: open sorting-hat'), 'hint');
+        line(T('More live demos: open work', 'ดูเดโมเพิ่ม: open work'), 'hint');
       },
       open: function(args){
         var t = (args[0] || '').toLowerCase();
         if(APPS[t]){ line(T('Opening ', 'กำลังเปิด ') + t + '…'); location.href = APPS[t]; }
-        else line(T('open: try sorting-hat or paotang', 'open: ลอง sorting-hat หรือ paotang'), 'err');
+        else line(T('open: try work, sorting-hat or paotang', 'open: ลอง work, sorting-hat หรือ paotang'), 'err');
       },
       skills: function(){
         line('CS 101  Languages   Java · Python · JavaScript · HTML · CSS · SQL');
