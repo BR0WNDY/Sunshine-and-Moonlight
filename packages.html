@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Web Development Packages — Suwapat Saelee</title>
 <meta name="description" content="Freelance web development packages by Suwapat Saelee: landing pages, multi-page corporate sites and full web applications." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href="https://browndy.vercel.app/packages.html" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://browndy.vercel.app/packages.html" />
@@ -39,7 +40,12 @@
     color:#fff;margin:auto 0 20px;line-height:1}
   .pkg .price small{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;
     color:var(--muted);text-transform:uppercase;display:block;margin-bottom:4px;font-weight:400}
+  .pkg-actions{display:flex;flex-direction:column;gap:10px}
   .pkg .btn{width:100%}
+  .pkg .demo-link{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.5px;
+    color:var(--bronze-soft);text-align:center;padding:8px 10px;border-radius:8px;
+    border:1px dashed rgba(200,163,58,.28);transition:.2s}
+  .pkg .demo-link:hover{border-color:var(--bronze);color:var(--parchment);background:rgba(200,163,58,.08)}
   .hire-note{color:var(--muted);font-size:.82rem;margin-top:26px;text-align:center;
     font-family:var(--font-mono);letter-spacing:.3px}
   @media(max-width:860px){ .pkg-grid{grid-template-columns:1fr} }
@@ -54,10 +60,11 @@
     <a class="brand" href="index.html#top">
       <span>Suwapat Saelee</span>
     </a>
-    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <button class="menu-toggle" aria-label="Menu">☰</button>
     <div class="nav-links">
       <a href="index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
       <a href="index.html#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+      <a href="/work" data-en="Work" data-th="ตัวอย่างงาน">Work</a>
       <a href="index.html#contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
       <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
     </div>
@@ -81,7 +88,10 @@
           <li><span class="k" data-en="Revisions" data-th="จำนวนการปรับแก้ชิ้นงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
         </ul>
         <p class="price"><small data-en="Price" data-th="ราคา">Price</small>฿1,500</p>
-        <a class="btn btn-ghost" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+        <div class="pkg-actions">
+          <a class="demo-link" href="demos/cafe.html" data-en="Preview sample: Café Landing Page →" data-th="ดูตัวอย่างงาน: Landing Page ร้านกาแฟ →">Preview sample: Café Landing Page →</a>
+          <a class="btn btn-ghost" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+        </div>
       </div>
 
       <div class="pkg featured">
@@ -94,7 +104,10 @@
           <li><span class="k" data-en="Revisions" data-th="จำนวนการปรับแก้ชิ้นงาน">Revisions</span><span class="v" data-en="3 rounds" data-th="3 ครั้ง">3 rounds</span></li>
         </ul>
         <p class="price"><small data-en="Price" data-th="ราคา">Price</small>฿3,000</p>
-        <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+        <div class="pkg-actions">
+          <a class="demo-link" href="demos/clinic.html" data-en="Preview sample: Dental Clinic Site →" data-th="ดูตัวอย่างงาน: เว็บไซต์คลินิกทันตกรรม →">Preview sample: Dental Clinic Site →</a>
+          <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+        </div>
       </div>
 
       <div class="pkg">
@@ -106,7 +119,10 @@
           <li><span class="k" data-en="Revisions" data-th="จำนวนการปรับแก้ชิ้นงาน">Revisions</span><span class="v" data-en="Unlimited" data-th="ไม่จำกัด">Unlimited</span></li>
         </ul>
         <p class="price"><small data-en="Price" data-th="ราคา">Price</small>฿5,500</p>
-        <a class="btn btn-ghost" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+        <div class="pkg-actions">
+          <a class="demo-link" href="demos/shop.html" data-en="Preview sample: Shop + Admin Back Office →" data-th="ดูตัวอย่างงาน: ร้านค้า + ระบบหลังบ้าน →">Preview sample: Shop + Admin Back Office →</a>
+          <a class="btn btn-ghost" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Order on Fastwork" data-th="สั่งงานผ่าน Fastwork">Order on Fastwork</a>
+        </div>
       </div>
 
     </div>

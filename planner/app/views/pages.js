@@ -29,6 +29,7 @@ export const GROUPS = [
     id: 'work',
     label: { th: 'เรียน & งาน', en: 'Study & work' },
     pages: [
+      { id: 'study', key: 'pgStudy', icon: 'book', badge: 'lessons' },
       { id: 'homework', key: 'pgHomework', icon: 'graduation', badge: 'homework' },
       { id: 'sales', key: 'pgSales', icon: 'briefcase' },
     ],

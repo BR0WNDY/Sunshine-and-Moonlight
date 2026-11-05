@@ -1,22 +1,25 @@
 /* The single data layer for the merged app.
 
-   Two apps are being folded together and each had its own localStorage
-   namespace: the Planner wrote `cp:*` (contents, goals, habits, plans, notes,
-   reminders, finance, payments) and the Ledger wrote `lm:*` (transactions,
-   debts, assignments, sales, habits). The merged app owns `cp:*` and imports
-   anything it finds under `lm:*` exactly once, guarded by `cp:schema`.
-
-   The import is non-destructive: `lm:*` keys are read and left in place, so a
-   half-finished migration can simply be run again. The Ledger itself has since
-   been removed from the site, but its keys may still sit in a browser that used
-   it, so the import stays. No migration deletes a user record; the only things
-   they remove are the app's own leftovers, such as a retired preference. */
+   Everything lives in this browser's localStorage under `cp:*`. Retired keys
+   from the old theme switcher (`cp:theme`) and the retired Starlit Ledger
+   (`lm:*`) are purged automatically. */
 
 import { ls, uid } from './dom.js';
-import { isISO } from './date.js';
 
 const PREFIX = 'cp:';
-export const SCHEMA_VERSION = 8;
+export const SCHEMA_VERSION = 9;
+
+/** Retired keys from earlier versions and the old Starlit Ledger. */
+const LEGACY_KEYS = [
+  'cp:theme',
+  'lm:transactions',
+  'lm:debts',
+  'lm:sales',
+  'lm:assignments',
+  'lm:habits',
+  'lm:lang',
+  'lm:theme',
+];
 
 /** Every list-shaped store, in the order the export writes them. */
 export const STORES = [
@@ -60,85 +63,25 @@ function normalizeList(value) {
     .map((row) => (row.id ? row : { ...row, id: uid() }));
 }
 
-/* ---------------- migration ---------------- */
+/* ---------------- cleanup & reset ---------------- */
 
-/** Union of two habits' tick lists, de-duplicated and sorted. */
-const mergeDates = (a = [], b = []) =>
-  [...new Set([...a, ...b].filter(isISO))].sort();
-
-/**
- * Folds the Ledger's `lm:*` stores into the merged `cp:*` ones.
- * Returns the list of stores it touched, for the caller to persist.
- */
-function importLedger() {
-  const touched = new Set();
-  const take = (key) => normalizeList(ls.json('lm:' + key, null));
-
-  /* Shapes that carry over unchanged. */
-  const direct = [
-    ['transactions', 'transactions'],
-    ['debts', 'debts'],
-    ['sales', 'sales'],
-  ];
-  for (const [from, to] of direct) {
-    const rows = take(from);
-    if (!rows.length) continue;
-    const seen = new Set(db[to].map((r) => r.id));
-    db[to] = [...db[to], ...rows.filter((r) => !seen.has(r.id))];
-    touched.add(to);
-  }
-
-  /* `assignments` is the Ledger's name for homework; `prio` keeps its name. */
-  const assignments = take('assignments');
-  if (assignments.length) {
-    const seen = new Set(db.homework.map((r) => r.id));
-    db.homework = [...db.homework, ...assignments.filter((r) => !seen.has(r.id))];
-    touched.add('homework');
-  }
-
-  /* Habits existed in both apps with the same shape. Same name means the same
-     habit, so the two tick histories merge rather than producing a duplicate
-     row the user would have to tidy up by hand. */
-  const ledgerHabits = take('habits');
-  if (ledgerHabits.length) {
-    const byName = new Map(db.habits.map((h) => [String(h.name).trim(), h]));
-    for (const h of ledgerHabits) {
-      const key = String(h.name).trim();
-      const existing = byName.get(key);
-      if (existing) {
-        existing.dates = mergeDates(existing.dates, h.dates);
-      } else {
-        const row = { ...h, dates: mergeDates(h.dates) };
-        db.habits.push(row);
-        byName.set(key, row);
-      }
-    }
-    touched.add('habits');
-  }
-
-  /* The Ledger stored its own language choice as JSON; carry it over as a bare
-     string if the merged app has not been given one yet. */
-  const ledgerLang = ls.json('lm:lang', null);
-  if (typeof ledgerLang === 'string' && ls.get(PREFIX + 'lang') == null) {
-    ls.set(PREFIX + 'lang', ledgerLang);
-  }
-
-  return [...touched];
+function purgeLegacyKeys() {
+  for (const key of LEGACY_KEYS) ls.remove(key);
 }
-
-/* ---------------- first run ----------------
-   A new install starts empty. The planner used to seed sample bills, content
-   and jobs so a fresh page looked alive, but that was demo furniture: with
-   sign-in required, the first thing anyone sees is their own account, and the
-   first thing they should see behind it is their own planner. Every view
-   already renders a proper empty state.
-
-   This only affects installs with no data at all. Existing records are never
-   touched — `load()` reaches this path only when nothing is stored. */
 
 function seed() {
   for (const key of STORES) db[key] = [];
   db.profile = SINGLETONS.profile();
+}
+
+/**
+ * Clears all planner data stores and legacy keys, starting fresh on the current schema.
+ */
+export function clearAll() {
+  purgeLegacyKeys();
+  seed();
+  ls.set(PREFIX + 'schema', String(SCHEMA_VERSION));
+  saveAll();
 }
 
 /* ---------------- load ---------------- */
@@ -148,6 +91,17 @@ function seed() {
  * @returns {{ seeded: boolean, migrated: string[] }}
  */
 export function load() {
+  purgeLegacyKeys();
+
+  const schema = Number(ls.get(PREFIX + 'schema')) || 0;
+
+  /* v9 — wipe all legacy/seeded data carried over from older schemas or the
+     retired cream Planner / Starlit Ledger so the browser starts clean. */
+  if (schema < SCHEMA_VERSION) {
+    clearAll();
+    return { seeded: true, migrated: [] };
+  }
+
   let found = false;
 
   for (const key of STORES) {
@@ -163,52 +117,11 @@ export function load() {
   }
 
   if (!found) {
-    seed();
-    ls.set(PREFIX + 'schema', String(SCHEMA_VERSION));
-    saveAll();
+    clearAll();
     return { seeded: true, migrated: [] };
   }
 
-  const schema = Number(ls.get(PREFIX + 'schema')) || 1;
-  let migrated = [];
-
-  /* v2 — existing Planner data: pull the Ledger's stores in, once. */
-  if (schema < 2) migrated = importLedger();
-
-  /* v5 — `cp:theme` held a palette choice from an earlier build. There is now
-     a single Ravenclaw palette declared on :root, so the key means nothing.
-     Retire it rather than leave it in everyone's storage. (Versions 3 and 4
-     each cleared a stale value for this same key; one step now covers all of
-     them, since anything below 5 wants it gone either way.) */
-  if (schema < 5) ls.remove(PREFIX + 'theme');
-
-  /* v6 — the seeded profile name was a personal handle; it is sample data, so
-     it now reads as the demo identity it always was. Only the seeded value is
-     renamed — a name the user set for themselves is left alone. */
-  /* v7 — there is no demo identity any more. A name that was only ever the
-     app's own placeholder is cleared so the account's username takes over; a
-     name the user typed for themselves is left exactly as it is. */
-  if (schema < 7 && db.profile && ['bswph', 'demo user'].includes(db.profile.name)) {
-    db.profile.name = '';
-  }
-
-  /* v8 — homework gained the assignment fields the Hogwarts system carried:
-     a three-state status, a type, House Points and a term. Existing rows only
-     have the boolean `done`, so derive the status from it and leave every other
-     new field empty. Nothing is discarded — `done` stays the source of truth
-     for the tick box and is kept in step by model/tasks.js. */
-  if (schema < 8) {
-    for (const row of db.homework) {
-      if (!row.status) row.status = row.done ? 'done' : 'todo';
-    }
-  }
-
-  if (schema < SCHEMA_VERSION) {
-    ls.set(PREFIX + 'schema', String(SCHEMA_VERSION));
-    saveAll();
-  }
-
-  return { seeded: false, migrated };
+  return { seeded: false, migrated: [] };
 }
 
 /* ---------------- record helpers ---------------- */

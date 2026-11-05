@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>The Sorting Hat — Suwapat Saelee</title>
 <meta name="description" content="An interactive quiz that sorts you into a Hogwarts house, with randomized questions, running in either Python (PyScript) or plain JavaScript." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href="https://browndy.vercel.app/sortinghats.html" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://browndy.vercel.app/sortinghats.html" />
@@ -86,7 +85,7 @@
     <a class="brand" href="index.html#top">
       <span>Suwapat Saelee</span>
     </a>
-    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <button class="menu-toggle" aria-label="Menu">☰</button>
     <div class="nav-links">
       <a href="index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
       <a href="index.html#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
@@ -103,10 +102,10 @@
     <p class="lead" data-en="An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript." data-th="แบบทดสอบเชิงโต้ตอบที่จัดคุณเข้าบ้านฮอกวอตส์ — สุ่มชุดคำถามใหม่ทุกครั้ง แตะตอบได้ทั้งบนมือถือและคอมพิวเตอร์ เลือกรันด้วย Python (PyScript) หรือ JavaScript ล้วนก็ได้">An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript.</p>
 
     <div class="hat-toggle" role="group" aria-label="Choose engine">
-      <button class="hat-toggle-btn is-active" id="enginePyBtn" type="button">Python · PyScript</button>
-      <button class="hat-toggle-btn" id="engineJsBtn" type="button">JavaScript</button>
+      <button class="hat-toggle-btn is-active" id="engineJsBtn" type="button">JavaScript (Instant)</button>
+      <button class="hat-toggle-btn" id="enginePyBtn" type="button">Python · PyScript</button>
     </div>
-    <p class="hat-engine-note">Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser (first switch takes a few seconds).</p>
+    <p class="hat-engine-note" data-en="Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser." data-th="แบบทดสอบเดียวกัน เลือกรันได้ 2 เอนจิน — JavaScript เริ่มเล่นได้ทันที ส่วน Python รันผ่าน Pyodide บนเบราว์เซอร์จริง">Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser.</p>
 
     <div class="hat-card">
       <div class="hat-progress" id="hatProgress"></div>
@@ -119,7 +118,7 @@
     <script type="py" src="./sorting-hat/sortinghat.py" config="./sorting-hat/pyscript.json"></script>
     <script>
       (function () {
-        var current = "py";
+        var current = "js";
         var pyReady = false;
 
         var jsBtn = document.getElementById("engineJsBtn");
@@ -129,6 +128,10 @@
           current = which;
           jsBtn.classList.toggle("is-active", which === "js");
           pyBtn.classList.toggle("is-active", which === "py");
+        }
+
+        if (typeof window.jsStartHat === "function") {
+          window.jsStartHat();
         }
 
         window.addEventListener("hatpy:ready", function () {

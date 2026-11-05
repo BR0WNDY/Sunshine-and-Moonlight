@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 — Page Not Found · Suwapat Saelee</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="stylesheet" href="/assets/styles.css?v=5" />
+<style>
+  .lost-wrap{max-width:640px;margin:0 auto;text-align:center;padding:clamp(48px,10vw,96px) 0}
+  .lost-code{font-family:var(--font-display);font-size:clamp(4.5rem,14vw,7.5rem);font-weight:600;
+    line-height:1;letter-spacing:2px;margin-bottom:12px;
+    background:linear-gradient(180deg,#fff 10%,#cfe0ff 70%,var(--bronze) 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .lost-spell{display:inline-block;font-family:var(--font-mono);font-size:.82rem;color:#7fe3f5;
+    background:#050a18;border:1px solid rgba(127,227,245,.2);border-radius:8px;
+    padding:8px 16px;margin:14px 0 26px}
+  .lost-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="glow" aria-hidden="true"></div>
+
+<header>
+  <nav class="nav">
+    <a class="brand" href="/index.html#top">
+      <span>Suwapat Saelee</span>
+    </a>
+    <button class="menu-toggle" aria-label="Menu">☰</button>
+    <div class="nav-links">
+      <a href="/index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
+      <a href="/work" data-en="Work" data-th="ตัวอย่างงาน">Work</a>
+      <a href="/packages.html" data-en="Packages" data-th="แพ็กเกจบริการ">Packages</a>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
+    </div>
+  </nav>
+</header>
+
+<main class="page wrap">
+  <div class="lost-wrap">
+    <p class="eyebrow" style="justify-content:center" data-en="Astronomy Tower · Error 404" data-th="หอดูดาว · ไม่พบหน้า 404">Astronomy Tower · Error 404</p>
+    <div class="lost-code">404</div>
+    <h1 class="page-title" data-en="This page has vanished from the map" data-th="หน้านี้หายไปจากแผนที่ตัวกวน">This page has vanished from the map</h1>
+    <div class="lost-spell">reveal(<span style="color:var(--bronze-soft)">location.pathname</span>) → <span style="color:#e07a6b">null</span></div>
+    <p class="lead" style="margin:0 auto" data-en="Even Ravenclaw's library holds no scroll at this address. Let Lumos guide you back to the main hall." data-th="แม้แต่ห้องสมุดเรเวนคลอว์ก็ไม่มีบันทึกในที่อยู่นี้ ให้คาถาลูมอสนำทางคุณกลับสู่ห้องโถงหลักนะครับ">Even Ravenclaw's library holds no scroll at this address. Let Lumos guide you back to the main hall.</p>
+    <div class="lost-actions">
+      <a class="btn btn-primary" href="/index.html#top" data-en="← Return to Portfolio" data-th="← กลับหน้าพอร์ตโฟลิโอ">← Return to Portfolio</a>
+      <a class="btn btn-ghost" href="/work" data-en="Explore Live Demos" data-th="ดูเดโมผลงาน">Explore Live Demos</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Suwapat Saelee</span>
+    <a href="/index.html#top" data-en="← Back to portfolio" data-th="← กลับสู่พอร์ตโฟลิโอ">← Back to portfolio</a>
+  </div>
+</footer>
+
+<script src="/assets/site.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -142,6 +142,7 @@ export function unpayBill(item) {
 }
 
 export const recentPayments = (limit = 8) => db.payments.slice(0, limit);
+export const hasPayment = (item) => db.payments.some((p) => p.itemId === item.id);
 
 export const addBill = (record) => insert('finance', record);
 export const bill = (id) => byId('finance', id);

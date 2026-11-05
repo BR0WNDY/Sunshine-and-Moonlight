@@ -7,7 +7,7 @@ import { icon } from '../lib/icons.js';
 import { db } from '../lib/store.js';
 import { baht } from '../lib/money.js';
 import { fmtLong, fmtShort, fmtMonthYear, currentMonthKey } from '../lib/date.js';
-import { CONTENT_STATUS } from '../lib/domain.js';
+import { CONTENT_STATUS, label } from '../lib/domain.js';
 import { pageHead, chip, cardTitle, rule, empty } from './shared.js';
 import { barChart } from './chart.js';
 import {
@@ -16,6 +16,7 @@ import {
 import { totals, monthTotals, monthlySeries } from '../model/cash.js';
 import { oweOutstanding, lentOutstanding } from '../model/debt.js';
 import { homeworkDueSoon, urgentTasks } from '../model/tasks.js';
+import { currentTerm, termSummary } from '../model/study.js';
 import { closedRevenue, pipelineValue } from '../model/sales.js';
 import { dueLabel } from '../model/dueState.js';
 
@@ -53,7 +54,7 @@ function headline(t, lang) {
       label: t('hwDueSoon'),
       value: t('taskCount', hwSoon),
       tone: hwSoon > 0 ? 'neutral' : 'green',
-      sub: t('within7'),
+      sub: `${t('within7')} · ${t('ptsShort', termSummary((currentTerm() && currentTerm().term) || '2/2026').total)}`,
       page: 'homework',
     },
     {
@@ -93,7 +94,7 @@ function contentsPanel(t, lang) {
           ${map(CONTENT_STATUS, (status, i) => `
             <div class="stat-tile ${tones[i]}">
               <div class="n">${counts[i]}</div>
-              <div class="l">${esc(status)}</div>
+              <div class="l">${esc(label(status, lang))}</div>
             </div>`)}
         </div>
         <div class="dashed-sep"></div>

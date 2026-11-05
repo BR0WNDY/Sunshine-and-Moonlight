@@ -3,6 +3,10 @@
     {
       "source": "/work",
       "destination": "/work.html"
+    },
+    {
+      "source": "/packages",
+      "destination": "/packages.html"
     }
   ],
   "headers": [

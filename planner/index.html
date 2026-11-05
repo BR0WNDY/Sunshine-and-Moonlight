@@ -7,16 +7,19 @@
   <title>Content Life Planner</title>
   <meta name="description" content="แพลนเนอร์ส่วนตัว — คอนเทนต์ เป้าหมาย นิสัย ปฏิทิน การเงิน การบ้าน และงานขาย เก็บข้อมูลไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น" />
   <meta name="color-scheme" content="dark" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./styles.css?v=3" />
   <script>
     /* Apply the saved language before first paint. It is stored as a bare
        string — see the preferences note in app/lib/store.js.
        There is nothing to do for the palette: the app has one theme, declared
        on :root in styles.css. */
     try {
+      localStorage.removeItem('cp:theme');
+      document.documentElement.removeAttribute('data-theme');
       var lang = localStorage.getItem('cp:lang');
       if (lang === 'th' || lang === 'en') document.documentElement.lang = lang;
     } catch (e) {}
@@ -35,6 +38,6 @@
   <noscript style="display:block;padding:40px;text-align:center">
     แพลนเนอร์นี้ต้องเปิดใช้งาน JavaScript · This planner needs JavaScript enabled
   </noscript>
-  <script type="module" src="./app/app.js"></script>
+  <script type="module" src="./app/app.js?v=3"></script>
 </body>
 </html>

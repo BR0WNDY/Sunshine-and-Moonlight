@@ -32,8 +32,7 @@ Every page you can visit sits at the top level; everything inside a folder is
 supporting material for one of those pages.
 
 Language choice persists in `localStorage('site:lang')` across pages; the planner keeps its own
-`cp:lang` (defaults to Thai) alongside its data keys `cp:contents`, `cp:finance`, `cp:habits`,
-`lm:sales`, `lm:habits`.
+`cp:lang` (defaults to Thai) alongside its data keys under `cp:*`.
 
 **Private vs public views.** The Paotang calculator comes in two flavors:
 
@@ -45,9 +44,8 @@ The demo view loads sample data, shows a Demo badge and saves nothing.
 
 **The Starlit Ledger has been removed.** Its four data areas — money, debts, homework and
 sales — were merged into the Content Life Planner, so the React app, its `/life-management/`
-page and the whole React/Recharts toolchain are gone. The planner still imports the Ledger's
-`lm:*` localStorage keys on first run, so a browser that used it carries its records across.
-The project was archived outside this repo before deletion.
+page and the whole React/Recharts toolchain are gone. Legacy `lm:*` and `cp:theme` keys are
+automatically purged from `localStorage`.
 
 ## Content Life Planner
 

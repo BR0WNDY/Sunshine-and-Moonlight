@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Thai Chuay Thai Calculator — Suwapat Saelee</title>
 <meta name="description" content="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." />
-<link rel="canonical" href="https://browndy.vercel.app/paotang.html?demo=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="canonical" href="https://browndy.vercel.app/paotang.html" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://browndy.vercel.app/paotang.html?demo=1" />
+<meta property="og:url" content="https://browndy.vercel.app/paotang.html" />
 <meta property="og:title" content="Thai Chuay Thai Calculator — Suwapat Saelee" />
 <meta property="og:description" content="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." />
 <meta property="og:image" content="https://browndy.vercel.app/images/thumb-paotang.jpg" />
@@ -125,7 +126,7 @@
     <a class="brand" href="index.html#top">
       <span>Suwapat Saelee</span>
     </a>
-    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <button class="menu-toggle" aria-label="Menu">☰</button>
     <div class="nav-links">
       <a href="index.html#top" data-en="Home" data-th="หน้าแรก">Home</a>
       <a href="index.html#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
@@ -381,17 +382,7 @@ window.deleteTransaction = function(index) {
 
 function calculateInitialQuota() {
   const now = new Date();
-  let year = now.getFullYear();
-  let month = now.getMonth();
-
-  let cycleStart;
-  if (month === 5 && now.getDate() === 1 && now.getHours() < 6) {
-    cycleStart = new Date(year, 4, 1, 0, 0, 0);
-  } else if (month === 5) {
-    cycleStart = new Date(year, 5, 1, 6, 0, 0);
-  } else {
-    cycleStart = new Date(year, month, 1, 0, 0, 0);
-  }
+  const cycleStart = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0);
 
   let usedGov = transactions.reduce((sum, tx) => {
     let txDate = tx.isoDate ? new Date(tx.isoDate) : new Date();
@@ -422,15 +413,7 @@ window.addAmount = function(val) {
 function startCountdown() {
   function update() {
     const now = new Date();
-    let year = now.getFullYear();
-    let month = now.getMonth();
-
-    let nextCycle;
-    if (month < 5 || (month === 5 && now.getDate() === 1 && now.getHours() < 6)) {
-      nextCycle = new Date(year, 5, 1, 6, 0, 0);
-    } else {
-      nextCycle = new Date(year, month + 1, 1, 0, 0, 0);
-    }
+    const nextCycle = new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0);
 
     const diff = nextCycle - now;
     const el = document.getElementById('wallet-countdown');
@@ -537,25 +520,27 @@ saveBtn.addEventListener('click', () => {
 
 exportBtn.addEventListener('click', () => {
   if (transactions.length === 0) { alert(t('noExport')); return; }
-  let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-  csvContent += "Date,Item Name,Total (THB),Government Paid (THB),User Paid (THB),ISO Date\n";
+  let csv = "\uFEFFDate,Item Name,Total (THB),Government Paid (THB),User Paid (THB),ISO Date\n";
 
   transactions.forEach(tx => {
+    let date = String(tx.date || '').replace(/"/g, '""');
     let name = tx.itemName ? tx.itemName.replace(/"/g, '""') : '';
     let total = tx.total.replace(/,/g, '');
     let gov = tx.govPays.replace(/,/g, '');
     let user = tx.userPays.replace(/,/g, '');
     let iso = tx.isoDate || '';
-    csvContent += `"${escapeHtml(tx.date)}","${name}","${total}","${gov}","${user}","${iso}"\n`;
+    csv += `"${date}","${name}","${total}","${gov}","${user}","${iso}"\n`;
   });
 
-  const encodedUri = encodeURI(csvContent);
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
+  link.setAttribute("href", url);
   link.setAttribute("download", "paotang_history.csv");
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 });
 
 importBtn.addEventListener('change', (e) => {

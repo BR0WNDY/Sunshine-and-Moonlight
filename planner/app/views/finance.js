@@ -9,7 +9,7 @@ import { label } from '../lib/domain.js';
 import { pageHead, addBtn, chip, cardTitle, rule, empty, statTile, progressBar, checkBox, rowActions } from './shared.js';
 import {
   fin, billState, sortedBills, overdueBills, dueThisMonth,
-  instalmentLeft, instalmentPaid, recentPayments,
+  instalmentLeft, instalmentPaid, recentPayments, hasPayment,
 } from '../model/finance.js';
 import { dueLabel } from '../model/dueState.js';
 
@@ -55,10 +55,12 @@ function instalmentBody(item, f, t) {
 }
 
 function oneOffBody(item, f, t) {
+  const canUndo = item.recurring && !f.closed && hasPayment(item);
   return `
     <div class="pay-row">
       ${checkBox(f.closed, f.closed ? 'unpay' : 'pay', { id: item.id })}
       <span>${esc(f.closed ? t('paidMark') : t('awaitingPay'))}</span>
+      ${when(canUndo, () => `<button class="icon-btn" data-act="unpay" data-id="${esc(item.id)}">${icon('minus', 15)}</button>`)}
       <span class="amt">${esc(baht(f.amount))}</span>
     </div>`;
 }

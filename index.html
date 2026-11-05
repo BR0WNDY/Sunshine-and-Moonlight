@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Suwapat Saelee — Front-End Developer</title>
 <meta name="description" content="Portfolio of Suwapat Saelee, a Front-End Developer and Computer Science student based in Bangkok." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href="https://browndy.vercel.app/" />
 
 <meta property="og:type" content="website" />
@@ -282,28 +283,7 @@
   .page .link .arr{transition:.2s}
   .page:hover .link .arr{transform:translateX(4px)}
 
-  .more-work{text-align:center;margin-top:36px}
-
-  /* ---------- services ---------- */
-  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
-  .svc{background:var(--night);border:1px solid var(--line);border-radius:16px;padding:30px 26px;position:relative;display:flex;flex-direction:column}
-  .svc.featured{border-color:rgba(200,163,58,.5);background:linear-gradient(180deg,rgba(42,74,134,.28),var(--night))}
-  .svc .badge{position:absolute;top:-11px;right:22px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:1.5px;
-    text-transform:uppercase;color:#1a1405;background:var(--bronze);padding:4px 12px;border-radius:999px}
-  .svc .tier{font-family:var(--font-mono);font-size:.74rem;letter-spacing:2px;text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
-  .svc h3{font-family:var(--font-display);font-size:1.55rem;font-weight:500;margin-bottom:14px;line-height:1.15}
-  .svc p.svc-for{color:var(--silver);font-size:.9rem;margin-bottom:20px}
-  .svc-meta{list-style:none;margin:0 0 22px;border-top:1px solid var(--line-soft)}
-  .svc-meta li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft);font-size:.88rem}
-  .svc-meta .k{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
-  .svc-meta .v{color:var(--parchment);font-weight:500}
-  .svc .price{font-family:var(--font-title);font-size:2.1rem;font-weight:600;color:#fff;margin:auto 0 0;line-height:1}
-  .svc .price small{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:6px;font-weight:400}
-  .hire-wrap{text-align:center;margin-top:46px}
-  .hire-btn{display:inline-flex;align-items:center;gap:11px;font-family:var(--font-mono);font-size:.95rem;letter-spacing:.8px;
-    background:var(--bronze);color:#1a1405;font-weight:600;padding:17px 40px;border-radius:11px;transition:.2s;border:1px solid var(--bronze)}
-  .hire-btn:hover{background:var(--bronze-soft);transform:translateY(-2px);box-shadow:0 18px 38px -16px rgba(200,162,58,.65)}
-  .hire-note{color:var(--muted);font-size:.8rem;margin-top:15px;font-family:var(--font-mono);letter-spacing:.3px}
+  .more-work{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:36px}
 
   /* ---------- contact: owl post ---------- */
   .contact{text-align:center}
@@ -325,7 +305,6 @@
     .hero .term{max-width:none}
     .about-grid{grid-template-columns:1fr;gap:32px}
     .skills-grid{grid-template-columns:repeat(2,1fr)}
-    .svc-grid{grid-template-columns:1fr}
   }
   @media(max-width:860px){
     .nav-links{position:fixed;inset:64px 0 auto 0;flex-direction:column;background:rgba(7,13,31,.97);
@@ -343,9 +322,8 @@
     .skills-grid{grid-template-columns:1fr}
     .term-body{padding:16px 16px 18px;font-size:.8rem}
     .term-input input{font-size:16px}  /* stops iOS zooming in on focus */
-    .cta-row{flex-direction:column;align-items:stretch}
+    .cta-row,.more-work{flex-direction:column;align-items:stretch}
     .btn{justify-content:center}
-    .hire-btn{padding:16px 24px}
     .foot{justify-content:center;text-align:center}
   }
 
@@ -374,7 +352,7 @@
       <a href="#skills" data-en="Skills" data-th="ทักษะ">Skills</a>
       <a href="#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
       <a class="nav-work" href="/work" data-en="Work" data-th="ตัวอย่างงาน">Work</a>
-      <a href="#services" data-en="Services" data-th="บริการ">Services</a>
+      <a href="packages.html" data-en="Packages" data-th="แพ็กเกจบริการ">Packages</a>
       <a href="#contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
       <button class="lang-btn" id="langBtn" onclick="toggleLang()">TH ◇ EN</button>
     </div>
@@ -412,9 +390,9 @@
         </div>
 
         <div class="cta-row">
-          <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me" data-th="จ้างงานผม">Hire Me</a>
-          <a class="btn btn-ghost" href="#projects" data-en="Open the Spellbook" data-th="เปิดตำราผลงาน">Open the Spellbook</a>
+          <a class="btn btn-primary" href="#projects" data-en="Open the Spellbook" data-th="เปิดตำราผลงาน">Open the Spellbook</a>
           <a class="btn btn-ghost" href="/work" data-en="Live demos →" data-th="ดูเดโมผลงาน →">Live demos →</a>
+          <a class="btn btn-ghost" href="packages.html" data-en="Service Packages →" data-th="แพ็กเกจบริการ →">Service Packages →</a>
         </div>
       </div>
 
@@ -509,7 +487,7 @@
     </div>
     <div class="proj-grid">
       <article class="page">
-        <img class="thumb" src="images/thumb-portfolio.jpg" alt="" loading="lazy" width="640" height="400" />
+        <img class="thumb" src="images/thumb-portfolio.jpg" alt="Screenshot of the Ravenclaw portfolio website" loading="lazy" width="640" height="400" />
         <div class="page-body">
           <p class="folio" data-en="Spell I" data-th="คาถาที่ I">Spell I</p>
           <h3 data-en="Portfolio Website" data-th="เว็บพอร์ตโฟลิโอ">Portfolio Website</h3>
@@ -522,20 +500,20 @@
         </div>
       </article>
       <article class="page">
-        <img class="thumb" src="images/thumb-sortinghat.jpg" alt="" loading="lazy" width="640" height="400" />
+        <img class="thumb" src="images/thumb-sortinghat.jpg" alt="Screenshot of The Sorting Hat interactive quiz" loading="lazy" width="640" height="400" />
         <div class="page-body">
           <p class="folio" data-en="Spell II" data-th="คาถาที่ II">Spell II</p>
           <h3 data-en="The Sorting Hat" data-th="หมวกคัดสรร">The Sorting Hat</h3>
           <p data-en="An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house." data-th="แอป Python เชิงโต้ตอบที่รันบนเบราว์เซอร์ด้วย PyScript เพื่อจัดคุณเข้าบ้านฮอกวอตส์">An interactive Python app that runs entirely in the browser with PyScript and sorts you into a Hogwarts house.</p>
           <div class="incant">house = <span class="kw">sorting_hat</span>.sort(you)  <span class="cm"># 🦅?</span></div>
           <div class="page-foot">
-            <span class="stack">Python · PyScript</span>
+            <span class="stack">Python · PyScript · JS</span>
             <a class="link" href="sortinghats.html" data-en="Launch App" data-th="เปิดใช้งาน">Launch App <span class="arr">→</span></a>
           </div>
         </div>
       </article>
       <article class="page">
-        <img class="thumb" src="images/thumb-paotang.jpg" alt="" loading="lazy" width="640" height="400" />
+        <img class="thumb" src="images/thumb-paotang.jpg" alt="Screenshot of the Thai Chuay Thai co-payment calculator" loading="lazy" width="640" height="400" />
         <div class="page-body">
           <p class="folio" data-en="Spell III" data-th="คาถาที่ III">Spell III</p>
           <h3 data-en="Thai Chuay Thai Calculator" data-th="เครื่องคำนวณไทยช่วยไทย">Thai Chuay Thai Calculator</h3>
@@ -547,63 +525,49 @@
           </div>
         </div>
       </article>
+      <article class="page">
+        <img class="thumb" src="images/thumb-demo-shop.jpg" alt="Screenshot of the bakery shop and admin dashboard demo" loading="lazy" width="640" height="400" />
+        <div class="page-body">
+          <p class="folio" data-en="Spell IV · Live Demo" data-th="คาถาที่ IV · เดโม">Spell IV · Live Demo</p>
+          <h3 data-en="Bakery Shop with Back Office" data-th="ร้านขนมออนไลน์พร้อมระบบหลังบ้าน">Bakery Shop with Back Office</h3>
+          <p data-en="An online storefront with cart and checkout paired with a live back-office dashboard for tracking orders and editing stock." data-th="หน้าร้านออนไลน์พร้อมตะกร้าและระบบสั่งซื้อ คู่กับแดชบอร์ดหลังบ้านสำหรับจัดการออเดอร์และตัดสต็อกแบบเรียลไทม์">An online storefront with cart and checkout paired with a live back-office dashboard for tracking orders and editing stock.</p>
+          <div class="incant"><span class="kw">orders</span>.push({ items, status: <span class="cm">'new'</span> })</div>
+          <div class="page-foot">
+            <span class="stack">E-commerce · Admin UI</span>
+            <a class="link" href="demos/shop.html" data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+      <article class="page">
+        <img class="thumb" src="images/thumb-demo-clinic.jpg" alt="Screenshot of the dental clinic multi-page website demo" loading="lazy" width="640" height="400" />
+        <div class="page-body">
+          <p class="folio" data-en="Spell V · Live Demo" data-th="คาถาที่ V · เดโม">Spell V · Live Demo</p>
+          <h3 data-en="Dental Clinic Website" data-th="เว็บไซต์คลินิกทันตกรรม">Dental Clinic Website</h3>
+          <p data-en="A corporate clinic site with a treatment price filter, doctor schedules by day of the week, and an interactive appointment booking form." data-th="เว็บไซต์คลินิกพร้อมตัวกรองราคาค่ารักษา ตารางเวรทันตแพทย์รายวัน และฟอร์มจองคิวนัดหมาย">A corporate clinic site with a treatment price filter, doctor schedules by day of the week, and an interactive appointment booking form.</p>
+          <div class="incant"><span class="kw">bookSlot</span>({ doctor, day, time })</div>
+          <div class="page-foot">
+            <span class="stack">Multi-page · Booking</span>
+            <a class="link" href="demos/clinic.html" data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
+      <article class="page">
+        <img class="thumb" src="images/thumb-demo-cafe.jpg" alt="Screenshot of the specialty coffee landing page demo" loading="lazy" width="640" height="400" />
+        <div class="page-body">
+          <p class="folio" data-en="Spell VI · Live Demo" data-th="คาถาที่ VI · เดโม">Spell VI · Live Demo</p>
+          <h3 data-en="Specialty Coffee Landing Page" data-th="หน้า Landing Page ร้านกาแฟ">Specialty Coffee Landing Page</h3>
+          <p data-en="A single-page café showcase with an interactive hot/iced/bakery menu filter, tasting notes, and branch hours." data-th="เว็บหน้าเดียวสำหรับร้านกาแฟ คัดกรองเมนูร้อน เย็น และเบเกอรี่ได้ทันที พร้อมข้อมูลเมล็ดกาแฟและเวลาเปิด-ปิด">A single-page café showcase with an interactive hot/iced/bakery menu filter, tasting notes, and branch hours.</p>
+          <div class="incant"><span class="kw">menu</span>.filter(item =&gt; item.kind === tag)</div>
+          <div class="page-foot">
+            <span class="stack">Landing Page · Filter</span>
+            <a class="link" href="demos/cafe.html" data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo <span class="arr">→</span></a>
+          </div>
+        </div>
+      </article>
     </div>
     <div class="more-work">
       <a class="btn btn-primary" href="/work" data-en="See all work &amp; live demos →" data-th="ดูผลงานและเดโมทั้งหมด →">See all work &amp; live demos →</a>
-    </div>
-  </section>
-
-  <div class="rule" aria-hidden="true">✦</div>
-
-  <!-- SERVICES -->
-  <section id="services" class="wrap">
-    <div class="sec-head">
-      <div>
-        <p class="eyebrow"><span class="no">04</span><span data-en="Freelance Services · Fastwork" data-th="บริการฟรีแลนซ์ · Fastwork">Freelance Services · Fastwork</span></p>
-        <h2 data-en="Web development, three packages" data-th="รับพัฒนาเว็บ สามแพ็กเกจ">Web development, three packages</h2>
-      </div>
-    </div>
-    <div class="svc-grid">
-
-      <div class="svc">
-        <p class="tier">Basic</p>
-        <h3 data-en="Landing Page / Portfolio" data-th="Landing Page / Portfolio">Landing Page / Portfolio</h3>
-        <p class="svc-for" data-en="For a personal résumé site, a portfolio to showcase your work, or a landing page to promote a campaign." data-th="เหมาะสำหรับ: เว็บไซต์เรซูเม่ส่วนตัว, พอร์ตโฟลิโอนำเสนอผลงาน หรือหน้า Landing Page สำหรับโปรโมทแคมเปญ">For a personal résumé site, a portfolio to showcase your work, or a landing page to promote a campaign.</p>
-        <ul class="svc-meta">
-          <li><span class="k" data-en="Delivery" data-th="ระยะเวลา">Delivery</span><span class="v" data-en="5 days" data-th="5 วัน">5 days</span></li>
-          <li><span class="k" data-en="Revisions" data-th="แก้ไขงาน">Revisions</span><span class="v" data-en="2 rounds" data-th="2 ครั้ง">2 rounds</span></li>
-        </ul>
-        <p class="price"><small data-en="Starting at" data-th="เริ่มต้น">Starting at</small>฿1,500</p>
-      </div>
-
-      <div class="svc featured">
-        <span class="badge" data-en="Popular" data-th="ยอดนิยม">Popular</span>
-        <p class="tier">Standard</p>
-        <h3 data-en="Corporate / Multi-page Website" data-th="Corporate / Multi-page Website แบบจัดเต็ม">Corporate / Multi-page Website</h3>
-        <p class="svc-for" data-en="For a company profile, a small business, or a multi-page site that needs clear, well-organised sections." data-th="เหมาะสำหรับ: เว็บไซต์โปรไฟล์บริษัท, ธุรกิจขนาดย่อม หรือเว็บนำเสนอผลงานที่ต้องการแบ่งหมวดหมู่ชัดเจน">For a company profile, a small business, or a multi-page site that needs clear, well-organised sections.</p>
-        <ul class="svc-meta">
-          <li><span class="k" data-en="Delivery" data-th="ระยะเวลา">Delivery</span><span class="v" data-en="10 days" data-th="10 วัน">10 days</span></li>
-          <li><span class="k" data-en="Revisions" data-th="แก้ไขงาน">Revisions</span><span class="v" data-en="3 rounds" data-th="3 ครั้ง">3 rounds</span></li>
-        </ul>
-        <p class="price"><small data-en="Starting at" data-th="เริ่มต้น">Starting at</small>฿3,000</p>
-      </div>
-
-      <div class="svc">
-        <p class="tier">Premium</p>
-        <h3 data-en="Web App / E-commerce" data-th="Web Application / E-commerce แบบมีระบบหลังบ้าน">Web App / E-commerce</h3>
-        <p class="svc-for" data-en="For online stores, booking or appointment systems, sites that store user data, or businesses that manage their own content through an admin dashboard." data-th="เหมาะสำหรับ: ร้านค้าออนไลน์, ระบบจองคิว/นัดหมาย, เว็บที่ต้องเก็บข้อมูลผู้ใช้ หรือธุรกิจที่ต้องการจัดการข้อมูลเองผ่านหน้าแอดมิน">For online stores, booking or appointment systems, sites that store user data, or businesses that manage their own content through an admin dashboard.</p>
-        <ul class="svc-meta">
-          <li><span class="k" data-en="Delivery" data-th="ระยะเวลา">Delivery</span><span class="v" data-en="25 days" data-th="25 วัน">25 days</span></li>
-          <li><span class="k" data-en="Revisions" data-th="แก้ไขงาน">Revisions</span><span class="v" data-en="Unlimited" data-th="ไม่จำกัด">Unlimited</span></li>
-        </ul>
-        <p class="price"><small data-en="Starting at" data-th="เริ่มต้น">Starting at</small>฿5,500</p>
-      </div>
-
-    </div>
-
-    <div class="hire-wrap">
-      <a class="hire-btn" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me on Fastwork ↗" data-th="จ้างงานผ่าน Fastwork ↗">Hire Me on Fastwork ↗</a>
-      <p class="hire-note" data-en="Secure payment &amp; escrow through Fastwork · Reply within 24 hours" data-th="ชำระเงินปลอดภัยผ่าน Fastwork · ตอบกลับภายใน 24 ชม.">Secure payment &amp; escrow through Fastwork · Reply within 24 hours</p>
+      <a class="btn btn-ghost" href="packages.html" data-en="Service packages &amp; pricing →" data-th="ดูแพ็กเกจและราคาบริการ →">Service packages &amp; pricing →</a>
     </div>
   </section>
 
@@ -611,7 +575,7 @@
 
   <!-- CONTACT -->
   <section id="contact" class="wrap contact">
-    <p class="eyebrow" style="justify-content:center"><span class="no">05</span><span data-en="Contact · Owl Post" data-th="ติดต่อ · ไปรษณีย์นกฮูก">Contact · Owl Post</span></p>
+    <p class="eyebrow" style="justify-content:center"><span class="no">04</span><span data-en="Contact · Owl Post" data-th="ติดต่อ · ไปรษณีย์นกฮูก">Contact · Owl Post</span></p>
     <h2 data-en="Send a scroll" data-th="ส่งข้อความหาผม">Send a scroll</h2>
     <p class="lead" data-en="Looking for a developer, or want to talk about a project? I'd be glad to hear from you." data-th="กำลังมองหานักพัฒนา หรืออยากคุยเรื่องโปรเจกต์? ยินดีรับฟังเสมอครับ">Looking for a developer, or want to talk about a project? I'd be glad to hear from you.</p>
     <div class="term" aria-hidden="true">
@@ -622,7 +586,7 @@
       </div>
     </div>
     <div class="contact-links">
-      <a class="btn btn-primary" href="https://fastwork.co/user/browndy/web-development-97015042?source=seller-center_my-service" target="_blank" rel="noopener" data-en="Hire Me on Fastwork" data-th="จ้างงานผมบน Fastwork">Hire Me on Fastwork</a>
+      <a class="btn btn-primary" href="packages.html" data-en="View Packages &amp; Hire" data-th="ดูแพ็กเกจจ้างงาน">View Packages &amp; Hire</a>
       <a class="btn btn-ghost" href="mailto:browndy_moconi@icloud.com">Email</a>
       <a class="btn btn-ghost" href="https://github.com/BR0WNDY" target="_blank" rel="noopener">GitHub</a>
       <a class="btn btn-ghost" href="https://www.instagram.com/browndy_moconi/" target="_blank" rel="noopener">Instagram</a>
@@ -696,10 +660,12 @@
       return true;
     }
 
-    var SECTIONS = ['about','skills','projects','services','contact'];
+    var SECTIONS = ['about','skills','projects','contact'];
     var APPS = {
       'sorting-hat': 'sortinghats.html', 'sortinghat': 'sortinghats.html',
       'paotang': 'paotang.html?demo=1', 'thai-chuay-thai': 'paotang.html?demo=1',
+      'shop': 'demos/shop.html', 'clinic': 'demos/clinic.html', 'cafe': 'demos/cafe.html',
+      'packages': 'packages.html', 'fastwork': 'packages.html', 'services': 'packages.html',
       'work': '/work'
     };
     var HOUSES = ['Gryffindor 🦁','Hufflepuff 🦡','Ravenclaw 🦅','Slytherin 🐍'];
@@ -711,7 +677,7 @@
          ['ls', T('list sections', 'ดูรายการหมวด')],
          ['cd <section>', T('jump to a section, e.g. cd projects', 'ไปยังหมวด เช่น cd projects')],
          ['projects', T('list my projects', 'ดูผลงาน')],
-         ['open <app>', T('open work, sorting-hat or paotang', 'เปิด work, sorting-hat หรือ paotang')],
+         ['open <app>', T('open work, packages, shop, clinic, cafe, sorting-hat or paotang', 'เปิด work, packages, shop, clinic, cafe, sorting-hat หรือ paotang')],
          ['skills', T('what I work with', 'ทักษะของผม')],
          ['contact', T('ways to reach me', 'ช่องทางติดต่อ')],
          ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
@@ -724,22 +690,26 @@
       whoami: function(){
         line('Suwapat Saelee — ' + T('Front-End Developer · Computer Science student · Ravenclaw 🦅', 'นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์ · เรเวนคลอว์ 🦅'));
       },
-      ls: function(){ line(SECTIONS.map(function(s){ return s + '/'; }).join('  ') + '  motto.txt'); },
+      ls: function(){ line(SECTIONS.map(function(s){ return s + '/'; }).join('  ') + '  packages.html  motto.txt'); },
       cd: function(args){
         var t = (args[0] || '').replace(/\/$/, '').toLowerCase();
         if(!t || t === '~'){ window.scrollTo({top:0}); return; }
+        if(t === 'services' || t === 'packages'){ location.href = 'packages.html'; return; }
         if(SECTIONS.indexOf(t) === -1 || !go(t)) line(T('cd: no such section: ', 'cd: ไม่มีหมวดนี้: ') + t, 'err');
       },
       projects: function(){
         line(T('Spell I    Portfolio Website — this site', 'คาถา I    เว็บพอร์ตโฟลิโอ — เว็บนี้เอง'));
-        line(T('Spell II   The Sorting Hat — Python in the browser', 'คาถา II   หมวกคัดสรร — Python บนเบราว์เซอร์'));
+        line(T('Spell II   The Sorting Hat — Python / JS in the browser', 'คาถา II   หมวกคัดสรร — Python / JS บนเบราว์เซอร์'));
         line(T('Spell III  Thai Chuay Thai Calculator', 'คาถา III  เครื่องคำนวณไทยช่วยไทย'));
-        line(T('More live demos: open work', 'ดูเดโมเพิ่ม: open work'), 'hint');
+        line(T('Spell IV   Bakery Shop with Back Office (open shop)', 'คาถา IV   ร้านขนมออนไลน์ + ระบบหลังบ้าน (open shop)'));
+        line(T('Spell V    Dental Clinic Website (open clinic)', 'คาถา V    เว็บไซต์คลินิกทันตกรรม (open clinic)'));
+        line(T('Spell VI   Specialty Coffee Landing Page (open cafe)', 'คาถา VI   หน้า Landing Page ร้านกาแฟ (open cafe)'));
+        line(T('More live demos: open work', 'ดูเดโมทั้งหมด: open work'), 'hint');
       },
       open: function(args){
         var t = (args[0] || '').toLowerCase();
         if(APPS[t]){ line(T('Opening ', 'กำลังเปิด ') + t + '…'); location.href = APPS[t]; }
-        else line(T('open: try work, sorting-hat or paotang', 'open: ลอง work, sorting-hat หรือ paotang'), 'err');
+        else line(T('open: try work, packages, shop, clinic, cafe, sorting-hat or paotang', 'open: ลอง work, packages, shop, clinic, cafe, sorting-hat หรือ paotang'), 'err');
       },
       skills: function(){
         line('CS 101  Languages   Java · Python · JavaScript · HTML · CSS · SQL');
@@ -774,7 +744,7 @@
       },
       lang: function(args){
         var want = (args[0] || '').toLowerCase();
-        if(want !== lang) toggleLang();
+        if(!want || ((want === 'en' || want === 'th') && want !== lang)) toggleLang();
         line(T('Language: English', 'ภาษา: ไทย'));
       },
       date: function(){ line(new Date().toLocaleString(lang === 'th' ? 'th-TH' : 'en-GB')); },

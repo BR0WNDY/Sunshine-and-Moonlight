@@ -239,8 +239,16 @@ def render_name(flavor):
         state["question_index"] = 0
         render_question()
 
+    def on_key(e):
+        if e.key == "Enter":
+            go(e)
+
     bind("nameGo", go)
-    document.getElementById("nameInput").focus()
+    input_el = document.getElementById("nameInput")
+    key_proxy = create_proxy(on_key)
+    _proxies.append(key_proxy)
+    input_el.addEventListener("keydown", key_proxy)
+    input_el.focus()
 
 
 def render_question(*_):

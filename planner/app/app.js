@@ -12,7 +12,7 @@
 import { $, esc } from './lib/dom.js';
 import { translator, normalizeLang, LANGS, DEFAULT_LANG } from './lib/i18n.js';
 import {
-  db, load, save, byId, insert, remove, readPref, writePref,
+  db, load, save, clearAll, byId, insert, remove, readPref, writePref,
 } from './lib/store.js';
 import { todayISO, parseISO } from './lib/date.js';
 import { FORMS } from './forms.js';
@@ -28,6 +28,7 @@ import { calendarView } from './views/calendar.js';
 import { moneyView } from './views/money.js';
 import { financeView } from './views/finance.js';
 import { debtsView } from './views/debts.js';
+import { studyView } from './views/study.js';
 import { homeworkView } from './views/homework.js';
 import { salesView } from './views/sales.js';
 import { knowledgeView } from './views/knowledge.js';
@@ -37,7 +38,8 @@ import { payBill, unpayBill } from './model/finance.js';
 import { payDebt, settleDebt } from './model/debt.js';
 import { toggle as toggleHabit } from './model/habits.js';
 import { stepGoal, togglePlan } from './model/goals.js';
-import { toggleDone } from './model/tasks.js';
+import { toggleDone, setHomeworkStatus } from './model/tasks.js';
+import { cycleLessonStatus, ensureTerm, addSubject } from './model/study.js';
 import { setStatus as setSaleStatus } from './model/sales.js';
 
 /* ---------------- state ---------------- */
@@ -53,6 +55,7 @@ const state = {
   calMonth: monthStart(),
   sideMonth: monthStart(),
   selected: todayISO(),
+  studyTerm: '2/2026',
   modal: null,
 
   /* the sign-in gate: 'app' when it is out of the way, otherwise which screen
@@ -91,6 +94,7 @@ const VIEWS = {
   money: moneyView,
   finance: financeView,
   debts: debtsView,
+  study: studyView,
   homework: homeworkView,
   sales: salesView,
   knowledge: knowledgeView,
@@ -229,6 +233,31 @@ const ACTIONS = {
   'habit-toggle': (d) => toggleHabit(d.id, d.date),
   'plan-toggle': (d) => togglePlan(d.id),
   'task-toggle': (d) => toggleDone(d.store, d.id),
+  'lesson-cycle': (d) => cycleLessonStatus(d.id),
+
+  'seed-au-2-2026': () => {
+    if (db.subjects.length > 0) return;
+    ensureTerm('2/2026');
+    const courses = [
+      { code: 'CSX3002', name: 'Object-Oriented Programming', credits: 3, lecturer: '', note: 'Tier 1: รีเกรดจาก D (1/2026)' },
+      { code: 'ITX3007', name: 'Software Engineering', credits: 3, lecturer: '', note: 'Tier 1: วิชาบังคับสำคัญ (Retake)' },
+      { code: 'ITX2007', name: 'Data Science', credits: 3, lecturer: 'อ.บิท (Ajarn Bit)', note: 'Tier 1: วิชาแกน (Retake จาก W)' },
+      { code: 'ELE2000', name: 'Academic English', credits: 3, lecturer: 'Ronald Simmons', note: 'Tier 1: เปลี่ยนอาจารย์ใหม่ ต้องผ่านเทอมนี้' },
+      { code: 'CSX3006', name: 'Database Systems', credits: 3, lecturer: '', note: 'Tier 2: วิชาหลักสาย SED' },
+      { code: 'ITX2004', name: 'UI/UX & Web Development', credits: 3, lecturer: '', note: 'Tier 2: วิชาถนัด เก็บเกรด A ดึง GPA' },
+      { code: 'BG14036', name: 'General Education / Ethics Seminar', credits: 0, lecturer: '', note: 'Tier 2: เช็คชื่อและส่งงานครบทุกครั้ง' },
+    ];
+    for (const c of courses.reverse()) {
+      addSubject({
+        ...c,
+        kind: 'วิชามหาวิทยาลัย',
+        status: 'กำลังเรียน',
+        term: '2/2026',
+        end: '2027-03-31',
+      });
+    }
+    state.studyTerm = '2/2026';
+  },
 
   'auth-lock': () => {
     auth.lock();
@@ -253,11 +282,18 @@ const ACTIONS = {
       save('profile');
     }
   },
+
+  'clear-all': () => {
+    if (!window.confirm(t('clearAllConfirm'))) return;
+    clearAll();
+  },
 };
 
 /** Actions fired by a `<select>` rather than a click. */
 const CHANGE_ACTIONS = {
   'sale-status': (d, el) => setSaleStatus(d.id, el.value),
+  'hw-status': (d, el) => setHomeworkStatus(d.id, el.value),
+  'study-term': (_d, el) => { state.studyTerm = el.value; },
 };
 
 /* ---------------- render ---------------- */

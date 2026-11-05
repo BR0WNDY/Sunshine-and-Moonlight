@@ -6,6 +6,7 @@ import { db } from '../lib/store.js';
 import { fmtMonthYear, dowLabels, iso, todayISO, leadingBlanks, daysInMonth } from '../lib/date.js';
 import { attentionCount } from '../model/finance.js';
 import { homeworkDueSoon } from '../model/tasks.js';
+import { openLessons } from '../model/study.js';
 import { busyDates } from '../model/calendar.js';
 import { username } from '../lib/auth.js';
 import { GROUPS } from './pages.js';
@@ -14,6 +15,7 @@ import { GROUPS } from './pages.js';
 const badges = () => ({
   bills: attentionCount(),
   homework: homeworkDueSoon().length,
+  lessons: openLessons().length,
 });
 
 function miniCalendar(month, t, lang) {
@@ -73,8 +75,9 @@ export function sidebarView({ t, lang, state }) {
     <div class="user-chip">
       <span class="avatar">${esc(name.slice(0, 1).toUpperCase())}</span>
       <span class="user-name">${esc(name)}</span>
-      <button class="icon-plain" data-act="rename" title="${esc(t('renameUser'))}">${icon('pencil', 16)}</button>
-      <button class="icon-plain" data-act="auth-lock" title="${esc(t('authLock'))}">${icon('lock', 17)}</button>
+      <button class="icon-plain" data-act="rename" title="${esc(t('renameUser'))}" aria-label="${esc(t('renameUser'))}">${icon('pencil', 16)}</button>
+      <button class="icon-plain" data-act="clear-all" title="${esc(t('clearAllData'))}" aria-label="${esc(t('clearAllData'))}">${icon('trash', 16)}</button>
+      <button class="icon-plain" data-act="auth-lock" title="${esc(t('authLock'))}" aria-label="${esc(t('authLock'))}">${icon('lock', 17)}</button>
     </div>
 
     <div class="pill-switch lang-switch" role="group" aria-label="${esc(t('langLabel'))}">
