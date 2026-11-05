@@ -679,6 +679,7 @@
          ['projects', T('list my projects', 'ดูผลงาน')],
          ['open <app>', T('open work, packages, shop, clinic, cafe, sorting-hat or paotang', 'เปิด work, packages, shop, clinic, cafe, sorting-hat หรือ paotang')],
          ['skills', T('what I work with', 'ทักษะของผม')],
+         ['spells', T('list all magical spells', 'ดูรายชื่อคาถาทั้งหมด')],
          ['contact', T('ways to reach me', 'ช่องทางติดต่อ')],
          ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
          ['sort', T('let the Hat sort you', 'ให้หมวกคัดสรรเลือกบ้าน')],
@@ -751,6 +752,19 @@
       echo: function(args){ line(args.join(' ')); },
       history: function(){ history.forEach(function(h, i){ line(String(i + 1).padStart(3) + '  ' + h); }); },
       clear: function(){ log.textContent = ''; },
+      spells: function(){
+        line(T('Available spells:', 'คาถาที่ร่ายได้:'));
+        [
+          ['lumos', T('ignite wand light', 'จุดแสงสว่างที่ปลายไม้')],
+          ['nox', T('extinguish wand light', 'ดับแสงไฟ')],
+          ['expecto patronum', T('cast your Patronus (or: patronus)', 'ร่ายคาถาผู้พิทักษ์ (หรือ: patronus)')],
+          ['alohomora', T('unlock secret developer note', 'ปลดล็อกข้อความลับ')],
+          ['wingardium leviosa', T('levitation charm (or: leviosa)', 'คาถาลอยตัว (หรือ: leviosa)')],
+          ['protego', T('shield charm', 'คาถาเกราะวิเศษป้องกันตัว')],
+          ['avada kedavra', T('unforgivable curse', 'คำสาปพิฆาต')],
+          ['mischief managed', T('clear map & screen', 'แผนที่ตัวกวน / ล้างหน้าจอ')]
+        ].forEach(function(c){ line('  ' + (c[0] + '                      ').slice(0, 22) + c[1]); });
+      },
       // spells
       lumos: function(){
         document.body.classList.remove('dim'); document.body.classList.add('lit');
@@ -784,6 +798,18 @@
       }
     };
     commands.about = commands.whoami;
+    commands.patronus = commands['expecto patronum'];
+    commands.leviosa = commands['wingardium leviosa'];
+    commands.avada = commands['avada kedavra'];
+    commands.protego = function(){
+      spell('Protego!', 'charm');
+      line(T('A shimmering shield barrier appears. The castle is secure.', 'เกราะเวทมนตร์สีเงินเปล่งประกาย ปราสาทปลอดภัยแล้ว'));
+    };
+    commands.charm = commands.charms = function(){
+      spell('Charms!', 'charm');
+      line(T('CS 204 Charms: Web Development · Responsive Design', 'วิชา CS 204 คาถา: พัฒนาเว็บ · ออกแบบรองรับทุกหน้าจอ'));
+      go('skills');
+    };
     commands['cat'] = function(args){
       if(args[0] === 'motto.txt') line(T('“Wit beyond measure is man\'s greatest treasure.”', '“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”'), 'motto');
       else line('cat: ' + (args[0] || '') + T(': no such file', ': ไม่มีไฟล์นี้'), 'err');
