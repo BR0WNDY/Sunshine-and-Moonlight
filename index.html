@@ -229,7 +229,7 @@
     background:radial-gradient(circle at 50% 35%, #0077fe, var(--night) 70%);
     box-shadow:0 0 0 10px rgba(0,242,254,.15),0 0 60px -10px rgba(0,242,254,.55),0 30px 60px -20px rgba(0,0,0,.7);
   }
-  body.flash-charm{animation:flashCharm .8s ease-out}
+  body.flash-charm > :not(.fx){animation:flashCharm .8s ease-out}
   @keyframes flashCharm{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.2) drop-shadow(0 0 50px #00f2fe)}
@@ -266,7 +266,7 @@
     background:radial-gradient(circle at 50% 35%, #0d592b, var(--night) 70%);
     box-shadow:0 0 0 10px rgba(0,255,135,.15),0 0 60px -10px rgba(0,255,135,.5),0 30px 60px -20px rgba(0,0,0,.7);
   }
-  body.flash-dark, body.avada-flash{animation:flashDark .8s ease-out}
+  body.flash-dark > :not(.fx), body.avada-flash > :not(.fx){animation:flashDark .8s ease-out}
   @keyframes flashDark{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.5) drop-shadow(0 0 50px #00ff87)}
@@ -302,7 +302,7 @@
     background:radial-gradient(circle at 50% 35%, #456185, var(--night) 70%);
     box-shadow:0 0 0 10px rgba(255,255,255,.22),0 0 75px -10px rgba(255,255,255,.75),0 30px 60px -20px rgba(0,0,0,.7);
   }
-  body.flash-patronus{animation:flashPatronus .8s ease-out}
+  body.flash-patronus > :not(.fx){animation:flashPatronus .8s ease-out}
   @keyframes flashPatronus{
     0%{filter:brightness(1)}
     15%{filter:brightness(4) drop-shadow(0 0 60px #ffffff)}
@@ -337,7 +337,7 @@
     background:radial-gradient(circle at 50% 35%, #b83a00, var(--night) 70%);
     box-shadow:0 0 0 10px rgba(255,122,0,.15),0 0 65px -10px rgba(255,85,0,.6),0 30px 60px -20px rgba(0,0,0,.7);
   }
-  body.flash-incendio{animation:flashIncendio .8s ease-out}
+  body.flash-incendio > :not(.fx){animation:flashIncendio .8s ease-out}
   @keyframes flashIncendio{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.2) drop-shadow(0 0 55px #ff5500)}
@@ -364,7 +364,7 @@
       radial-gradient(700px 500px at 0% 100%, rgba(0,102,255,.4), transparent 60%);
   }
   body.theme-aguamenti .stars{filter:brightness(2.2) drop-shadow(0 0 3px #00d2ff)}
-  body.flash-aguamenti{animation:flashAguamenti .8s ease-out}
+  body.flash-aguamenti > :not(.fx){animation:flashAguamenti .8s ease-out}
   @keyframes flashAguamenti{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.2) drop-shadow(0 0 50px #00d2ff)}
@@ -395,7 +395,7 @@
     background:linear-gradient(90deg,#f43f5e,#fb923c,#facc15,#4ade80,#38bdf8,#a855f7);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  body.flash-riddikulus{animation:flashRiddikulus .8s ease-out}
+  body.flash-riddikulus > :not(.fx){animation:flashRiddikulus .8s ease-out}
   @keyframes flashRiddikulus{
     0%{filter:brightness(1)}
     20%{filter:brightness(3.5) hue-rotate(120deg)}
@@ -403,7 +403,7 @@
   }
 
   /* Bombarda Screen Shake */
-  body.shake-screen{
+  body.shake-screen > :not(.fx){
     animation:screenShake .45s cubic-bezier(.36,.07,.19,.97) both;
   }
   @keyframes screenShake{
@@ -437,7 +437,7 @@
     background:linear-gradient(180deg,#ffffff 10%,#fca5a5 70%,#ef4444 130%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  body.flash-crucio{animation:flashCrucio .7s ease-out, crucioTwitch .45s 2 ease-in-out}
+  body.flash-crucio > :not(.fx){animation:flashCrucio .7s ease-out, crucioTwitch .45s 2 ease-in-out}
   @keyframes flashCrucio{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.2) drop-shadow(0 0 55px #ef4444)}
@@ -475,11 +475,32 @@
     background:linear-gradient(180deg,#ffffff 10%,#6ee7b7 70%,#10b981 130%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  body.flash-morsmordre{animation:flashMorsmordre .9s ease-out}
+  body.flash-morsmordre > :not(.fx){animation:flashMorsmordre .9s ease-out}
   @keyframes flashMorsmordre{
     0%{filter:brightness(1)}
     20%{filter:brightness(3.6) drop-shadow(0 0 60px #10b981)}
     100%{filter:brightness(1)}
+  }
+
+  /* Morsmordre: the Dark Mark overlay (skull + serpent rising into the sky) */
+  .dark-mark{position:fixed;left:50%;top:6vh;width:min(320px,58vw);z-index:9998;pointer-events:none;
+    color:#6ee7b7;filter:drop-shadow(0 0 10px #10b981) drop-shadow(0 0 32px #059669);
+    transform:translateX(-50%);animation:markRise 4.2s ease-out forwards}
+  .dark-mark svg{display:block;width:100%;height:auto;overflow:visible}
+  .dark-mark .serpent{stroke-dasharray:520;stroke-dashoffset:520;animation:serpentDraw 1.6s .6s ease-out forwards}
+  .dark-mark .serpent-head{opacity:0;animation:appear .3s 2s ease-out forwards}
+  @keyframes markRise{
+    0%{opacity:0;transform:translate(-50%,60px) scale(.55)}
+    22%{opacity:1;transform:translate(-50%,0) scale(1)}
+    78%{opacity:.92;transform:translate(-50%,-6px) scale(1.02)}
+    100%{opacity:0;transform:translate(-50%,-24px) scale(1.06)}
+  }
+  @keyframes serpentDraw{to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion:reduce){
+    .dark-mark{animation:fadeMark 4.2s linear forwards}
+    .dark-mark .serpent{animation:none;stroke-dashoffset:0}
+    .dark-mark .serpent-head{animation:none;opacity:1}
+    @keyframes fadeMark{0%,80%{opacity:1}100%{opacity:0}}
   }
 
   /* 9. Imperio: Hypnotic Violet Mind Control Mist */
@@ -506,7 +527,7 @@
     background:linear-gradient(180deg,#ffffff 10%,#d8b4fe 70%,#a855f7 130%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  body.flash-imperio{animation:flashImperio .8s ease-out}
+  body.flash-imperio > :not(.fx){animation:flashImperio .8s ease-out}
   @keyframes flashImperio{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.4) drop-shadow(0 0 55px #a855f7)}
@@ -1092,7 +1113,7 @@
           ['obliviate', T('wipe terminal memory & history 🧠', 'ล้างความจำและประวัติทั้งหมด 🧠')],
           ['-- DARK ARTS --', T('---------------------------', '---------------------------')],
           ['avada kedavra', T('Killing Curse: emerald green', 'คำสาปพิฆาต: แสงสีเขียวมรกต')],
-          ['crucio', T('Cruciatus Curse: blood red agony', 'คำสาปกรีดแทง: สีแดงเลือดกระตุก')],
+          ['crucio', T('Cruciatus Curse: blood red agony', 'คำสาปทรมาน: สีแดงเลือดกระตุก')],
           ['imperio', T('Imperius Curse: mind control mist', 'คำสาปสะกดใจ: หมอกสะกดสีม่วง')],
           ['morsmordre', T('conjure the Dark Mark 💀🐍', 'เสกตรามารหัวกะโหลกและงูมรกต 💀🐍')],
           ['sectumsempra', T('slashing wound across screen 🩸', 'ฟันเฉือนกรีดรอยแผลล่องหน 🩸')]
@@ -1122,11 +1143,31 @@
       crucio: function(){
         setTheme('theme-crucio', 'flash-crucio');
         spell('Crucio!', 'dark');
-        line(T('⚡ Cruciatus Curse! Blood-red agony surges across the screen (#ef4444).', '⚡ คำสาปกรีดแทง! คลื่นพลังสีแดงเลือดชโลมหน้าจอพร้อมแรงกระตุก (#ef4444)'));
+        line(T('⚡ Cruciatus Curse! Blood-red agony surges across the screen (#ef4444).', '⚡ คำสาปทรมาน! คลื่นพลังสีแดงเลือดชโลมหน้าจอพร้อมแรงกระตุก (#ef4444)'));
         line(T('Type lumos to soothe the pain and restore balance.', 'พิมพ์ lumos เพื่อบรรเทาความเจ็บปวดและคืนค่าเดิม'), 'hint');
       },
       morsmordre: function(){
         setTheme('theme-morsmordre', 'flash-morsmordre');
+        var old = document.querySelector('.dark-mark');
+        if(old) old.parentNode.removeChild(old);
+        var mark = document.createElement('div');
+        mark.className = 'fx dark-mark';
+        mark.setAttribute('aria-hidden', 'true');
+        mark.innerHTML =
+          '<svg viewBox="0 0 200 260" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">' +
+            // skull
+            '<path d="M58 92C58 46 142 46 142 92c0 20-8 28-13 34l-2 18H73l-2-18c-5-6-13-14-13-34Z" fill="rgba(4,33,16,.55)" stroke-width="4"/>' +
+            '<ellipse cx="81" cy="96" rx="13" ry="14" fill="currentColor" stroke="none" opacity=".9"/>' +
+            '<ellipse cx="119" cy="96" rx="13" ry="14" fill="currentColor" stroke="none" opacity=".9"/>' +
+            '<path d="M100 110l-7 15h14Z" fill="currentColor" stroke="none"/>' +
+            '<path d="M80 144v-10M90 146v-12M110 146v-12M120 144v-10" stroke-width="3"/>' +
+            // serpent slithering out of the mouth
+            '<path class="serpent" d="M100 140c-14 22 30 28 22 52-6 20-46 14-50 36-3 16 20 24 36 14" stroke-width="9"/>' +
+            '<g class="serpent-head"><ellipse cx="111" cy="241" rx="11" ry="7" transform="rotate(-30 111 241)" fill="currentColor" stroke="none"/>' +
+            '<path d="M120 235l9-4m-9 4 7 3" stroke-width="2"/></g>' +
+          '</svg>';
+        document.body.appendChild(mark);
+        setTimeout(function(){ if(mark.parentNode) mark.parentNode.removeChild(mark); }, 4300);
         spell('Morsmordre!', 'dark');
         line(T('💀🐍 The Dark Mark rises in the sky! Giant skull & emerald serpent summoned.', '💀🐍 ตรามารลอยเด่นขึ้นสู่ท้องฟ้า! หัวกะโหลกยักษ์พร้อมงูมรกตเลื้อยออกมา'));
         line(T('Lord Voldemort\'s sign is cast. Type lumos to banish the mark.', 'สัญลักษณ์แห่งจอมมารปรากฏแล้ว พิมพ์ lumos เพื่อขับไล่ตรามาร'), 'hint');
@@ -1139,7 +1180,7 @@
       },
       sectumsempra: function(){
         var slash = document.createElement('div');
-        slash.className = 'slash-wound';
+        slash.className = 'fx slash-wound';
         document.body.appendChild(slash);
         setTimeout(function(){ if(slash.parentNode) slash.parentNode.removeChild(slash); }, 800);
         setTheme('theme-crucio', 'flash-crucio');
@@ -1165,6 +1206,8 @@
         line(T('Aqua theme active. Type lumos to reset.', 'ธีมสายน้ำทำงาน พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       bombarda: function(){
+        // drop leftover flash classes first — they come later in the CSS and would override the shake animation
+        ALL_THEMES.forEach(function(c){ if(c.indexOf('flash') !== -1) document.body.classList.remove(c); });
         document.body.classList.remove('shake-screen');
         void document.body.offsetWidth;
         document.body.classList.add('shake-screen');
@@ -1178,7 +1221,7 @@
         line(T('Party mode active! Type lumos to reset.', 'โหมดปาร์ตี้สายรุ้งทำงาน! พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       accio: function(args){
-        var target = (args[0] || '').toLowerCase().replace(/^[#./]+/, '');
+        var target = (args[0] || '').toLowerCase().replace(/^[#./]+/, '').replace(/[!.?]+$/, '');
         if(!target){
           line(T('Accio what? Try: accio resume, accio projects, accio work, accio packages, accio contact', 'เรียกอะไรดี? ลอง: accio resume, accio projects, accio work, accio packages, accio contact'), 'hint');
           return;
@@ -1248,6 +1291,8 @@
     var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'theme-incendio', 'theme-aguamenti', 'theme-riddikulus', 'theme-crucio', 'theme-morsmordre', 'theme-imperio', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'flash-incendio', 'flash-aguamenti', 'flash-riddikulus', 'flash-crucio', 'flash-morsmordre', 'flash-imperio', 'avada-flash', 'shake-screen'];
     function setTheme(themeClass, flashClass){
       ALL_THEMES.forEach(function(c){ document.body.classList.remove(c); });
+      var mark = document.querySelector('.dark-mark');
+      if(mark && themeClass !== 'theme-morsmordre') mark.parentNode.removeChild(mark);
       if(themeClass) document.body.classList.add(themeClass);
       if(flashClass){
         void document.body.offsetWidth;
