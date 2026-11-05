@@ -204,7 +204,10 @@
   .spell.dark{text-shadow:0 0 10px #00ff87,0 0 25px #10b981}
   .spell.patronus{text-shadow:0 0 14px #fff,0 0 30px #b0e0e6}
   .spell.fire{text-shadow:0 0 12px #ff7a00,0 0 28px #ff2200}
-  .spell.water{text-shadow:0 0 12px #00d2ff,0 0 28px #0055ff}
+  .spell.water{text-shadow:0 0 12px #00c6ff,0 0 28px #0055ff}
+  .spell.stun{text-shadow:0 0 10px #ff3b3b,0 0 26px #b91c1c}
+  .spell.ice{color:#f0fbff;text-shadow:0 0 10px #9fdcf5,0 0 26px #4f8fb0}
+  .spell.gold{text-shadow:0 0 10px #e3c766,0 0 26px #c8a33a}
   @keyframes cast{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
   body.lit .glow{background:
       radial-gradient(900px 560px at 80% -8%, rgba(79,121,201,.65), transparent 60%),
@@ -322,7 +325,7 @@
     100%{filter:brightness(1)}
   }
 
-  /* 4. Incendio: Fiery Flame & Ember glow (#ff5500 / #ffaa00) */
+  /* 4. Incendio: Fiery Flame & Ember glow (#ff4500 / #ffaa00) */
   body.theme-incendio{
     --ink:#1a0803;
     --night:#2a0f06;
@@ -338,7 +341,7 @@
   }
   body.theme-incendio .glow{
     background:
-      radial-gradient(900px 520px at 80% -8%, rgba(255,85,0,.5), transparent 60%),
+      radial-gradient(900px 520px at 80% -8%, rgba(255,69,0,.5), transparent 60%),
       radial-gradient(700px 500px at 0% 100%, rgba(255,170,0,.4), transparent 60%);
   }
   body.theme-incendio .stars{filter:sepia(1) hue-rotate(-25deg) saturate(4) brightness(1.3)}
@@ -348,16 +351,16 @@
   }
   body.theme-incendio .portrait-frame{
     background:radial-gradient(circle at 50% 35%, #b83a00, var(--night) 70%);
-    box-shadow:0 0 0 10px rgba(255,122,0,.15),0 0 65px -10px rgba(255,85,0,.6),0 30px 60px -20px rgba(0,0,0,.7);
+    box-shadow:0 0 0 10px rgba(255,122,0,.15),0 0 65px -10px rgba(255,69,0,.6),0 30px 60px -20px rgba(0,0,0,.7);
   }
   body.flash-incendio > :not(.fx){animation:flashIncendio .8s ease-out}
   @keyframes flashIncendio{
     0%{filter:brightness(1)}
-    15%{filter:brightness(3.2) drop-shadow(0 0 55px #ff5500)}
+    15%{filter:brightness(3.2) drop-shadow(0 0 55px #ff4500)}
     100%{filter:brightness(1)}
   }
 
-  /* 5. Aguamenti: Ocean Aqua & Water surge (#00d2ff / #0066ff) */
+  /* 5. Aguamenti: Ocean Aqua & Water surge (#00c6ff / #0072ff) */
   body.theme-aguamenti{
     --ink:#02111d;
     --night:#041f33;
@@ -365,22 +368,22 @@
     --term:#010c14;
     --ravenclaw:#0284c7;
     --ravenclaw-bright:#38bdf8;
-    --bronze:#00d2ff;
+    --bronze:#00c6ff;
     --bronze-soft:#7dd3fc;
-    --charm:#00d2ff;
-    --line:rgba(0,210,255,.28);
-    --line-soft:rgba(0,210,255,.14);
+    --charm:#00c6ff;
+    --line:rgba(0,198,255,.28);
+    --line-soft:rgba(0,198,255,.14);
   }
   body.theme-aguamenti .glow{
     background:
-      radial-gradient(900px 520px at 80% -8%, rgba(0,210,255,.5), transparent 60%),
-      radial-gradient(700px 500px at 0% 100%, rgba(0,102,255,.4), transparent 60%);
+      radial-gradient(900px 520px at 80% -8%, rgba(0,198,255,.5), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(0,114,255,.4), transparent 60%);
   }
-  body.theme-aguamenti .stars{filter:brightness(2.2) drop-shadow(0 0 3px #00d2ff)}
+  body.theme-aguamenti .stars{filter:brightness(2.2) drop-shadow(0 0 3px #00c6ff)}
   body.flash-aguamenti > :not(.fx){animation:flashAguamenti .8s ease-out}
   @keyframes flashAguamenti{
     0%{filter:brightness(1)}
-    15%{filter:brightness(3.2) drop-shadow(0 0 50px #00d2ff)}
+    15%{filter:brightness(3.2) drop-shadow(0 0 50px #00c6ff)}
     100%{filter:brightness(1)}
   }
 
@@ -417,7 +420,7 @@
 
   /* Bombarda Screen Shake */
   body.shake-screen > :not(.fx){
-    animation:screenShake .45s cubic-bezier(.36,.07,.19,.97) both;
+    animation:screenShake .4s cubic-bezier(.36,.07,.19,.97) both;
   }
   @keyframes screenShake{
     10%, 90% { transform: translate3d(-3px, 0, 0); }
@@ -600,6 +603,52 @@
   .fx-fog{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(240,246,255,.75),rgba(200,215,240,.35) 70%);
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;animation:fxFog 1.6s ease-in-out both}
   @keyframes fxFog{0%{opacity:0}35%,55%{opacity:1}100%{opacity:0}}
+  .fx-beam{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 6px var(--c)) drop-shadow(0 0 18px var(--c))}
+  .fx-beam svg{position:absolute;inset:0;overflow:visible}
+  .fx-beam line{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:fxBeam var(--t,.45s) ease-out forwards}
+  @keyframes fxBeam{55%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+  .fx-wand{position:absolute;left:var(--x);top:var(--y);font-size:34px;line-height:1;margin:-17px 0 0 -17px;
+    filter:drop-shadow(0 0 8px #ffb199);animation:fxWand 1.8s .3s cubic-bezier(.3,.55,.5,1) both}
+  @keyframes fxWand{0%{opacity:0;transform:translate(0,0) rotate(0)}8%,80%{opacity:1}
+    100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(.7)}}
+  /* Petrificus Totalus: icy blue-grey and every page animation frozen in place (the terminal stays usable) */
+  body.petrified{
+    --ink:#0a131b; --night:#112130; --night-2:#183043; --term:#08111a;
+    --ravenclaw:#4e6f86; --ravenclaw-bright:#a5c8dc; --bronze:#bfe3f2; --bronze-soft:#e3f4fb; --charm:#cfefff;
+    --line:rgba(191,227,242,.3); --line-soft:rgba(191,227,242,.14);
+  }
+  body.petrified > :not(.fx){filter:grayscale(1) sepia(.6) hue-rotate(165deg) saturate(2.4) brightness(.95)}
+  body.petrified :not(.fx):not(.fx *):not(.hero .term):not(.hero .term *){animation-play-state:paused!important}
+  body.petrified .glow{background:radial-gradient(900px 520px at 80% -8%, rgba(191,227,242,.35), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(120,170,200,.3), transparent 60%)}
+  .term.stiffen{animation:stiffen .35s ease-out}
+  .fx-caustics{position:absolute;inset:0;opacity:0;mix-blend-mode:screen;
+    background:repeating-radial-gradient(circle at 30% 70%, rgba(0,198,255,.0) 0 22px, rgba(0,198,255,.16) 26px, rgba(0,198,255,0) 32px),
+               repeating-radial-gradient(circle at 75% 30%, rgba(125,211,252,0) 0 30px, rgba(125,211,252,.12) 34px, rgba(125,211,252,0) 40px);
+    animation:fxCaustics 2.6s ease-in-out both}
+  @keyframes fxCaustics{0%{opacity:0;transform:scale(1)}30%{opacity:1}100%{opacity:0;transform:scale(1.12)}}
+  /* tempus: astronomical clock */
+  #term-log .out.tempus{display:flex;gap:18px;align-items:center;flex-wrap:wrap;white-space:normal;margin:6px 0 12px}
+  .astro{width:124px;height:124px;flex:0 0 auto;overflow:visible}
+  .astro .rim{fill:rgba(200,163,58,.06);stroke:var(--bronze);stroke-width:1}
+  .astro .inner{fill:rgba(7,13,31,.5);stroke:var(--line);stroke-dasharray:2 3}
+  .astro .zodiac{transform-origin:60px 60px;animation:spin 240s linear infinite}
+  .astro .zodiac line{stroke:var(--bronze);stroke-width:.8}
+  .astro .zodiac text{fill:var(--bronze-soft);font-size:7px;opacity:.8}
+  .astro .hand-h{stroke:var(--parchment);stroke-width:2.6;stroke-linecap:round}
+  .astro .hand-m{stroke:var(--parchment);stroke-width:1.6;stroke-linecap:round}
+  .astro .hand-s{stroke:var(--bronze);stroke-width:.8;stroke-linecap:round}
+  .astro .pin{fill:var(--bronze)}
+  .astro .sun{fill:#ffd166;font-size:12px}
+  .astro .moon{fill:#e2e8f0;font-size:12px}
+  .tempus-read{line-height:1.75;min-width:0;flex:1 1 200px}
+  .tempus-read .lb{color:var(--muted)}
+  .tempus-read b{color:var(--parchment);font-weight:400}
+  @keyframes stiffen{0%{transform:none}30%{transform:scale(1.015)}60%{transform:scale(.995)}100%{transform:none}}
+  .portrait-frame.stunned{animation:stunned .6s ease-out 2}
+  @keyframes stunned{0%,100%{transform:none;filter:none}
+    20%{transform:translateX(-6px) rotate(-2deg);filter:brightness(1.6) drop-shadow(0 0 24px #ff3b3b)}
+    50%{transform:translateX(5px) rotate(1.5deg)}75%{transform:translateX(-3px)}}
   .term.levitate{animation:levitate 2.6s ease-in-out}
   @keyframes levitate{0%,100%{transform:none}30%{transform:translateY(-24px) rotate(-1deg)}65%{transform:translateY(-14px) rotate(1deg)}}
 
@@ -1063,6 +1112,73 @@
       s.className = 'spell ' + kind; s.textContent = text;
       d.appendChild(s);
     }
+    // ---------- tempus: astronomical clock ----------
+    var MOON = [['🌑', 'New Moon', 'จันทร์ดับ'], ['🌒', 'Waxing Crescent', 'ข้างขึ้นเสี้ยว'], ['🌓', 'First Quarter', 'ข้างขึ้นครึ่งดวง'],
+                ['🌔', 'Waxing Gibbous', 'ข้างขึ้นค่อนดวง'], ['🌕', 'Full Moon', 'จันทร์เต็มดวง'], ['🌖', 'Waning Gibbous', 'ข้างแรมค่อนดวง'],
+                ['🌗', 'Last Quarter', 'ข้างแรมครึ่งดวง'], ['🌘', 'Waning Crescent', 'ข้างแรมเสี้ยว']];
+    var HOURS = [ // [until hour (Hogwarts time), EN, TH]
+      [3, 'The Witching Hour — ghosts roam the corridors', 'ชั่วโมงแม่มด — ผีออกเดินตามทางเดิน'],
+      [6, 'Before dawn — only the house-elves are awake', 'ก่อนรุ่งสาง — มีแค่เอลฟ์ประจำบ้านที่ตื่นอยู่'],
+      [9, 'Breakfast in the Great Hall — the owl post arrives', 'อาหารเช้าในห้องโถงใหญ่ — นกฮูกส่งจดหมายมาถึง'],
+      [12, 'Morning lessons — Potions in the dungeons', 'คาบเช้า — วิชาปรุงยาในคุกใต้ดิน'],
+      [14, 'Lunch & Quidditch gossip', 'มื้อกลางวันและคุยเรื่องควิดดิช'],
+      [17, 'Afternoon lessons — Herbology in the greenhouses', 'คาบบ่าย — วิชาสมุนไพรศาสตร์ในเรือนกระจก'],
+      [19, 'Quidditch practice on the pitch', 'ซ้อมควิดดิชที่สนาม'],
+      [21, 'Dinner feast in the Great Hall', 'งานเลี้ยงมื้อค่ำในห้องโถงใหญ่'],
+      [24, 'Astronomy class atop the Astronomy Tower', 'วิชาดาราศาสตร์บนยอดหอดูดาว']
+    ];
+    var SIGNS = [ // [month, last day of sign in that month, glyph, EN, TH] — sign that starts after the cut-off
+      [1, 19, '♑', 'Capricorn', 'มังกร'], [2, 18, '♒', 'Aquarius', 'กุมภ์'], [3, 20, '♓', 'Pisces', 'มีน'], [4, 19, '♈', 'Aries', 'เมษ'],
+      [5, 20, '♉', 'Taurus', 'พฤษภ'], [6, 20, '♊', 'Gemini', 'เมถุน'], [7, 22, '♋', 'Cancer', 'กรกฎ'], [8, 22, '♌', 'Leo', 'สิงห์'],
+      [9, 22, '♍', 'Virgo', 'กันย์'], [10, 22, '♎', 'Libra', 'ตุลย์'], [11, 21, '♏', 'Scorpio', 'พิจิก'], [12, 21, '♐', 'Sagittarius', 'ธนู']
+    ];
+    function sunSign(dt){
+      var m = dt.getMonth() + 1, day = dt.getDate(), i = SIGNS[m - 1][1] >= day ? m - 1 : m % 12;
+      return SIGNS[i];
+    }
+    function tickTempus(el, now){
+      var loc = lang === 'th' ? 'th-TH' : 'en-GB';
+      // Hogwarts is in Scotland, so magical time follows the UK clock
+      var hogParts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: 'numeric', minute: '2-digit', hourCycle: 'h23' }).formatToParts(now);
+      var hogH = +hogParts.filter(function(p){ return p.type === 'hour'; })[0].value;
+      var hogM = +hogParts.filter(function(p){ return p.type === 'minute'; })[0].value;
+      var hogTime = now.toLocaleTimeString(loc, { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' });
+      var hour = HOURS.filter(function(h){ return hogH < h[0]; })[0];
+      // moon phase from a known new moon (6 Jan 2000 18:14 UTC) and the synodic month
+      var SYN = 29.530588853, age = (((now - Date.UTC(2000, 0, 6, 18, 14)) / 864e5) % SYN + SYN) % SYN;
+      var phase = age / SYN, lit = Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
+      var moon = MOON[Math.round(phase * 8) % 8], sign = sunSign(now);
+      // dial: clock hands (local time) + sun and moon riding the rim on a 24h Hogwarts sky (noon at the top)
+      var h = now.getHours() % 12 + now.getMinutes() / 60, m = now.getMinutes() + now.getSeconds() / 60, s = now.getSeconds();
+      el.querySelector('.hand-h').setAttribute('transform', 'rotate(' + (h * 30) + ' 60 60)');
+      el.querySelector('.hand-m').setAttribute('transform', 'rotate(' + (m * 6) + ' 60 60)');
+      el.querySelector('.hand-s').setAttribute('transform', 'rotate(' + (s * 6) + ' 60 60)');
+      var sunA = ((hogH + hogM / 60 - 12) / 24) * Math.PI * 2, moonA = sunA + phase * Math.PI * 2;
+      [['.sun', sunA], ['.moon', moonA]].forEach(function(p){
+        var t = el.querySelector(p[0]);
+        t.setAttribute('x', (60 + Math.sin(p[1]) * 56).toFixed(1));
+        t.setAttribute('y', (60 - Math.cos(p[1]) * 56).toFixed(1));
+      });
+      var read = el.querySelector('.tempus-read');
+      if(read.getAttribute('data-lang') !== lang){   // (re)build the labels only when the language changes
+        read.innerHTML = [
+          ['🕰', T('Muggle time', 'เวลาโลกมักเกิ้ล')], ['🏰', T('Hogwarts time', 'เวลาฮอกวอตส์')],
+          ['✨', T('Magical hour', 'ชั่วโมงเวทมนตร์')], ['', T('Moon', 'ดวงจันทร์')], ['', T('Sun sign', 'ราศี')]
+        ].map(function(r){ return '<div><span class="ic">' + r[0] + '</span> <span class="lb">' + r[1] + '</span> <b></b></div>'; }).join('');
+        read.setAttribute('data-lang', lang);
+      }
+      var vals = [
+        now.toLocaleTimeString(loc) + ' · ' + now.toLocaleDateString(loc, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }),
+        hogTime + ' ' + T('(Scotland)', '(สกอตแลนด์)'),
+        T(hour[1], hour[2]),
+        T(moon[1], moon[2]) + ' · ' + lit + T('% lit', '% สว่าง'),
+        T(sign[3], sign[4])
+      ];
+      var bs = read.querySelectorAll('b'), ics = read.querySelectorAll('.ic');
+      vals.forEach(function(v, i){ bs[i].textContent = v; });
+      ics[3].textContent = moon[0]; ics[4].textContent = sign[2];
+    }
+
     // two-column list that reflows on phones; each entry is [label, description, cmd?]
     // label '-' = section heading; cmd ending in a space only fills the prompt (needs an argument)
     function rows(list){
@@ -1110,7 +1226,6 @@
           ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
           ['sort', T('let the Hat sort you', 'ให้หมวกคัดสรรเลือกบ้าน')],
           ['lang', T('switch TH / EN', 'สลับภาษา TH / EN')],
-          ['sound on|off', T('turn spell sounds on / off', 'เปิด / ปิดเสียงคาถา'), 'sound'],
           ['clear', T('clear the screen', 'ล้างหน้าจอ')]
         ]);
         line(T('…and a few spells, if you know any. Type spells to see them all.', '…และคาถาอีกเพียบ พิมพ์ spells เพื่อดูทั้งหมด'), 'hint');
@@ -1192,12 +1307,17 @@
           ['wingardium leviosa', T('make the terminal float', 'ทำให้เทอร์มินัลลอยได้')],
           ['vulnera sanentur', T('heal all wounds 🌿', 'รักษาบาดแผลทั้งหมด 🌿')],
           ['-', T('✦ ELEMENTS', '✦ ธาตุ')],
-          ['incendio', T('fire aura & rising embers 🔥', 'ออร่าเปลวไฟและสะเก็ดไฟ 🔥')],
-          ['aguamenti', T('water wave & raindrops 💧', 'คลื่นน้ำและหยดน้ำ 💧')],
+          ['incendio', T('Gryffindor-warm firelight & embers 🔥', 'ไฟส้ม-ทองอบอุ่นแบบห้องนั่งเล่นกริฟฟินดอร์ 🔥')],
+          ['aguamenti', T('aqua spray & rippling water light 💧', 'ละอองน้ำฟ้าครามและแสงระลอกคลื่น 💧')],
           ['bombarda', T('blasting charm — shakes the screen 💥', 'คาถาระเบิด หน้าจอสั่นสะเทือน 💥')],
-          ['riddikulus', T('rainbow party & confetti 🎈', 'โหมดปาร์ตี้สายรุ้ง 🎈')],
+          ['riddikulus', T('rainbow party — laughs away dark themes 🎈', 'โหมดสายรุ้ง แก้ทางธีมมืด 🎈')],
+          ['-', T('⚔ DUELLING', '⚔ คาถาดวล')],
+          ['stupefy', T('Stunning Spell: a jet of red light ⚡', 'คาถาสะกดนิ่ง: ลำแสงสีแดง ⚡')],
+          ['expelliarmus', T('Disarming Charm: send their wand flying 🪄', 'คาถาปลดอาวุธ: ไม้กายสิทธิ์กระเด็น 🪄')],
+          ['petrificus totalus', T('Full Body-Bind: freeze every animation ❄️', 'คาถาสะกดร่าง: แช่แข็งทุกแอนิเมชัน ❄️')],
           ['-', T('✦ UTILITY', '✦ คาถาใช้งาน')],
-          ['accio <item>', T('summon a page: projects, work, packages, contact', 'เรียกหน้า: projects, work, packages, contact'), 'accio '],
+          ['accio <item>', T('summon: resume, projects, contact, github, linkedin, email…', 'เรียก: resume, projects, contact, github, linkedin, email…'), 'accio '],
+          ['tempus', T('astronomical clock: Muggle & magical time ⏱️', 'นาฬิกาดาราศาสตร์: เวลามักเกิ้ลและเวลาเวทมนตร์ ⏱️')],
           ['obliviate', T('wipe terminal memory & history 🧠', 'ล้างความจำและประวัติทั้งหมด 🧠')],
           ['mischief managed', T('clear the map', 'ลบแผนที่')],
           ['-', T('☠ DARK ARTS', '☠ ศาสตร์มืด')],
@@ -1207,7 +1327,7 @@
           ['morsmordre', T('conjure the Dark Mark 💀🐍', 'เสกตรามารหัวกะโหลกและงู 💀🐍')],
           ['sectumsempra', T('slashing curse 🩸', 'คาถาฟันเฉือน 🩸')]
         ]);
-        line(T('Tip: lumos resets any theme · sound off mutes spells', 'เคล็ดลับ: lumos คืนค่าทุกธีม · sound off ปิดเสียงคาถา'), 'hint');
+        line(T('Tip: lumos resets any theme', 'เคล็ดลับ: พิมพ์ lumos เพื่อคืนค่าทุกธีม'), 'hint');
       },
       // spells
       lumos: function(){
@@ -1286,13 +1406,13 @@
       incendio: function(){
         setTheme('theme-incendio', 'flash-incendio');
         spell('Incendio!', 'fire');
-        line(T('🔥 Flames erupt! Warm fiery flame aura engulfs the castle (#ff5500).', '🔥 เปลวเพลิงลุกโชน! ออร่าสีส้มทองอบอุ่นปกคลุมปราสาท (#ff5500)'));
+        line(T('🔥 Flames roar to life! Orange-gold firelight warms the castle like the Gryffindor common room (#ff4500 / #ffaa00).', '🔥 เปลวเพลิงลุกโชน! แสงไฟส้ม-ทองอบอุ่นเหมือนห้องนั่งเล่นกริฟฟินดอร์ (#ff4500 / #ffaa00)'));
         line(T('Fire theme active. Type lumos to reset.', 'ธีมเปลวไฟทำงาน พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       aguamenti: function(){
         setTheme('theme-aguamenti', 'flash-aguamenti');
         spell('Aguamenti!', 'water');
-        line(T('💧 A surging wave of clear water washes over the realm (#00d2ff).', '💧 ระลอกคลื่นน้ำใสเย็นชโลมทั่วหน้าเว็บ (#00d2ff)'));
+        line(T('💧 Cool aqua spray and rippling water light wash over the realm (#00c6ff / #0072ff).', '💧 ละอองน้ำสีฟ้าครามสดชื่นพร้อมแสงระลอกคลื่นน้ำ (#00c6ff / #0072ff)'));
         line(T('Aqua theme active. Type lumos to reset.', 'ธีมสายน้ำทำงาน พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       bombarda: function(){
@@ -1307,21 +1427,36 @@
       riddikulus: function(){
         setTheme('theme-riddikulus', 'flash-riddikulus');
         spell('Riddikulus!', 'charm');
-        line(T('🎈 Boggart banished! The realm bursts into colorful rainbow party vibes.', '🎈 กำจัดบ็อกการ์ทสำเร็จ! ปราสาทเปลี่ยนเป็นสีลูกกวาดสายรุ้งสุดคึกคัก'));
+        line(T('🎈 Boggart banished! Every dark curse is laughed away — the realm bursts into rainbow candy colours.', '🎈 กำจัดบ็อกการ์ทสำเร็จ! ความมืดทั้งหมดถูกหัวเราะใส่จนหายไป ปราสาทกลายเป็นสีลูกกวาดสายรุ้ง'));
         line(T('Party mode active! Type lumos to reset.', 'โหมดปาร์ตี้สายรุ้งทำงาน! พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       accio: function(args){
         var target = (args[0] || '').toLowerCase().replace(/^[#./]+/, '').replace(/[!.?]+$/, '');
         if(!target){
-          line(T('Accio what? Try: accio resume, accio projects, accio work, accio packages, accio contact', 'เรียกอะไรดี? ลอง: accio resume, accio projects, accio work, accio packages, accio contact'), 'hint');
+          line(T('Accio what? Try: accio resume, projects, contact, work, packages, github, linkedin, youtube or email', 'เรียกอะไรดี? ลอง: accio resume, projects, contact, work, packages, github, linkedin, youtube หรือ email'), 'hint');
           return;
         }
         spell('Accio ' + target.toUpperCase() + '!', 'charm');
         if(target === 'work') { line(T('Summoning live demos…', 'กำลังเรียกเดโม…')); location.href = '/work'; return; }
-        if(target === 'packages' || target === 'fastwork' || target === 'hire') { line(T('Summoning packages…', 'กำลังเรียกแพ็กเกจ…')); location.href = 'packages.html'; return; }
+        if(target === 'packages' || target === 'hire') { line(T('Summoning packages…', 'กำลังเรียกแพ็กเกจ…')); location.href = 'packages.html'; return; }
         if(target === 'projects' || target === 'skills' || target === 'about' || target === 'contact') {
           line(T('Summoning section: ', 'กำลังนำทางไปที่: ') + target + '…');
           go(target);
+          return;
+        }
+        var LINKS = {
+          github: 'https://github.com/BR0WNDY', linkedin: 'https://www.linkedin.com/in/browndy-moconi/',
+          youtube: 'https://www.youtube.com/@Browndy_Moconi', fastwork: FASTWORK
+        };
+        if(LINKS[target]){
+          line(T('🦉 Summoning ', '🦉 กำลังเรียก ') + target + T(' in a new tab…', ' ในแท็บใหม่…'));
+          var win = window.open(LINKS[target], '_blank', 'noopener');
+          if(!win) link('→ ' + LINKS[target].replace(/^https?:\/\/(www\.)?/, ''), LINKS[target], true);   // pop-up blocked: give a link instead
+          return;
+        }
+        if(target === 'email' || target === 'mail' || target === 'owl'){
+          line(T('🦉 Sending an owl…', '🦉 กำลังส่งนกฮูก…'));
+          location.href = 'mailto:browndy_moconi@icloud.com';
           return;
         }
         if(target === 'resume' || target === 'cv') {
@@ -1329,14 +1464,14 @@
           go('about');
           return;
         }
-        line(T('Accio: could not locate “', 'Accio: ไม่พบสิ่งของ “') + target + T('” — try projects, work, packages, contact', '” — ลอง projects, work, packages, contact'), 'err');
+        line(T('Accio: could not locate “', 'Accio: ไม่พบสิ่งของ “') + target + T('” — try resume, projects, contact, work, github or email', '” — ลอง resume, projects, contact, work, github หรือ email'), 'err');
       },
       obliviate: function(){
         history = []; hIdx = 0;
         setTheme();
         log.textContent = '';
         spell('Obliviate!', 'charm');
-        line(T('🧠 Obliviate! Command memory wiped… Who am I? Who are you? 🤔', '🧠 อ็อบลิวิเอต! ความจำทั้งหมดถูกล้างแล้ว… เราเป็นใคร? แล้วคุณคือใครนะ? 🤔'));
+        line(T('🧠 Obliviate! Your memory is completely gone… wait, who are we again? 🤔', '🧠 ออบลิวิเอต! ความจำคุณหายไปหมดแล้ว... เราเป็นใครนะ? 🤔'));
         line(T('Type help to rediscover commands.', 'พิมพ์ help เพื่อค้นหาคำสั่งอีกครั้ง'), 'hint');
       },
       alohomora: function(){
@@ -1347,6 +1482,53 @@
         spell('Wingardium Leviosa!', 'charm');
         line(T("It's Levi-O-sa, not Levio-SA.", 'ต้องเป็น เลวี-โอ-ซา ไม่ใช่ เลวิโอ-ซ้า'));
         window.scrollBy({top:-60});
+      },
+      stupefy: function(){
+        spell('Stupefy!', 'stun');
+        line(T('⚡ A jet of red light streaks across the castle — target stunned!', '⚡ ลำแสงสีแดงพุ่งข้ามปราสาท — เป้าหมายถูกสะกดให้นิ่งแล้ว!'));
+      },
+      expelliarmus: function(){
+        spell('Expelliarmus!', 'stun');
+        line(T('🪄 The Disarming Charm! Your opponent\'s wand goes flying.', '🪄 คาถาปลดอาวุธ! ไม้กายสิทธิ์ของคู่ต่อสู้กระเด็นหลุดมือ'));
+      },
+      'petrificus totalus': function(){
+        setTheme('petrified');
+        spell('Petrificus Totalus!', 'ice');
+        line(T('❄️ Full Body-Bind! Every animation freezes — the stars stop twinkling, the portrait ring stops turning.', '❄️ คาถาสะกดร่าง! ทุกแอนิเมชันหยุดนิ่ง ดวงดาวเลิกกะพริบ วงแหวนโปรไฟล์หยุดหมุน'));
+        line(T('The castle is frozen in icy blue-grey. Type lumos to thaw it.', 'ปราสาทกลายเป็นสีน้ำแข็งฟ้าอมเทา พิมพ์ lumos เพื่อละลาย'), 'hint');
+      },
+      tempus: function(){
+        spell('Tempus!', 'gold');
+        var now = new Date();
+        var d = line('', 'tempus');
+        d.innerHTML =
+          '<svg class="astro" viewBox="0 0 120 120" aria-hidden="true">' +
+            '<circle cx="60" cy="60" r="56" class="rim"/><g class="zodiac"></g>' +
+            '<circle cx="60" cy="60" r="38" class="inner"/>' +
+            '<line x1="60" y1="60" x2="60" y2="30" class="hand-h"/><line x1="60" y1="60" x2="60" y2="22" class="hand-m"/>' +
+            '<line x1="60" y1="60" x2="60" y2="18" class="hand-s"/>' +
+            '<text class="sun" text-anchor="middle" dominant-baseline="central">☀</text>' +
+            '<text class="moon" text-anchor="middle" dominant-baseline="central">☾</text>' +
+            '<circle cx="60" cy="60" r="3" class="pin"/>' +
+          '</svg><div class="tempus-read"></div>';
+        // 24 tick marks + 12 zodiac glyphs on the outer rim
+        var z = d.querySelector('.zodiac'), glyphs = '♈♉♊♋♌♍♎♏♐♑♒♓', html = '';
+        for(var i = 0; i < 24; i++){
+          var a = i / 24 * Math.PI * 2, r1 = i % 2 ? 52 : 49;
+          html += '<line x1="' + (60 + Math.sin(a) * r1).toFixed(1) + '" y1="' + (60 - Math.cos(a) * r1).toFixed(1) +
+                  '" x2="' + (60 + Math.sin(a) * 55).toFixed(1) + '" y2="' + (60 - Math.cos(a) * 55).toFixed(1) + '"/>';
+        }
+        for(var j = 0; j < 12; j++){
+          var b = (j + .5) / 12 * Math.PI * 2;
+          html += '<text x="' + (60 + Math.sin(b) * 44).toFixed(1) + '" y="' + (60 - Math.cos(b) * 44).toFixed(1) + '" text-anchor="middle" dominant-baseline="central">' + glyphs[j] + '</text>';
+        }
+        z.innerHTML = html;
+        tickTempus(d, now);
+        var timer = setInterval(function(){
+          if(!d.isConnected){ clearInterval(timer); return; }
+          tickTempus(d, new Date());
+        }, 1000);
+        setTimeout(function(){ clearInterval(timer); }, 5 * 60 * 1000);   // stop ticking after 5 minutes
       },
       'mischief managed': function(){
         setTheme();
@@ -1362,6 +1544,7 @@
     commands.leviosa = commands['wingardium leviosa'];
     commands.avada = commands.avadakedavra = commands.dark = commands['avada kedavra'];
     commands.sanentur = commands['vulnera sanentur'];
+    commands.petrificus = commands['petrificus totalus'];
     commands.protego = function(){
       spell('Protego!', 'charm');
       line(T('A shimmering shield barrier appears. The castle is secure.', 'เกราะเวทมนตร์สีเงินเปล่งประกาย ปราสาทปลอดภัยแล้ว'));
@@ -1412,6 +1595,29 @@
       var r = (spells.length ? spells[spells.length - 1] : form).getBoundingClientRect();
       var x = r.left + Math.min(r.width / 2, 160), y = r.top + r.height / 2;
       return { x: Math.max(40, Math.min(innerWidth - 40, x)), y: Math.max(80, Math.min(innerHeight - 60, y)) };
+    }
+    // duelling spells aim at the portrait when it is on screen, otherwise at the top-right of the viewport
+    function target(){
+      var p = document.querySelector('.portrait-frame');
+      if(p){
+        var r = p.getBoundingClientRect();
+        if(r.bottom > 40 && r.top < innerHeight - 40) return { x: r.left + r.width / 2, y: r.top + r.height / 2, el: p };
+      }
+      return { x: innerWidth * .82, y: innerHeight * .18, el: null };
+    }
+    // a straight jet of light from the wand to the target
+    function beam(layer, o, t, color, dur){
+      var len = Math.round(Math.hypot(t.x - o.x, t.y - o.y));
+      fxEl(layer, 'fx-beam', { c: color, len: len, t: dur },
+        '<svg width="100%" height="100%"><line x1="' + o.x + '" y1="' + o.y + '" x2="' + t.x + '" y2="' + t.y +
+        '" stroke="' + color + '" stroke-width="5" stroke-linecap="round"/><line x1="' + o.x + '" y1="' + o.y + '" x2="' + t.x + '" y2="' + t.y +
+        '" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>');
+    }
+    // briefly mark the element that was hit
+    function hit(el, cls, ms){
+      if(!el) return;
+      el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+      setTimeout(function(){ el.classList.remove(cls); }, ms);
     }
     function burst(layer, o, n, colors, dMin, dMax, extra){
       for(var i = 0; i < n; i++){
@@ -1498,16 +1704,22 @@
       },
       incendio: function(){
         var L = fxLayer(3600);
-        fxEl(L, 'fx-flash', { c: '#ff5500', o: '.2', t: '.6s' });
-        rise(L, 60, ['#ff5500', '#ffaa00', '#ffd166', '#ff7a00'], { min: .35, max: .9 });
+        fxEl(L, 'fx-flash', { c: '#ff4500', o: '.2', t: '.6s' });
+        rise(L, 60, ['#ff4500', '#ffaa00', '#ffd166', '#ff7a00'], { min: .35, max: .9 });
       },
       aguamenti: function(){
         var L = fxLayer(3600);
         fxEl(L, 'fx-wave', {}, '<svg width="100%" height="100%" viewBox="0 0 1200 300" preserveAspectRatio="none">' +
           '<defs><linearGradient id="fxw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7dd3fc" stop-opacity=".75"/>' +
-          '<stop offset="1" stop-color="#0066ff" stop-opacity=".25"/></linearGradient></defs>' +
+          '<stop offset="1" stop-color="#0072ff" stop-opacity=".25"/></linearGradient></defs>' +
           '<path d="M0 60 C150 0 300 120 450 60 S750 0 900 60 S1150 120 1200 60 V300 H0Z" fill="url(#fxw)"/></svg>');
-        fall(L, 34, ['#00d2ff', '#7dd3fc', '#e0f7ff'], { cls: 'drop', drift: 20, sMin: 5, sMax: 9, tMin: 1.1, tMax: 1.9 });
+        fall(L, 34, ['#00c6ff', '#7dd3fc', '#e0f7ff'], { cls: 'drop', drift: 20, sMin: 5, sMax: 9, tMin: 1.1, tMax: 1.9 });
+        // rippling water light: concentric rings spreading from the wand
+        var o = wand();
+        [0, .25, .5, .75].forEach(function(d){
+          fxEl(L, 'fx-ring', { x: o.x + 'px', y: o.y + 'px', size: '620px', c: 'rgba(0,198,255,.7)', t: '1.6s', d: d + 's' });
+        });
+        fxEl(L, 'fx-caustics', {});
       },
       bombarda: function(){
         var L = fxLayer(1800), o = wand();
@@ -1549,6 +1761,41 @@
         var L = fxLayer(3400);
         rise(L, 16, ['#ffffff', '#e2e8f0'], { min: .25, max: .6, sMin: 4, sMax: 7, spread: 1 });
       },
+      stupefy: function(){
+        var L = fxLayer(1800), o = wand(), t = target();
+        beam(L, o, t, '#ff3b3b', '.45s');
+        fxEl(L, 'fx-ring', { x: t.x + 'px', y: t.y + 'px', size: '320px', c: '#ff3b3b', t: '.7s', d: '.35s' });
+        fxEl(L, 'fx-flash', { c: '#ff2a2a', o: '.18', t: '.5s' });
+        burst(L, t, 26, ['#ff3b3b', '#ff8a8a', '#ffffff'], 60, 220, { d: .35 });
+        hit(t.el, 'stunned', 1200);
+      },
+      expelliarmus: function(){
+        var L = fxLayer(2400), o = wand(), t = target();
+        beam(L, o, t, '#ff5a3c', '.4s');
+        fxEl(L, 'fx-ring', { x: t.x + 'px', y: t.y + 'px', size: '240px', c: '#ffb199', t: '.6s', d: '.3s' });
+        burst(L, t, 18, ['#ff5a3c', '#ffd2c4', '#ffffff'], 40, 160, { d: .3 });
+        // the opponent's wand spins off the screen
+        var dirX = t.x > innerWidth / 2 ? 1 : -1;
+        fxEl(L, 'fx-wand', { x: t.x + 'px', y: t.y + 'px', dx: (dirX * rnd(.22, .3) * innerWidth) + 'px', dy: -(innerHeight * rnd(.35, .45)) + 'px', r: (dirX * 1080) + 'deg' }, '🪄');
+        hit(t.el, 'stunned', 700);
+      },
+      'petrificus totalus': function(){
+        var L = fxLayer(2400), W = innerWidth, H = innerHeight;
+        fxEl(L, 'fx-flash', { c: '#cfefff', o: '.4', t: '.7s' });
+        fxEl(L, 'fx-vignette', { c: 'rgba(200,235,255,.75)', blur: '200px', spread: '30px', t: '2.2s' });
+        for(var i = 0; i < 26; i++){   // ice crystals glinting as everything locks in place
+          fxP(L, { x: rnd(0, W), y: rnd(0, H), dx: rnd(-14, 14), dy: rnd(-14, 14), r: rnd(-90, 90), s: rnd(4, 9),
+            c: pick(['#e0f7ff', '#bfe3f2', '#ffffff']), t: rnd(1, 1.8), d: rnd(0, .5), cls: 'sq' });
+        }
+        var term = form.closest('.term');
+        if(term){ term.classList.remove('stiffen'); void term.offsetWidth; term.classList.add('stiffen'); setTimeout(function(){ term.classList.remove('stiffen'); }, 400); }
+      },
+      tempus: function(){
+        var L = fxLayer(1800), o = wand();
+        fxEl(L, 'fx-ring', { x: o.x + 'px', y: o.y + 'px', size: '360px', c: '#e3c766', t: '1s' });
+        fxEl(L, 'fx-ring', { x: o.x + 'px', y: o.y + 'px', size: '220px', c: '#fff4c2', t: '.8s', d: '.15s' });
+        burst(L, o, 16, ['#e3c766', '#fff4c2'], 50, 170);
+      },
       charm: function(){
         var L = fxLayer(1800), o = wand();
         fxEl(L, 'fx-glow', { x: o.x + 'px', y: o.y + 'px', size: '700px', c: 'rgba(0,242,254,.45)', t: '1s' });
@@ -1561,163 +1808,15 @@
       try { FX[name](args); } catch(e){ /* effects are decorative — never break the terminal */ }
     }
 
-    // ---------- spell sounds (synthesised with Web Audio — no audio files) ----------
-    var soundOn = true;
-    try { soundOn = localStorage.getItem('site:sound') !== 'off'; } catch(e){}
-    var AC = null, master = null, noiseBuf = null;
-    function audio(){
-      if(!AC){
-        var Ctx = window.AudioContext || window.webkitAudioContext;
-        if(!Ctx) return null;
-        AC = new Ctx();
-        var comp = AC.createDynamicsCompressor();
-        master = AC.createGain(); master.gain.value = .35;
-        master.connect(comp); comp.connect(AC.destination);
-        noiseBuf = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate);
-        var ch = noiseBuf.getChannelData(0);
-        for(var i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1;
-      }
-      if(AC.state === 'suspended' && AC.resume) AC.resume();
-      return AC;
-    }
-    // gain envelope: fade in over a, hold, fade out over the last rel seconds
-    function envelope(g, t0, a, peak, dur, rel){
-      a = Math.min(a, dur / 2); rel = Math.min(rel, dur - a);
-      g.gain.setValueAtTime(.0001, t0);
-      g.gain.exponentialRampToValueAtTime(peak, t0 + a);
-      g.gain.setValueAtTime(peak, t0 + dur - rel);
-      g.gain.exponentialRampToValueAtTime(.0001, t0 + dur);
-    }
-    // tone({f, to, type, dur, at, gain, a, rel, vib:[rate, depth]})
-    function tone(o){
-      var t0 = AC.currentTime + (o.at || 0), dur = o.dur || .4;
-      var osc = AC.createOscillator(), g = AC.createGain();
-      osc.type = o.type || 'sine';
-      osc.frequency.setValueAtTime(o.f, t0);
-      if(o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t0 + dur);
-      if(o.vib){
-        var lfo = AC.createOscillator(), lg = AC.createGain();
-        lfo.frequency.value = o.vib[0]; lg.gain.value = o.vib[1];
-        lfo.connect(lg); lg.connect(osc.frequency);
-        lfo.start(t0); lfo.stop(t0 + dur + .05);
-      }
-      envelope(g, t0, o.a || .01, o.gain || .25, dur, o.rel || dur * .6);
-      osc.connect(g); g.connect(master);
-      osc.start(t0); osc.stop(t0 + dur + .05);
-    }
-    // noise({dur, at, gain, type, f, to, q, a, rel}) — filtered white noise for whooshes, booms, hiss
-    function noise(o){
-      var t0 = AC.currentTime + (o.at || 0), dur = o.dur || .4;
-      var src = AC.createBufferSource(), flt = AC.createBiquadFilter(), g = AC.createGain();
-      src.buffer = noiseBuf; src.loop = true;
-      flt.type = o.type || 'lowpass'; flt.Q.value = o.q || 1;
-      flt.frequency.setValueAtTime(o.f || 1000, t0);
-      if(o.to) flt.frequency.exponentialRampToValueAtTime(o.to, t0 + dur);
-      envelope(g, t0, o.a || .01, o.gain || .3, dur, o.rel || dur * .7);
-      src.connect(flt); flt.connect(g); g.connect(master);
-      src.start(t0, Math.random()); src.stop(t0 + dur + .05);
-    }
-    function chime(notes, step, opt){
-      opt = opt || {};
-      notes.forEach(function(f, i){ tone({ f: f, type: opt.type || 'sine', dur: opt.dur || .6, at: (opt.at || 0) + i * step, gain: opt.gain || .16, rel: (opt.dur || .6) * .8 }); });
-    }
-
-    var SFX = {
-      lumos: function(){ chime([1047, 1319, 1568, 2093], .07, { dur: .7, gain: .14 }); noise({ type: 'highpass', f: 6000, dur: .5, gain: .05, a: .05 }); },
-      nox: function(){ tone({ f: 600, to: 140, dur: .6, gain: .18 }); noise({ type: 'lowpass', f: 1200, to: 200, dur: .5, gain: .08 }); },
-      'expecto patronum': function(){
-        [440, 554, 659, 880].forEach(function(f, i){ tone({ f: f, dur: 2, a: .35, gain: .09, at: i * .06, vib: [5, 3] }); tone({ f: f * 1.003, dur: 2, a: .4, gain: .05, at: i * .06 }); });
-        noise({ type: 'highpass', f: 7000, dur: 1.6, gain: .04, a: .4 });
-      },
-      'avada kedavra': function(){
-        noise({ type: 'highpass', f: 1500, dur: .25, gain: .5, a: .003, rel: .2 });
-        tone({ f: 1400, to: 60, type: 'sawtooth', dur: .5, gain: .2, a: .003 });
-        noise({ type: 'lowpass', f: 400, to: 60, dur: 1.4, gain: .35, at: .08, a: .05 });
-      },
-      crucio: function(){
-        tone({ f: 220, type: 'sawtooth', dur: .9, gain: .1, vib: [17, 25] });
-        tone({ f: 233, type: 'sawtooth', dur: .9, gain: .1, vib: [13, 30] });
-        noise({ type: 'bandpass', f: 1800, q: 4, dur: .7, gain: .12 });
-      },
-      imperio: function(){
-        tone({ f: 392, to: 294, dur: 1.8, gain: .12, a: .3, vib: [3, 18] });
-        tone({ f: 396, to: 297, dur: 1.8, gain: .08, a: .4, vib: [2.3, 22] });
-        tone({ f: 98, dur: 1.8, gain: .1, a: .4 });
-      },
-      morsmordre: function(){
-        tone({ f: 55, type: 'sawtooth', dur: 2.4, gain: .14, a: .5, vib: [.6, 2] });
-        tone({ f: 82.4, type: 'triangle', dur: 2.4, gain: .1, a: .6 });
-        noise({ type: 'highpass', f: 4500, dur: .9, gain: .1, at: .9, a: .2 });   // the serpent's hiss
-      },
-      sectumsempra: function(){
-        [0, .18, .36].forEach(function(t){ noise({ type: 'bandpass', f: 5000, to: 600, q: 3, dur: .22, gain: .45, at: t, a: .005 }); });
-        tone({ f: 180, to: 90, type: 'triangle', dur: .4, gain: .1, at: .4 });
-      },
-      'vulnera sanentur': function(){ chime([523, 659, 784, 1047, 1319], .14, { dur: 1, gain: .12 }); },
-      incendio: function(){
-        noise({ type: 'lowpass', f: 300, to: 4000, dur: .7, gain: .35, a: .15 });
-        for(var i = 0; i < 16; i++) noise({ type: 'highpass', f: 2500, dur: .03, gain: rnd(.08, .2), at: rnd(.2, 1.8), a: .002, rel: .025 });
-      },
-      aguamenti: function(){
-        noise({ type: 'bandpass', f: 500, to: 1500, q: 1.5, dur: 1.6, gain: .25, a: .3 });
-        for(var i = 0; i < 12; i++){ var f = rnd(400, 900); tone({ f: f, to: f * 1.8, dur: .07, gain: .1, at: rnd(.1, 1.4), a: .005 }); }
-      },
-      bombarda: function(){
-        tone({ f: 130, to: 32, dur: .9, gain: .6, a: .005 });
-        noise({ type: 'lowpass', f: 2500, to: 120, dur: 1.2, gain: .55, a: .005 });
-        noise({ type: 'highpass', f: 3000, dur: .15, gain: .3, a: .002 });
-      },
-      riddikulus: function(){
-        chime([523, 659, 784, 1047, 784, 1047], .08, { type: 'square', dur: .18, gain: .14 });
-        tone({ f: 300, to: 900, type: 'sawtooth', dur: .35, gain: .12, at: .5 });
-      },
-      accio: function(args){
-        if(!args || !args[0]) return;
-        noise({ type: 'bandpass', f: 300, to: 3500, q: 2, dur: .7, gain: .3, a: .3 });
-        tone({ f: 1568, dur: .5, gain: .12, at: .7 });
-      },
-      obliviate: function(){
-        noise({ type: 'lowpass', f: 400, to: 6000, dur: .9, gain: .25, a: .6, rel: .3 });
-        tone({ f: 880, to: 220, dur: 1.2, gain: .1, at: .6, vib: [6, 10] });
-      },
-      protego: function(){
-        tone({ f: 220, dur: 1.4, gain: .12, a: .05 });
-        tone({ f: 330, dur: 1.4, gain: .1, a: .05 });
-        tone({ f: 1760, dur: .8, gain: .1, a: .005 });
-      },
-      alohomora: function(){
-        noise({ type: 'bandpass', f: 3000, q: 5, dur: .04, gain: .4, a: .002 });
-        noise({ type: 'bandpass', f: 2200, q: 5, dur: .05, gain: .4, at: .12, a: .002 });
-        tone({ f: 1319, dur: .6, gain: .12, at: .22 });
-      },
-      'wingardium leviosa': function(){ tone({ f: 330, to: 660, dur: 1.4, gain: .12, a: .3, vib: [5, 8] }); chime([1319, 1568], .3, { at: .8, gain: .07 }); },
-      charm: function(){ for(var i = 0; i < 10; i++) tone({ f: rnd(1800, 3200), dur: .12, gain: .07, at: i * .05 + rnd(0, .03) }); }
-    };
-    SFX['rm -rf /'] = SFX.protego;
-    function castSfx(name, args){
-      if(!soundOn || !SFX[name]) return;
-      try { if(audio()) SFX[name](args); } catch(e){ /* sound is decorative — never break the terminal */ }
-    }
-    commands.sound = function(args){
-      var want = (args[0] || '').toLowerCase();
-      if(want === 'on' || want === 'off') soundOn = want === 'on';
-      else if(!want) soundOn = !soundOn;
-      try { localStorage.setItem('site:sound', soundOn ? 'on' : 'off'); } catch(e){}
-      if(soundOn) audio();
-      line(soundOn ? T('🔊 Sound on — spells will be heard.', '🔊 เปิดเสียงแล้ว — ร่ายคาถาแล้วจะได้ยินเสียง') : T('🔇 Sound off.', '🔇 ปิดเสียงแล้ว'), 'hint');
-    };
-    commands.mute = function(){ commands.sound(['off']); };
-    commands.unmute = function(){ commands.sound(['on']); };
-
-    // wrap each spell (and every alias pointing at the same function) so its effect + sound play after it is cast
+    // wrap each spell (and every alias pointing at the same function) so its effect plays after it is cast
     Object.keys(FX).forEach(function(name){
       var orig = commands[name];
       if(!orig) return;
-      var wrapped = function(args){ var r = orig.apply(this, arguments); castFx(name, args); castSfx(name, args); return r; };
+      var wrapped = function(args){ var r = orig.apply(this, arguments); castFx(name, args); return r; };
       Object.keys(commands).forEach(function(k){ if(commands[k] === orig) commands[k] = wrapped; });
     });
 
-    var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'theme-incendio', 'theme-aguamenti', 'theme-riddikulus', 'theme-crucio', 'theme-morsmordre', 'theme-imperio', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'flash-incendio', 'flash-aguamenti', 'flash-riddikulus', 'flash-crucio', 'flash-morsmordre', 'flash-imperio', 'avada-flash', 'shake-screen'];
+    var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'theme-incendio', 'theme-aguamenti', 'theme-riddikulus', 'theme-crucio', 'theme-morsmordre', 'theme-imperio', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'flash-incendio', 'flash-aguamenti', 'flash-riddikulus', 'flash-crucio', 'flash-morsmordre', 'flash-imperio', 'avada-flash', 'shake-screen', 'petrified'];
     function setTheme(themeClass, flashClass){
       ALL_THEMES.forEach(function(c){ document.body.classList.remove(c); });
       var mark = document.querySelector('.dark-mark');
@@ -1766,7 +1865,7 @@
 
     // quick-cast chips — tap instead of typing (shown on phones / touch screens)
     var CAST_POOL = ['lumos', 'nox', 'expecto patronum', 'charm', 'protego', 'alohomora', 'wingardium leviosa', 'vulnera sanentur',
-      'incendio', 'aguamenti', 'bombarda', 'riddikulus', 'avada kedavra', 'crucio', 'imperio', 'morsmordre', 'sectumsempra'];
+      'incendio', 'aguamenti', 'bombarda', 'riddikulus', 'stupefy', 'expelliarmus', 'petrificus totalus', 'tempus', 'avada kedavra', 'crucio', 'imperio', 'morsmordre', 'sectumsempra'];
     var chips = document.createElement('div');
     chips.className = 'term-chips';
     [['help', 'help'], ['spells', 'spells'], ['✦ ' + T('random spell', 'สุ่มคาถา'), '__random'], ['lumos', 'lumos']].forEach(function(c){
