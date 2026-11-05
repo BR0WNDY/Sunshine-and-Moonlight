@@ -190,6 +190,8 @@
   .spell.charm{text-shadow:0 0 10px #00f2fe,0 0 25px #0077fe}
   .spell.dark{text-shadow:0 0 10px #00ff87,0 0 25px #10b981}
   .spell.patronus{text-shadow:0 0 14px #fff,0 0 30px #b0e0e6}
+  .spell.fire{text-shadow:0 0 12px #ff7a00,0 0 28px #ff2200}
+  .spell.water{text-shadow:0 0 12px #00d2ff,0 0 28px #0055ff}
   @keyframes cast{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.1);opacity:1}100%{transform:scale(1)}}
   body.lit .glow{background:
       radial-gradient(900px 560px at 80% -8%, rgba(79,121,201,.65), transparent 60%),
@@ -305,6 +307,110 @@
     0%{filter:brightness(1)}
     15%{filter:brightness(4) drop-shadow(0 0 60px #ffffff)}
     100%{filter:brightness(1)}
+  }
+
+  /* 4. Incendio: Fiery Flame & Ember glow (#ff5500 / #ffaa00) */
+  body.theme-incendio{
+    --ink:#1a0803;
+    --night:#2a0f06;
+    --night-2:#3d170a;
+    --term:#120502;
+    --ravenclaw:#b83a00;
+    --ravenclaw-bright:#ff6b2b;
+    --bronze:#ff7a00;
+    --bronze-soft:#ffa64d;
+    --charm:#ffaa00;
+    --line:rgba(255,122,0,.28);
+    --line-soft:rgba(255,122,0,.14);
+  }
+  body.theme-incendio .glow{
+    background:
+      radial-gradient(900px 520px at 80% -8%, rgba(255,85,0,.5), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(255,170,0,.4), transparent 60%);
+  }
+  body.theme-incendio .stars{filter:sepia(1) hue-rotate(-25deg) saturate(4) brightness(1.3)}
+  body.theme-incendio .hero h1{
+    background:linear-gradient(180deg,#ffffff 10%,#fed7aa 70%,#ff7a00 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  body.theme-incendio .portrait-frame{
+    background:radial-gradient(circle at 50% 35%, #b83a00, var(--night) 70%);
+    box-shadow:0 0 0 10px rgba(255,122,0,.15),0 0 65px -10px rgba(255,85,0,.6),0 30px 60px -20px rgba(0,0,0,.7);
+  }
+  body.flash-incendio{animation:flashIncendio .8s ease-out}
+  @keyframes flashIncendio{
+    0%{filter:brightness(1)}
+    15%{filter:brightness(3.2) drop-shadow(0 0 55px #ff5500)}
+    100%{filter:brightness(1)}
+  }
+
+  /* 5. Aguamenti: Ocean Aqua & Water surge (#00d2ff / #0066ff) */
+  body.theme-aguamenti{
+    --ink:#02111d;
+    --night:#041f33;
+    --night-2:#072d4a;
+    --term:#010c14;
+    --ravenclaw:#0284c7;
+    --ravenclaw-bright:#38bdf8;
+    --bronze:#00d2ff;
+    --bronze-soft:#7dd3fc;
+    --charm:#00d2ff;
+    --line:rgba(0,210,255,.28);
+    --line-soft:rgba(0,210,255,.14);
+  }
+  body.theme-aguamenti .glow{
+    background:
+      radial-gradient(900px 520px at 80% -8%, rgba(0,210,255,.5), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(0,102,255,.4), transparent 60%);
+  }
+  body.theme-aguamenti .stars{filter:brightness(2.2) drop-shadow(0 0 3px #00d2ff)}
+  body.flash-aguamenti{animation:flashAguamenti .8s ease-out}
+  @keyframes flashAguamenti{
+    0%{filter:brightness(1)}
+    15%{filter:brightness(3.2) drop-shadow(0 0 50px #00d2ff)}
+    100%{filter:brightness(1)}
+  }
+
+  /* 6. Riddikulus: Rainbow Party */
+  body.theme-riddikulus{
+    --ink:#0f091f;
+    --night:#1d1238;
+    --night-2:#2e1b54;
+    --term:#080410;
+    --ravenclaw:#a855f7;
+    --ravenclaw-bright:#ec4899;
+    --bronze:#f43f5e;
+    --bronze-soft:#fb7185;
+    --charm:#f472b6;
+    --line:rgba(244,63,94,.28);
+    --line-soft:rgba(244,63,94,.14);
+  }
+  body.theme-riddikulus .glow{
+    background:
+      radial-gradient(900px 520px at 80% -8%, rgba(236,72,153,.45), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(168,85,247,.45), transparent 60%);
+  }
+  body.theme-riddikulus .stars{filter:hue-rotate(180deg) saturate(3) brightness(1.8)}
+  body.theme-riddikulus .hero h1{
+    background:linear-gradient(90deg,#f43f5e,#fb923c,#facc15,#4ade80,#38bdf8,#a855f7);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  body.flash-riddikulus{animation:flashRiddikulus .8s ease-out}
+  @keyframes flashRiddikulus{
+    0%{filter:brightness(1)}
+    20%{filter:brightness(3.5) hue-rotate(120deg)}
+    100%{filter:brightness(1)}
+  }
+
+  /* Bombarda Screen Shake */
+  body.shake-screen{
+    animation:screenShake .45s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes screenShake{
+    10%, 90% { transform: translate3d(-3px, 0, 0); }
+    20%, 80% { transform: translate3d(5px, -2px, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 3px, 0); }
+    40%, 60% { transform: translate3d(6px, -1px, 0); }
   }
 
   /* typed commands: width grows one character at a time */
@@ -865,15 +971,19 @@
         line(T('Available spells & themes:', 'คาถาและธีมที่ร่ายได้:'));
         [
           ['charm', T('electric blue aura (#00f2fe / #0077fe)', 'แสงออร่าสีฟ้า-น้ำเงิน (#00f2fe / #0077fe)')],
-          ['dark', T('emerald dark magic (#00ff87 / #10b981)', 'แสงสีเขียวมรกต (#00ff87 / #10b981)')],
+          ['dark / avada', T('emerald dark magic (#00ff87 / #10b981)', 'แสงสีเขียวมรกต (#00ff87 / #10b981)')],
           ['patronus', T('pure white & silver glow (#ffffff / #b0e0e6)', 'แสงสีเงินประกายขาวนวล (#ffffff / #b0e0e6)')],
-          ['lumos', T('ignite light & reset palette', 'จุดแสงสว่าง & คืนค่าสีเดิม')],
-          ['nox', T('extinguish wand light', 'ดับแสงไฟให้มืดลง')],
+          ['incendio', T('warm fiery flame aura (#ff5500 / #ffaa00)', 'เปลวเพลิงสีส้มทองอบอุ่น (#ff5500 / #ffaa00)')],
+          ['aguamenti', T('ocean aqua water surge (#00d2ff)', 'คลื่นน้ำสีฟ้าครามสดชื่น (#00d2ff)')],
+          ['bombarda', T('blasting charm (shakes the screen!)', 'คาถาระเบิด (หน้าจอสั่นสะเทือน!)')],
+          ['riddikulus', T('rainbow party mode 🎈', 'โหมดสีลูกกวาดสายรุ้ง 🎈')],
+          ['accio <item>', T('summon projects, work, packages, contact', 'เรียกหน้าหรือส่วนต่างๆ เช่น accio work')],
+          ['obliviate', T('wipe terminal memory & history 🧠', 'ล้างความจำและประวัติทั้งหมด 🧠')],
+          ['lumos / nox', T('ignite light & reset / dim lights', 'จุดแสงสว่างคืนค่าเดิม / ดับไฟ')],
           ['alohomora', T('unlock secret developer note', 'ปลดล็อกข้อความลับ')],
           ['wingardium leviosa', T('levitation charm (or: leviosa)', 'คาถาลอยตัว (หรือ: leviosa)')],
-          ['protego', T('shield charm', 'คาถาเกราะวิเศษป้องกันตัว')],
-          ['mischief managed', T('clear map & screen', 'แผนที่ตัวกวน / ล้างหน้าจอ')]
-        ].forEach(function(c){ line('  ' + (c[0] + '                      ').slice(0, 22) + c[1]); });
+          ['protego', T('shield charm', 'คาถาเกราะวิเศษป้องกันตัว')]
+        ].forEach(function(c){ line('  ' + (c[0] + '                        ').slice(0, 24) + c[1]); });
       },
       // spells
       lumos: function(){
@@ -895,6 +1005,60 @@
         spell('Avada Kedavra!', 'dark');
         line(T('⚡ Emerald green dark magic engulfs the realm (#00ff87 / #10b981)!', '⚡ ลำแสงสีเขียวมรกตและเวทมนตร์ศาสตร์มืดเข้าปกคลุมหน้าเว็บ (#00ff87 / #10b981)!'));
         line(T('Dark magic theme active. Type lumos to lift the curse.', 'ธีมสีเขียวศาสตร์มืดทำงาน พิมพ์ lumos เพื่อถอนคำสาป'), 'hint');
+      },
+      incendio: function(){
+        setTheme('theme-incendio', 'flash-incendio');
+        spell('Incendio!', 'fire');
+        line(T('🔥 Flames erupt! Warm fiery flame aura engulfs the castle (#ff5500).', '🔥 เปลวเพลิงลุกโชน! ออร่าสีส้มทองอบอุ่นปกคลุมปราสาท (#ff5500)'));
+        line(T('Fire theme active. Type lumos to reset.', 'ธีมเปลวไฟทำงาน พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
+      },
+      aguamenti: function(){
+        setTheme('theme-aguamenti', 'flash-aguamenti');
+        spell('Aguamenti!', 'water');
+        line(T('💧 A surging wave of clear water washes over the realm (#00d2ff).', '💧 ระลอกคลื่นน้ำใสเย็นชโลมทั่วหน้าเว็บ (#00d2ff)'));
+        line(T('Aqua theme active. Type lumos to reset.', 'ธีมสายน้ำทำงาน พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
+      },
+      bombarda: function(){
+        document.body.classList.remove('shake-screen');
+        void document.body.offsetWidth;
+        document.body.classList.add('shake-screen');
+        spell('Bombarda Maxima!', 'fire');
+        line(T('💥 BOOM! An explosive blast rocks the entire castle screen!', '💥 ตู้ม! คาถาระเบิดส่งแรงกระแทกสั่นสะเทือนไปทั่วหน้าจอ!'));
+      },
+      riddikulus: function(){
+        setTheme('theme-riddikulus', 'flash-riddikulus');
+        spell('Riddikulus!', 'charm');
+        line(T('🎈 Boggart banished! The realm bursts into colorful rainbow party vibes.', '🎈 กำจัดบ็อกการ์ทสำเร็จ! ปราสาทเปลี่ยนเป็นสีลูกกวาดสายรุ้งสุดคึกคัก'));
+        line(T('Party mode active! Type lumos to reset.', 'โหมดปาร์ตี้สายรุ้งทำงาน! พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
+      },
+      accio: function(args){
+        var target = (args[0] || '').toLowerCase().replace(/^[#./]+/, '');
+        if(!target){
+          line(T('Accio what? Try: accio resume, accio projects, accio work, accio packages, accio contact', 'เรียกอะไรดี? ลอง: accio resume, accio projects, accio work, accio packages, accio contact'), 'hint');
+          return;
+        }
+        spell('Accio ' + target.toUpperCase() + '!', 'charm');
+        if(target === 'work') { line(T('Summoning live demos…', 'กำลังเรียกเดโม…')); location.href = '/work'; return; }
+        if(target === 'packages' || target === 'fastwork' || target === 'hire') { line(T('Summoning packages…', 'กำลังเรียกแพ็กเกจ…')); location.href = 'packages.html'; return; }
+        if(target === 'projects' || target === 'skills' || target === 'about' || target === 'contact') {
+          line(T('Summoning section: ', 'กำลังนำทางไปที่: ') + target + '…');
+          go(target);
+          return;
+        }
+        if(target === 'resume' || target === 'cv') {
+          line(T('📜 Summoning scroll: Student & Developer record', '📜 เรียกเอกสาร: บันทึกข้อมูลนักศึกษาและนักพัฒนา'));
+          go('about');
+          return;
+        }
+        line(T('Accio: could not locate “', 'Accio: ไม่พบสิ่งของ “') + target + T('” — try projects, work, packages, contact', '” — ลอง projects, work, packages, contact'), 'err');
+      },
+      obliviate: function(){
+        history = []; hIdx = 0;
+        setTheme();
+        log.textContent = '';
+        spell('Obliviate!', 'charm');
+        line(T('🧠 Obliviate! Command memory wiped… Who am I? Who are you? 🤔', '🧠 อ็อบลิวิเอต! ความจำทั้งหมดถูกล้างแล้ว… เราเป็นใคร? แล้วคุณคือใครนะ? 🤔'));
+        line(T('Type help to rediscover commands.', 'พิมพ์ help เพื่อค้นหาคำสั่งอีกครั้ง'), 'hint');
       },
       alohomora: function(){
         spell('Alohomora!', 'charm');
@@ -934,7 +1098,7 @@
     };
     commands['sorting-hat'] = commands.sort;
 
-    var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'avada-flash'];
+    var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'theme-incendio', 'theme-aguamenti', 'theme-riddikulus', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'flash-incendio', 'flash-aguamenti', 'flash-riddikulus', 'avada-flash', 'shake-screen'];
     function setTheme(themeClass, flashClass){
       ALL_THEMES.forEach(function(c){ document.body.classList.remove(c); });
       if(themeClass) document.body.classList.add(themeClass);
