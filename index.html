@@ -185,6 +185,19 @@
   #term-log .err{color:#e07a6b}
   #term-log a{color:var(--bronze-soft);text-decoration:underline;text-underline-offset:3px}
   #term-log a:hover{color:var(--bronze)}
+  /* help / spells lists: real two-column grid instead of space-padded text, so it reflows on phones */
+  #term-log .rows{display:grid;grid-template-columns:max-content 1fr;align-items:start;column-gap:20px;row-gap:1px;white-space:normal;padding-left:12px}
+  #term-log .rows .sep{grid-column:1/-1;color:var(--bronze);font-size:.74rem;letter-spacing:2px;margin:10px 0 2px;opacity:.85}
+  #term-log .rows .sep:first-child{margin-top:2px}
+  #term-log .rows .v{color:var(--muted)}
+  .run{font:inherit;line-height:inherit;color:var(--parchment);background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;
+    text-decoration:underline dotted;text-decoration-color:rgba(200,163,58,.45);text-underline-offset:4px;-webkit-tap-highlight-color:transparent}
+  .run:hover,.run:focus-visible{color:var(--bronze-soft);text-decoration-color:currentColor;outline:0}
+  .term-chips{display:none;flex-wrap:wrap;gap:8px;padding:10px 16px 12px;border-top:1px solid var(--line-soft);background:rgba(7,13,31,.45)}
+  .term-chips .chip{flex:0 0 auto;font-family:var(--font-mono);font-size:.78rem;text-decoration:none;color:var(--silver);
+    border:1px solid var(--line);border-radius:999px;padding:7px 14px;min-height:36px;background:rgba(42,74,134,.18)}
+  .term-chips .chip:active{background:rgba(200,163,58,.18);border-color:var(--bronze);color:var(--bronze-soft)}
+  @media (max-width:860px), (pointer:coarse){ .hero .term-chips{display:flex} }
   .spell{display:inline-block;font-family:var(--font-title);font-size:1.5em;font-weight:700;letter-spacing:1px;
     color:#fff;margin:4px 0;animation:cast .45s ease-out}
   .spell.charm{text-shadow:0 0 10px #00f2fe,0 0 25px #0077fe}
@@ -714,6 +727,11 @@
     .skills-grid{grid-template-columns:1fr}
     .term-body{padding:16px 16px 18px;font-size:.8rem}
     .term-input input{font-size:16px}  /* stops iOS zooming in on focus */
+    .hero .term-body{max-height:min(420px,58vh)}
+    #term-log .rows{grid-template-columns:1fr;padding-left:4px}
+    #term-log .rows .run{padding:5px 0 0;min-height:32px}
+    #term-log .rows .v{margin:0 0 4px 14px;font-size:.92em;line-height:1.5}
+    .term-bar span{font-size:.62rem}
     .cta-row,.more-work{flex-direction:column;align-items:stretch}
     .btn{justify-content:center}
     .foot{justify-content:center;text-align:center}
@@ -1045,6 +1063,21 @@
       s.className = 'spell ' + kind; s.textContent = text;
       d.appendChild(s);
     }
+    // two-column list that reflows on phones; each entry is [label, description, cmd?]
+    // label '-' = section heading; cmd ending in a space only fills the prompt (needs an argument)
+    function rows(list){
+      var d = line('', 'rows');
+      list.forEach(function(r){
+        if(r[0] === '-'){
+          var h = document.createElement('div'); h.className = 'sep'; h.textContent = r[1]; d.appendChild(h); return;
+        }
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'run k'; b.textContent = r[0];
+        b.setAttribute('data-cmd', r[2] || r[0]);
+        var v = document.createElement('div'); v.className = 'v'; v.textContent = r[1];
+        d.appendChild(b); d.appendChild(v);
+      });
+    }
     function go(id){
       var el = document.getElementById(id);
       if(!el) return false;
@@ -1064,21 +1097,23 @@
 
     var commands = {
       help: function(){
-        line(T('Commands:', 'คำสั่งที่ใช้ได้:'));
-        [['whoami', T('who is behind this terminal', 'เจ้าของเทอร์มินัลนี้คือใคร')],
-         ['ls', T('list sections', 'ดูรายการหมวด')],
-         ['cd <section>', T('jump to a section, e.g. cd projects', 'ไปยังหมวด เช่น cd projects')],
-         ['projects', T('list my projects', 'ดูผลงาน')],
-         ['open <app>', T('open work, packages, shop, clinic, cafe, sorting-hat or paotang', 'เปิด work, packages, shop, clinic, cafe, sorting-hat หรือ paotang')],
-         ['skills', T('what I work with', 'ทักษะของผม')],
-         ['spells', T('list all magical spells', 'ดูรายชื่อคาถาทั้งหมด')],
-         ['contact', T('ways to reach me', 'ช่องทางติดต่อ')],
-         ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
-         ['sort', T('let the Hat sort you', 'ให้หมวกคัดสรรเลือกบ้าน')],
-         ['lang', T('switch TH / EN', 'สลับภาษา TH / EN')],
-         ['clear', T('clear the screen', 'ล้างหน้าจอ')]
-        ].forEach(function(c){ line('  ' + (c[0] + '                  ').slice(0, 18) + c[1]); });
-        line(T('…and a few spells, if you know any.', '…และคาถาอีกนิดหน่อย ถ้าคุณรู้จัก'), 'hint');
+        line(T('Commands (click or tap to run):', 'คำสั่งที่ใช้ได้ (แตะเพื่อรันได้เลย):'));
+        rows([
+          ['whoami', T('who is behind this terminal', 'เจ้าของเทอร์มินัลนี้คือใคร')],
+          ['ls', T('list sections', 'ดูรายการหมวด')],
+          ['cd <section>', T('jump to a section, e.g. cd projects', 'ไปยังหมวด เช่น cd projects'), 'cd '],
+          ['projects', T('list my projects', 'ดูผลงาน')],
+          ['open <app>', T('open work, packages, shop, clinic, cafe, sorting-hat or paotang', 'เปิด work, packages, shop, clinic, cafe, sorting-hat หรือ paotang'), 'open '],
+          ['skills', T('what I work with', 'ทักษะของผม')],
+          ['spells', T('list every spell you can cast', 'ดูรายชื่อคาถาทั้งหมด')],
+          ['contact', T('ways to reach me', 'ช่องทางติดต่อ')],
+          ['sudo hire suwapat', T('you know you want to', 'ลองดูสิ')],
+          ['sort', T('let the Hat sort you', 'ให้หมวกคัดสรรเลือกบ้าน')],
+          ['lang', T('switch TH / EN', 'สลับภาษา TH / EN')],
+          ['sound on|off', T('turn spell sounds on / off', 'เปิด / ปิดเสียงคาถา'), 'sound'],
+          ['clear', T('clear the screen', 'ล้างหน้าจอ')]
+        ]);
+        line(T('…and a few spells, if you know any. Type spells to see them all.', '…และคาถาอีกเพียบ พิมพ์ spells เพื่อดูทั้งหมด'), 'hint');
       },
       whoami: function(){
         line('Suwapat Saelee — ' + T('Front-End Developer · Computer Science student · Ravenclaw 🦅', 'นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์ · เรเวนคลอว์ 🦅'));
@@ -1145,24 +1180,34 @@
       history: function(){ history.forEach(function(h, i){ line(String(i + 1).padStart(3) + '  ' + h); }); },
       clear: function(){ log.textContent = ''; },
       spells: function(){
-        line(T('Available spells & themes:', 'คาถาและธีมที่ร่ายได้:'));
-        [
-          ['lumos / nox', T('ignite light & reset / dim lights', 'จุดแสงสว่างคืนค่าเดิม / ดับไฟ')],
-          ['patronus', T('pure white & silver glow (#ffffff)', 'คาถาผู้พิทักษ์ แสงสีเงินประกายขาวนวล')],
-          ['charm', T('electric blue aura (#00f2fe / #0077fe)', 'แสงออร่าสีฟ้า-น้ำเงิน')],
-          ['incendio', T('warm fiery flame aura (#ff5500)', 'เปลวเพลิงสีส้มทองอบอุ่น')],
-          ['aguamenti', T('ocean aqua water surge (#00d2ff)', 'คลื่นน้ำสีฟ้าครามสดชื่น')],
-          ['bombarda', T('blasting charm (shakes screen!)', 'คาถาระเบิด (หน้าจอสั่นสะเทือน!)')],
-          ['riddikulus', T('rainbow party mode 🎈', 'โหมดสีลูกกวาดสายรุ้ง 🎈')],
-          ['accio <item>', T('summon projects, work, packages…', 'เรียกหน้าหรือส่วนต่างๆ เช่น accio work')],
+        line(T('Every spell you can cast (click or tap to cast):', 'คาถาทั้งหมดที่ร่ายได้ (แตะเพื่อร่ายได้เลย):'));
+        rows([
+          ['-', T('✦ CHARMS & LIGHT', '✦ คาถาและแสงสว่าง')],
+          ['lumos', T('ignite the light & restore colours', 'จุดแสงสว่าง คืนค่าสีเดิม')],
+          ['nox', T('dim the lights', 'ดับไฟ')],
+          ['expecto patronum', T('silver Patronus glow (or just: patronus)', 'คาถาผู้พิทักษ์ แสงสีเงิน (พิมพ์ patronus ก็ได้)')],
+          ['charm', T('electric blue charm aura', 'แสงออร่าสีฟ้า-น้ำเงิน')],
+          ['protego', T('raise a shield dome', 'กางเกราะเวทมนตร์')],
+          ['alohomora', T('unlock a secret 🔓', 'ปลดล็อกความลับ 🔓')],
+          ['wingardium leviosa', T('make the terminal float', 'ทำให้เทอร์มินัลลอยได้')],
+          ['vulnera sanentur', T('heal all wounds 🌿', 'รักษาบาดแผลทั้งหมด 🌿')],
+          ['-', T('✦ ELEMENTS', '✦ ธาตุ')],
+          ['incendio', T('fire aura & rising embers 🔥', 'ออร่าเปลวไฟและสะเก็ดไฟ 🔥')],
+          ['aguamenti', T('water wave & raindrops 💧', 'คลื่นน้ำและหยดน้ำ 💧')],
+          ['bombarda', T('blasting charm — shakes the screen 💥', 'คาถาระเบิด หน้าจอสั่นสะเทือน 💥')],
+          ['riddikulus', T('rainbow party & confetti 🎈', 'โหมดปาร์ตี้สายรุ้ง 🎈')],
+          ['-', T('✦ UTILITY', '✦ คาถาใช้งาน')],
+          ['accio <item>', T('summon a page: projects, work, packages, contact', 'เรียกหน้า: projects, work, packages, contact'), 'accio '],
           ['obliviate', T('wipe terminal memory & history 🧠', 'ล้างความจำและประวัติทั้งหมด 🧠')],
-          ['-- DARK ARTS --', T('---------------------------', '---------------------------')],
-          ['avada kedavra', T('Killing Curse: emerald green', 'คำสาปพิฆาต: แสงสีเขียวมรกต')],
-          ['crucio', T('Cruciatus Curse: blood red agony', 'คำสาปทรมาน: สีแดงเลือดกระตุก')],
-          ['imperio', T('Imperius Curse: mind control mist', 'คำสาปสะกดใจ: หมอกสะกดสีม่วง')],
-          ['morsmordre', T('conjure the Dark Mark 💀🐍', 'เสกตรามารหัวกะโหลกและงูมรกต 💀🐍')],
-          ['sectumsempra', T('slashing wound across screen 🩸', 'ฟันเฉือนกรีดรอยแผลล่องหน 🩸')]
-        ].forEach(function(c){ line('  ' + (c[0] + '                        ').slice(0, 24) + c[1]); });
+          ['mischief managed', T('clear the map', 'ลบแผนที่')],
+          ['-', T('☠ DARK ARTS', '☠ ศาสตร์มืด')],
+          ['avada kedavra', T('Killing Curse: emerald lightning', 'คำสาปพิฆาต: สายฟ้าสีเขียวมรกต')],
+          ['crucio', T('Cruciatus Curse: blood-red agony', 'คำสาปทรมาน: สีแดงเลือดกระตุก')],
+          ['imperio', T('Imperius Curse: mind-control mist', 'คำสาปสะกดใจ: หมอกสะกดสีม่วง')],
+          ['morsmordre', T('conjure the Dark Mark 💀🐍', 'เสกตรามารหัวกะโหลกและงู 💀🐍')],
+          ['sectumsempra', T('slashing curse 🩸', 'คาถาฟันเฉือน 🩸')]
+        ]);
+        line(T('Tip: lumos resets any theme · sound off mutes spells', 'เคล็ดลับ: lumos คืนค่าทุกธีม · sound off ปิดเสียงคาถา'), 'hint');
       },
       // spells
       lumos: function(){
@@ -1515,11 +1560,160 @@
       if(REDUCED.matches || !FX[name]) return;
       try { FX[name](args); } catch(e){ /* effects are decorative — never break the terminal */ }
     }
-    // wrap each spell (and every alias pointing at the same function) so its effect plays after it is cast
+
+    // ---------- spell sounds (synthesised with Web Audio — no audio files) ----------
+    var soundOn = true;
+    try { soundOn = localStorage.getItem('site:sound') !== 'off'; } catch(e){}
+    var AC = null, master = null, noiseBuf = null;
+    function audio(){
+      if(!AC){
+        var Ctx = window.AudioContext || window.webkitAudioContext;
+        if(!Ctx) return null;
+        AC = new Ctx();
+        var comp = AC.createDynamicsCompressor();
+        master = AC.createGain(); master.gain.value = .35;
+        master.connect(comp); comp.connect(AC.destination);
+        noiseBuf = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate);
+        var ch = noiseBuf.getChannelData(0);
+        for(var i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1;
+      }
+      if(AC.state === 'suspended' && AC.resume) AC.resume();
+      return AC;
+    }
+    // gain envelope: fade in over a, hold, fade out over the last rel seconds
+    function envelope(g, t0, a, peak, dur, rel){
+      a = Math.min(a, dur / 2); rel = Math.min(rel, dur - a);
+      g.gain.setValueAtTime(.0001, t0);
+      g.gain.exponentialRampToValueAtTime(peak, t0 + a);
+      g.gain.setValueAtTime(peak, t0 + dur - rel);
+      g.gain.exponentialRampToValueAtTime(.0001, t0 + dur);
+    }
+    // tone({f, to, type, dur, at, gain, a, rel, vib:[rate, depth]})
+    function tone(o){
+      var t0 = AC.currentTime + (o.at || 0), dur = o.dur || .4;
+      var osc = AC.createOscillator(), g = AC.createGain();
+      osc.type = o.type || 'sine';
+      osc.frequency.setValueAtTime(o.f, t0);
+      if(o.to) osc.frequency.exponentialRampToValueAtTime(o.to, t0 + dur);
+      if(o.vib){
+        var lfo = AC.createOscillator(), lg = AC.createGain();
+        lfo.frequency.value = o.vib[0]; lg.gain.value = o.vib[1];
+        lfo.connect(lg); lg.connect(osc.frequency);
+        lfo.start(t0); lfo.stop(t0 + dur + .05);
+      }
+      envelope(g, t0, o.a || .01, o.gain || .25, dur, o.rel || dur * .6);
+      osc.connect(g); g.connect(master);
+      osc.start(t0); osc.stop(t0 + dur + .05);
+    }
+    // noise({dur, at, gain, type, f, to, q, a, rel}) — filtered white noise for whooshes, booms, hiss
+    function noise(o){
+      var t0 = AC.currentTime + (o.at || 0), dur = o.dur || .4;
+      var src = AC.createBufferSource(), flt = AC.createBiquadFilter(), g = AC.createGain();
+      src.buffer = noiseBuf; src.loop = true;
+      flt.type = o.type || 'lowpass'; flt.Q.value = o.q || 1;
+      flt.frequency.setValueAtTime(o.f || 1000, t0);
+      if(o.to) flt.frequency.exponentialRampToValueAtTime(o.to, t0 + dur);
+      envelope(g, t0, o.a || .01, o.gain || .3, dur, o.rel || dur * .7);
+      src.connect(flt); flt.connect(g); g.connect(master);
+      src.start(t0, Math.random()); src.stop(t0 + dur + .05);
+    }
+    function chime(notes, step, opt){
+      opt = opt || {};
+      notes.forEach(function(f, i){ tone({ f: f, type: opt.type || 'sine', dur: opt.dur || .6, at: (opt.at || 0) + i * step, gain: opt.gain || .16, rel: (opt.dur || .6) * .8 }); });
+    }
+
+    var SFX = {
+      lumos: function(){ chime([1047, 1319, 1568, 2093], .07, { dur: .7, gain: .14 }); noise({ type: 'highpass', f: 6000, dur: .5, gain: .05, a: .05 }); },
+      nox: function(){ tone({ f: 600, to: 140, dur: .6, gain: .18 }); noise({ type: 'lowpass', f: 1200, to: 200, dur: .5, gain: .08 }); },
+      'expecto patronum': function(){
+        [440, 554, 659, 880].forEach(function(f, i){ tone({ f: f, dur: 2, a: .35, gain: .09, at: i * .06, vib: [5, 3] }); tone({ f: f * 1.003, dur: 2, a: .4, gain: .05, at: i * .06 }); });
+        noise({ type: 'highpass', f: 7000, dur: 1.6, gain: .04, a: .4 });
+      },
+      'avada kedavra': function(){
+        noise({ type: 'highpass', f: 1500, dur: .25, gain: .5, a: .003, rel: .2 });
+        tone({ f: 1400, to: 60, type: 'sawtooth', dur: .5, gain: .2, a: .003 });
+        noise({ type: 'lowpass', f: 400, to: 60, dur: 1.4, gain: .35, at: .08, a: .05 });
+      },
+      crucio: function(){
+        tone({ f: 220, type: 'sawtooth', dur: .9, gain: .1, vib: [17, 25] });
+        tone({ f: 233, type: 'sawtooth', dur: .9, gain: .1, vib: [13, 30] });
+        noise({ type: 'bandpass', f: 1800, q: 4, dur: .7, gain: .12 });
+      },
+      imperio: function(){
+        tone({ f: 392, to: 294, dur: 1.8, gain: .12, a: .3, vib: [3, 18] });
+        tone({ f: 396, to: 297, dur: 1.8, gain: .08, a: .4, vib: [2.3, 22] });
+        tone({ f: 98, dur: 1.8, gain: .1, a: .4 });
+      },
+      morsmordre: function(){
+        tone({ f: 55, type: 'sawtooth', dur: 2.4, gain: .14, a: .5, vib: [.6, 2] });
+        tone({ f: 82.4, type: 'triangle', dur: 2.4, gain: .1, a: .6 });
+        noise({ type: 'highpass', f: 4500, dur: .9, gain: .1, at: .9, a: .2 });   // the serpent's hiss
+      },
+      sectumsempra: function(){
+        [0, .18, .36].forEach(function(t){ noise({ type: 'bandpass', f: 5000, to: 600, q: 3, dur: .22, gain: .45, at: t, a: .005 }); });
+        tone({ f: 180, to: 90, type: 'triangle', dur: .4, gain: .1, at: .4 });
+      },
+      'vulnera sanentur': function(){ chime([523, 659, 784, 1047, 1319], .14, { dur: 1, gain: .12 }); },
+      incendio: function(){
+        noise({ type: 'lowpass', f: 300, to: 4000, dur: .7, gain: .35, a: .15 });
+        for(var i = 0; i < 16; i++) noise({ type: 'highpass', f: 2500, dur: .03, gain: rnd(.08, .2), at: rnd(.2, 1.8), a: .002, rel: .025 });
+      },
+      aguamenti: function(){
+        noise({ type: 'bandpass', f: 500, to: 1500, q: 1.5, dur: 1.6, gain: .25, a: .3 });
+        for(var i = 0; i < 12; i++){ var f = rnd(400, 900); tone({ f: f, to: f * 1.8, dur: .07, gain: .1, at: rnd(.1, 1.4), a: .005 }); }
+      },
+      bombarda: function(){
+        tone({ f: 130, to: 32, dur: .9, gain: .6, a: .005 });
+        noise({ type: 'lowpass', f: 2500, to: 120, dur: 1.2, gain: .55, a: .005 });
+        noise({ type: 'highpass', f: 3000, dur: .15, gain: .3, a: .002 });
+      },
+      riddikulus: function(){
+        chime([523, 659, 784, 1047, 784, 1047], .08, { type: 'square', dur: .18, gain: .14 });
+        tone({ f: 300, to: 900, type: 'sawtooth', dur: .35, gain: .12, at: .5 });
+      },
+      accio: function(args){
+        if(!args || !args[0]) return;
+        noise({ type: 'bandpass', f: 300, to: 3500, q: 2, dur: .7, gain: .3, a: .3 });
+        tone({ f: 1568, dur: .5, gain: .12, at: .7 });
+      },
+      obliviate: function(){
+        noise({ type: 'lowpass', f: 400, to: 6000, dur: .9, gain: .25, a: .6, rel: .3 });
+        tone({ f: 880, to: 220, dur: 1.2, gain: .1, at: .6, vib: [6, 10] });
+      },
+      protego: function(){
+        tone({ f: 220, dur: 1.4, gain: .12, a: .05 });
+        tone({ f: 330, dur: 1.4, gain: .1, a: .05 });
+        tone({ f: 1760, dur: .8, gain: .1, a: .005 });
+      },
+      alohomora: function(){
+        noise({ type: 'bandpass', f: 3000, q: 5, dur: .04, gain: .4, a: .002 });
+        noise({ type: 'bandpass', f: 2200, q: 5, dur: .05, gain: .4, at: .12, a: .002 });
+        tone({ f: 1319, dur: .6, gain: .12, at: .22 });
+      },
+      'wingardium leviosa': function(){ tone({ f: 330, to: 660, dur: 1.4, gain: .12, a: .3, vib: [5, 8] }); chime([1319, 1568], .3, { at: .8, gain: .07 }); },
+      charm: function(){ for(var i = 0; i < 10; i++) tone({ f: rnd(1800, 3200), dur: .12, gain: .07, at: i * .05 + rnd(0, .03) }); }
+    };
+    SFX['rm -rf /'] = SFX.protego;
+    function castSfx(name, args){
+      if(!soundOn || !SFX[name]) return;
+      try { if(audio()) SFX[name](args); } catch(e){ /* sound is decorative — never break the terminal */ }
+    }
+    commands.sound = function(args){
+      var want = (args[0] || '').toLowerCase();
+      if(want === 'on' || want === 'off') soundOn = want === 'on';
+      else if(!want) soundOn = !soundOn;
+      try { localStorage.setItem('site:sound', soundOn ? 'on' : 'off'); } catch(e){}
+      if(soundOn) audio();
+      line(soundOn ? T('🔊 Sound on — spells will be heard.', '🔊 เปิดเสียงแล้ว — ร่ายคาถาแล้วจะได้ยินเสียง') : T('🔇 Sound off.', '🔇 ปิดเสียงแล้ว'), 'hint');
+    };
+    commands.mute = function(){ commands.sound(['off']); };
+    commands.unmute = function(){ commands.sound(['on']); };
+
+    // wrap each spell (and every alias pointing at the same function) so its effect + sound play after it is cast
     Object.keys(FX).forEach(function(name){
       var orig = commands[name];
       if(!orig) return;
-      var wrapped = function(args){ var r = orig.apply(this, arguments); castFx(name, args); return r; };
+      var wrapped = function(args){ var r = orig.apply(this, arguments); castFx(name, args); castSfx(name, args); return r; };
       Object.keys(commands).forEach(function(k){ if(commands[k] === orig) commands[k] = wrapped; });
     });
 
@@ -1564,10 +1758,34 @@
       else if(e.key === 'ArrowDown'){ e.preventDefault(); hIdx = Math.min(history.length, hIdx + 1); input.value = history[hIdx] || ''; }
       else if(e.key === 'l' && e.ctrlKey){ e.preventDefault(); log.textContent = ''; }
     });
-    // clicking anywhere in the terminal focuses the prompt (but not when selecting text or following a link)
+    // clicking anywhere in the terminal focuses the prompt (but not when selecting text, following a link or tapping a button)
     body.addEventListener('click', function(e){
-      if(e.target.closest('a') || String(window.getSelection())) return;
+      if(e.target.closest('a, button') || String(window.getSelection())) return;
       input.focus({preventScroll:true});
+    });
+
+    // quick-cast chips — tap instead of typing (shown on phones / touch screens)
+    var CAST_POOL = ['lumos', 'nox', 'expecto patronum', 'charm', 'protego', 'alohomora', 'wingardium leviosa', 'vulnera sanentur',
+      'incendio', 'aguamenti', 'bombarda', 'riddikulus', 'avada kedavra', 'crucio', 'imperio', 'morsmordre', 'sectumsempra'];
+    var chips = document.createElement('div');
+    chips.className = 'term-chips';
+    [['help', 'help'], ['spells', 'spells'], ['✦ ' + T('random spell', 'สุ่มคาถา'), '__random'], ['lumos', 'lumos']].forEach(function(c){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'run chip'; b.textContent = c[0]; b.setAttribute('data-cmd', c[1]);
+      if(c[1] === '__random'){ b.setAttribute('data-en', '✦ random spell'); b.setAttribute('data-th', '✦ สุ่มคาถา'); }
+      chips.appendChild(b);
+    });
+    body.parentNode.appendChild(chips);
+
+    // one handler for every tappable command (help/spells rows + chips)
+    body.parentNode.addEventListener('click', function(e){
+      var b = e.target.closest('.run');
+      if(!b) return;
+      var cmd = b.getAttribute('data-cmd');
+      if(cmd === '__random') cmd = pick(CAST_POOL);
+      if(/ $/.test(cmd)){ input.value = cmd; input.focus({preventScroll:true}); return; }   // needs an argument — let them finish typing
+      run(cmd);
+      body.scrollTop = body.scrollHeight;
     });
   })();
 </script>
