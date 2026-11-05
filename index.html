@@ -198,6 +198,45 @@
   body.dim .glow{opacity:.25}
   body.dim .stars{opacity:.35}
 
+  /* Easter egg: Avada Kedavra transforms the entire site into emerald dark magic */
+  body.avada{
+    --ink:#04130a;
+    --night:#062312;
+    --night-2:#09331a;
+    --term:#021008;
+    --ravenclaw:#0d592b;
+    --ravenclaw-bright:#10b981;
+    --bronze:#00ff87;
+    --bronze-soft:#60ffa8;
+    --charm:#00ff87;
+    --line:rgba(0,255,135,.28);
+    --line-soft:rgba(0,255,135,.14);
+  }
+  body.avada .glow{
+    background:
+      radial-gradient(900px 560px at 80% -8%, rgba(0,255,135,.45), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(16,185,129,.35), transparent 60%);
+  }
+  body.avada .stars{
+    filter:sepia(1) hue-rotate(85deg) saturate(3.5) brightness(1.25);
+  }
+  body.avada .hero h1{
+    background:linear-gradient(180deg,#ffffff 10%,#a7f3d0 70%,#00ff87 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  body.avada .portrait-frame{
+    background:radial-gradient(circle at 50% 35%, #0d592b, var(--night) 70%);
+    box-shadow:0 0 0 10px rgba(0,255,135,.12),0 0 60px -10px rgba(0,255,135,.45),0 30px 60px -20px rgba(0,0,0,.7);
+  }
+  body.avada-flash{
+    animation:avadaFlash .8s ease-out;
+  }
+  @keyframes avadaFlash{
+    0%{filter:brightness(1)}
+    15%{filter:brightness(3.5) drop-shadow(0 0 50px #00ff87)}
+    100%{filter:brightness(1)}
+  }
+
   /* typed commands: width grows one character at a time */
   .typed{display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;width:0;
     animation:type var(--dur) steps(var(--n)) var(--at) forwards}
@@ -767,11 +806,13 @@
       },
       // spells
       lumos: function(){
-        document.body.classList.remove('dim'); document.body.classList.add('lit');
-        spell('Lumos!', 'charm'); line(T('The castle brightens.', 'ปราสาทสว่างขึ้นแล้ว'));
+        document.body.classList.remove('dim', 'avada', 'avada-flash');
+        document.body.classList.add('lit');
+        spell('Lumos!', 'charm'); line(T('The castle brightens. Colors restored.', 'ปราสาทสว่างขึ้นแล้ว คืนค่าสีเดิมเรียบร้อย'));
       },
       nox: function(){
-        document.body.classList.remove('lit'); document.body.classList.add('dim');
+        document.body.classList.remove('lit', 'avada', 'avada-flash');
+        document.body.classList.add('dim');
         spell('Nox.', 'charm'); line(T('The lights dim. Type lumos to bring them back.', 'แสงดับลง พิมพ์ lumos เพื่อเปิดไฟ'));
       },
       'expecto patronum': function(){
@@ -779,8 +820,14 @@
         line(T('A silver eagle bursts from your wand. 🦅 Of course it does.', 'นกอินทรีสีเงินพุ่งออกจากไม้กายสิทธิ์ 🦅 แน่นอนอยู่แล้ว'));
       },
       'avada kedavra': function(){
+        document.body.classList.remove('lit', 'dim', 'avada-flash');
+        document.body.classList.add('avada');
+        void document.body.offsetWidth;
+        document.body.classList.add('avada-flash');
         spell('Avada Kedavra!', 'dark');
-        line(T('Unforgivable Curse blocked. Process not killed. 😐', 'คำสาปต้องห้ามถูกสกัดไว้ โปรเซสยังไม่ตาย 😐'), 'err');
+        line(T('⚡ A blinding jet of emerald green light flashes across the screen!', '⚡ ลำแสงสีเขียวมรกตสว่างวาบไปทั่วหน้าจอ!'));
+        line(T('Dark magic transforms the entire website into emerald green. 🐍', 'เว็ปไซต์ถูกเปลี่ยนเป็นธีมสีเขียวศาสตร์มืดแล้ว 🐍'));
+        line(T('Type lumos to lift the curse and restore original colors.', 'พิมพ์ lumos เพื่อถอนคำสาปและคืนสีเดิม'), 'hint');
       },
       alohomora: function(){
         spell('Alohomora!', 'charm');
@@ -791,7 +838,10 @@
         line(T("It's Levi-O-sa, not Levio-SA.", 'ต้องเป็น เลวี-โอ-ซา ไม่ใช่ เลวิโอ-ซ้า'));
         window.scrollBy({top:-60});
       },
-      'mischief managed': function(){ log.textContent = ''; line(T('Map cleared.', 'แผนที่ถูกลบแล้ว'), 'hint'); },
+      'mischief managed': function(){
+        document.body.classList.remove('avada', 'avada-flash');
+        log.textContent = ''; line(T('Map cleared.', 'แผนที่ถูกลบแล้ว'), 'hint');
+      },
       'rm -rf /': function(){
         spell('Protego!', 'charm');
         line(T('The castle is protected. Nothing was deleted.', 'ปราสาทได้รับการปกป้อง ไม่มีอะไรถูกลบ'));
@@ -800,7 +850,7 @@
     commands.about = commands.whoami;
     commands.patronus = commands['expecto patronum'];
     commands.leviosa = commands['wingardium leviosa'];
-    commands.avada = commands['avada kedavra'];
+    commands.avada = commands.avadakedavra = commands['avada kedavra'];
     commands.protego = function(){
       spell('Protego!', 'charm');
       line(T('A shimmering shield barrier appears. The castle is secure.', 'เกราะเวทมนตร์สีเงินเปล่งประกาย ปราสาทปลอดภัยแล้ว'));
@@ -824,6 +874,10 @@
       if(!text) return;
       history.push(text); hIdx = history.length;
       var lower = text.toLowerCase().replace(/[!.]+$/, '').replace(/\s+/g, ' ');
+      var compact = lower.replace(/\s+/g, '');
+      if(compact === 'avadakedavra' || compact === 'avada' || compact === 'avadakedavara') {
+        return commands['avada kedavra']([]);
+      }
       if(lower.indexOf(' ') !== -1 && Object.prototype.hasOwnProperty.call(commands, lower)) return commands[lower]([]);   // multi-word spells
       var parts = text.split(/\s+/), name = parts[0].toLowerCase().replace(/[!.]+$/, '');
       if(Object.prototype.hasOwnProperty.call(commands, name)) commands[name](parts.slice(1));
