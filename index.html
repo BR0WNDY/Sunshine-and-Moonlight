@@ -198,8 +198,44 @@
   body.dim .glow{opacity:.25}
   body.dim .stars{opacity:.35}
 
-  /* Easter egg: Avada Kedavra transforms the entire site into emerald dark magic */
-  body.avada{
+  /* ---------- magic aura themes (charm, dark, patronus) ---------- */
+  /* 1. Charm: Cyan/Electric Blue aura (#00f2fe / #0077fe) */
+  body.theme-charm{
+    --ink:#030c20;
+    --night:#071638;
+    --night-2:#0c204e;
+    --term:#020919;
+    --ravenclaw:#0077fe;
+    --ravenclaw-bright:#00f2fe;
+    --bronze:#00f2fe;
+    --bronze-soft:#80f8ff;
+    --charm:#00f2fe;
+    --line:rgba(0,242,254,.28);
+    --line-soft:rgba(0,242,254,.14);
+  }
+  body.theme-charm .glow{
+    background:
+      radial-gradient(900px 520px at 80% -8%, rgba(0,242,254,.5), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(0,119,254,.4), transparent 60%);
+  }
+  body.theme-charm .stars{filter:brightness(2.2) drop-shadow(0 0 2px #00f2fe)}
+  body.theme-charm .hero h1{
+    background:linear-gradient(180deg,#ffffff 10%,#a5f3fc 70%,#00f2fe 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  body.theme-charm .portrait-frame{
+    background:radial-gradient(circle at 50% 35%, #0077fe, var(--night) 70%);
+    box-shadow:0 0 0 10px rgba(0,242,254,.15),0 0 60px -10px rgba(0,242,254,.55),0 30px 60px -20px rgba(0,0,0,.7);
+  }
+  body.flash-charm{animation:flashCharm .8s ease-out}
+  @keyframes flashCharm{
+    0%{filter:brightness(1)}
+    15%{filter:brightness(3.2) drop-shadow(0 0 50px #00f2fe)}
+    100%{filter:brightness(1)}
+  }
+
+  /* 2. Dark Arts: Emerald Green aura (#00ff87 / #10b981) */
+  body.theme-dark, body.avada{
     --ink:#04130a;
     --night:#062312;
     --night-2:#09331a;
@@ -212,28 +248,62 @@
     --line:rgba(0,255,135,.28);
     --line-soft:rgba(0,255,135,.14);
   }
-  body.avada .glow{
+  body.theme-dark .glow, body.avada .glow{
     background:
-      radial-gradient(900px 560px at 80% -8%, rgba(0,255,135,.45), transparent 60%),
+      radial-gradient(900px 520px at 80% -8%, rgba(0,255,135,.45), transparent 60%),
       radial-gradient(700px 500px at 0% 100%, rgba(16,185,129,.35), transparent 60%);
   }
-  body.avada .stars{
+  body.theme-dark .stars, body.avada .stars{
     filter:sepia(1) hue-rotate(85deg) saturate(3.5) brightness(1.25);
   }
-  body.avada .hero h1{
+  body.theme-dark .hero h1, body.avada .hero h1{
     background:linear-gradient(180deg,#ffffff 10%,#a7f3d0 70%,#00ff87 130%);
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  body.avada .portrait-frame{
+  body.theme-dark .portrait-frame, body.avada .portrait-frame{
     background:radial-gradient(circle at 50% 35%, #0d592b, var(--night) 70%);
-    box-shadow:0 0 0 10px rgba(0,255,135,.12),0 0 60px -10px rgba(0,255,135,.45),0 30px 60px -20px rgba(0,0,0,.7);
+    box-shadow:0 0 0 10px rgba(0,255,135,.15),0 0 60px -10px rgba(0,255,135,.5),0 30px 60px -20px rgba(0,0,0,.7);
   }
-  body.avada-flash{
-    animation:avadaFlash .8s ease-out;
-  }
-  @keyframes avadaFlash{
+  body.flash-dark, body.avada-flash{animation:flashDark .8s ease-out}
+  @keyframes flashDark{
     0%{filter:brightness(1)}
     15%{filter:brightness(3.5) drop-shadow(0 0 50px #00ff87)}
+    100%{filter:brightness(1)}
+  }
+
+  /* 3. Patronus: Silver & Pure White luminous aura (#ffffff / #b0e0e6) */
+  body.theme-patronus{
+    --ink:#080e1a;
+    --night:#111b2e;
+    --night-2:#192742;
+    --term:#050a14;
+    --ravenclaw:#456185;
+    --ravenclaw-bright:#b0e0e6;
+    --bronze:#ffffff;
+    --bronze-soft:#e2f4f8;
+    --charm:#ffffff;
+    --silver:#eef4fb;
+    --line:rgba(255,255,255,.32);
+    --line-soft:rgba(255,255,255,.16);
+  }
+  body.theme-patronus .glow{
+    background:
+      radial-gradient(900px 520px at 80% -8%, rgba(255,255,255,.55), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(176,224,230,.45), transparent 60%);
+  }
+  body.theme-patronus .stars{filter:brightness(2.6) contrast(1.3) drop-shadow(0 0 2px #fff)}
+  body.theme-patronus .hero h1{
+    background:linear-gradient(180deg,#ffffff 20%,#e0f2fe 75%,#b0e0e6 130%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  body.theme-patronus .portrait-frame{
+    background:radial-gradient(circle at 50% 35%, #456185, var(--night) 70%);
+    box-shadow:0 0 0 10px rgba(255,255,255,.22),0 0 75px -10px rgba(255,255,255,.75),0 30px 60px -20px rgba(0,0,0,.7);
+  }
+  body.flash-patronus{animation:flashPatronus .8s ease-out}
+  @keyframes flashPatronus{
+    0%{filter:brightness(1)}
+    15%{filter:brightness(4) drop-shadow(0 0 60px #ffffff)}
     100%{filter:brightness(1)}
   }
 
@@ -792,42 +862,39 @@
       history: function(){ history.forEach(function(h, i){ line(String(i + 1).padStart(3) + '  ' + h); }); },
       clear: function(){ log.textContent = ''; },
       spells: function(){
-        line(T('Available spells:', 'คาถาที่ร่ายได้:'));
+        line(T('Available spells & themes:', 'คาถาและธีมที่ร่ายได้:'));
         [
-          ['lumos', T('ignite wand light', 'จุดแสงสว่างที่ปลายไม้')],
-          ['nox', T('extinguish wand light', 'ดับแสงไฟ')],
-          ['expecto patronum', T('cast your Patronus (or: patronus)', 'ร่ายคาถาผู้พิทักษ์ (หรือ: patronus)')],
+          ['charm', T('electric blue aura (#00f2fe / #0077fe)', 'แสงออร่าสีฟ้า-น้ำเงิน (#00f2fe / #0077fe)')],
+          ['dark', T('emerald dark magic (#00ff87 / #10b981)', 'แสงสีเขียวมรกต (#00ff87 / #10b981)')],
+          ['patronus', T('pure white & silver glow (#ffffff / #b0e0e6)', 'แสงสีเงินประกายขาวนวล (#ffffff / #b0e0e6)')],
+          ['lumos', T('ignite light & reset palette', 'จุดแสงสว่าง & คืนค่าสีเดิม')],
+          ['nox', T('extinguish wand light', 'ดับแสงไฟให้มืดลง')],
           ['alohomora', T('unlock secret developer note', 'ปลดล็อกข้อความลับ')],
           ['wingardium leviosa', T('levitation charm (or: leviosa)', 'คาถาลอยตัว (หรือ: leviosa)')],
           ['protego', T('shield charm', 'คาถาเกราะวิเศษป้องกันตัว')],
-          ['avada kedavra', T('unforgivable curse', 'คำสาปพิฆาต')],
           ['mischief managed', T('clear map & screen', 'แผนที่ตัวกวน / ล้างหน้าจอ')]
         ].forEach(function(c){ line('  ' + (c[0] + '                      ').slice(0, 22) + c[1]); });
       },
       // spells
       lumos: function(){
-        document.body.classList.remove('dim', 'avada', 'avada-flash');
-        document.body.classList.add('lit');
+        setTheme('lit');
         spell('Lumos!', 'charm'); line(T('The castle brightens. Colors restored.', 'ปราสาทสว่างขึ้นแล้ว คืนค่าสีเดิมเรียบร้อย'));
       },
       nox: function(){
-        document.body.classList.remove('lit', 'avada', 'avada-flash');
-        document.body.classList.add('dim');
+        setTheme('dim');
         spell('Nox.', 'charm'); line(T('The lights dim. Type lumos to bring them back.', 'แสงดับลง พิมพ์ lumos เพื่อเปิดไฟ'));
       },
       'expecto patronum': function(){
+        setTheme('theme-patronus', 'flash-patronus');
         spell('Expecto Patronum!', 'patronus');
-        line(T('A silver eagle bursts from your wand. 🦅 Of course it does.', 'นกอินทรีสีเงินพุ่งออกจากไม้กายสิทธิ์ 🦅 แน่นอนอยู่แล้ว'));
+        line(T('A silver eagle bursts from your wand! 🦅 (#ffffff / #b0e0e6)', 'นกอินทรีสีเงินพุ่งออกจากไม้กายสิทธิ์! 🦅 (#ffffff / #b0e0e6)'));
+        line(T('Luminous silver and pure white Patronus aura protects the realm.', 'แสงสีเงินประกายขาวนวลสว่างไสวปกป้องทั่วทั้งหน้าเว็บ'), 'hint');
       },
       'avada kedavra': function(){
-        document.body.classList.remove('lit', 'dim', 'avada-flash');
-        document.body.classList.add('avada');
-        void document.body.offsetWidth;
-        document.body.classList.add('avada-flash');
+        setTheme('theme-dark', 'flash-dark');
         spell('Avada Kedavra!', 'dark');
-        line(T('⚡ A blinding jet of emerald green light flashes across the screen!', '⚡ ลำแสงสีเขียวมรกตสว่างวาบไปทั่วหน้าจอ!'));
-        line(T('Dark magic transforms the entire website into emerald green. 🐍', 'เว็ปไซต์ถูกเปลี่ยนเป็นธีมสีเขียวศาสตร์มืดแล้ว 🐍'));
-        line(T('Type lumos to lift the curse and restore original colors.', 'พิมพ์ lumos เพื่อถอนคำสาปและคืนสีเดิม'), 'hint');
+        line(T('⚡ Emerald green dark magic engulfs the realm (#00ff87 / #10b981)!', '⚡ ลำแสงสีเขียวมรกตและเวทมนตร์ศาสตร์มืดเข้าปกคลุมหน้าเว็บ (#00ff87 / #10b981)!'));
+        line(T('Dark magic theme active. Type lumos to lift the curse.', 'ธีมสีเขียวศาสตร์มืดทำงาน พิมพ์ lumos เพื่อถอนคำสาป'), 'hint');
       },
       alohomora: function(){
         spell('Alohomora!', 'charm');
@@ -839,7 +906,7 @@
         window.scrollBy({top:-60});
       },
       'mischief managed': function(){
-        document.body.classList.remove('avada', 'avada-flash');
+        setTheme();
         log.textContent = ''; line(T('Map cleared.', 'แผนที่ถูกลบแล้ว'), 'hint');
       },
       'rm -rf /': function(){
@@ -850,21 +917,32 @@
     commands.about = commands.whoami;
     commands.patronus = commands['expecto patronum'];
     commands.leviosa = commands['wingardium leviosa'];
-    commands.avada = commands.avadakedavra = commands['avada kedavra'];
+    commands.avada = commands.avadakedavra = commands.dark = commands['avada kedavra'];
     commands.protego = function(){
       spell('Protego!', 'charm');
       line(T('A shimmering shield barrier appears. The castle is secure.', 'เกราะเวทมนตร์สีเงินเปล่งประกาย ปราสาทปลอดภัยแล้ว'));
     };
     commands.charm = commands.charms = function(){
-      spell('Charms!', 'charm');
-      line(T('CS 204 Charms: Web Development · Responsive Design', 'วิชา CS 204 คาถา: พัฒนาเว็บ · ออกแบบรองรับทุกหน้าจอ'));
-      go('skills');
+      setTheme('theme-charm', 'flash-charm');
+      spell('Charm Aura!', 'charm');
+      line(T('✨ Cyan & electric blue charm aura illuminates the castle (#00f2fe / #0077fe).', '✨ แสงออร่าสีฟ้า-น้ำเงินเปล่งประกายปกคลุมปราสาท (#00f2fe / #0077fe)'));
+      line(T('CS 204 Charms · Responsive Design. Type lumos to reset.', 'วิชา CS 204 คาถา · ออกแบบรองรับทุกหน้าจอ พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
     };
     commands['cat'] = function(args){
       if(args[0] === 'motto.txt') line(T('“Wit beyond measure is man\'s greatest treasure.”', '“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”'), 'motto');
       else line('cat: ' + (args[0] || '') + T(': no such file', ': ไม่มีไฟล์นี้'), 'err');
     };
     commands['sorting-hat'] = commands.sort;
+
+    var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'avada-flash'];
+    function setTheme(themeClass, flashClass){
+      ALL_THEMES.forEach(function(c){ document.body.classList.remove(c); });
+      if(themeClass) document.body.classList.add(themeClass);
+      if(flashClass){
+        void document.body.offsetWidth;
+        document.body.classList.add(flashClass);
+      }
+    }
 
     function run(raw){
       var text = raw.trim();
