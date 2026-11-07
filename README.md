@@ -7,32 +7,27 @@ a bilingual (EN/TH) static site with a Ravenclaw / "Starlit Academy" theme, depl
 
 ```
 index.html          the homepage (self-contained: its CSS/JS live inside the file)
-sortinghats.html    page: The Sorting Hat (Python in the browser via PyScript)
+sortinghats.html    page: The Sorting Hat (Python in the browser via PyScript + instant JS engine)
 paotang.html        page: Thai Chuay Thai co-payment calculator
-packages.html       page: Fastwork service packages demo (Basic/Standard/Premium)
+packages.html       page: Fastwork service packages (Basic / Standard / Premium)
 work.html           page: /work, the contact-free portfolio the Fastwork listing links to
-demos/              pages: fictional-business demos shown on /work (cafe, clinic, shop + admin)
-planner/            page: Content Life Planner (private; no build step)
-  index.html          the shell
-  styles.css          one theme, every colour a token on :root
-  app/                35 ES modules, loaded directly — nothing is compiled
+404.html            page: custom 404 page
+demos/              pages: fictional-business demos (cafe, clinic, shop + admin)
 
 assets/             shared look & feel for sub-pages (styles.css + site.js)
-sorting-hat/        Python code + config used by sortinghats.html
+sorting-hat/        Python & JS code + config used by sortinghats.html
 images/             photos and project thumbnails
-videos/             media files
 docs/               DESIGN.md (theme rules) and PRODUCT.md (product notes)
 
-server.py           local dev server with the same headers as production
-vercel.json         Vercel deploy headers (needed by PyScript)
+server.py           local dev server with the same headers & rewrites as production
+vercel.json         Vercel deploy headers & URL rewrites
 package.json        project metadata only — the site has no dependencies
 ```
 
 Every page you can visit sits at the top level; everything inside a folder is
 supporting material for one of those pages.
 
-Language choice persists in `localStorage('site:lang')` across pages; the planner keeps its own
-`cp:lang` (defaults to Thai) alongside its data keys under `cp:*`.
+Language choice persists in `localStorage('site:lang')` across pages.
 
 **Private vs public views.** The Paotang calculator comes in two flavors:
 
@@ -41,42 +36,6 @@ Language choice persists in `localStorage('site:lang')` across pages; the planne
 | Paotang calculator | `/paotang.html` | `/paotang.html?demo=1` |
 
 The demo view loads sample data, shows a Demo badge and saves nothing.
-
-**The Starlit Ledger has been removed.** Its four data areas — money, debts, homework and
-sales — were merged into the Content Life Planner, so the React app, its `/life-management/`
-page and the whole React/Recharts toolchain are gone. Legacy `lm:*` and `cp:theme` keys are
-automatically purged from `localStorage`.
-
-## Content Life Planner
-
-`/planner/` is a Thai-language planner for the content side of things: a content pipeline
-(รอถ่าย → ถ่ายรอตัด → รอโพสต์ → โพสต์แล้ว), goals with counters, daily habits, day/month plans,
-a calendar, a knowledge hub, reminders, and a Finance tab that tracks one-off bills, monthly
-recurring bills and installment plans (`฿10,000 × 10 งวด`, pay/undo a งวด at a time).
-
-The four areas the Starlit Ledger brought with it — money, debts, homework and sales — sit
-alongside those, eleven pages grouped in the sidebar as Make · Money · Study & work · Keep.
-
-No build step and no framework: `planner/index.html` + `planner/styles.css` load
-`planner/app/` as plain ES modules. Charts are hand-drawn inline SVG, which is why the
-project has no dependencies at all. Data lives in this browser only, under `cp:contents`,
-`cp:goals`, `cp:habits`, `cp:plans`, `cp:notes`, `cp:reminders`, `cp:finance`, `cp:payments`,
-`cp:transactions`, `cp:debts`, `cp:homework`, `cp:sales` and `cp:profile`, with `cp:schema`
-tracking the migration version. Nothing is seeded — a new browser starts empty.
-
-One theme and no theme switch: the Ravenclaw palette from `docs/DESIGN.md`, midnight blue with
-bronze CTAs and a faint starfield. Every colour is a CSS custom property declared once on
-`:root` at the top of `styles.css`, the only place hex values live. The sidebar keeps just the
-TH/EN language switch.
-
-Dates are shown in the Buddhist era (`4 ก.ย. 69`) and money as `฿56,853.41`.
-Page state is in the URL hash (`/planner/#finance`), so a tab can be bookmarked.
-
-The planner requires sign-in: a browser with no account gets a setup screen, and every load
-after that shows a lock screen. The credential is a PBKDF2-SHA256 salt and hash created in the
-browser — the password is never stored and no credential is in this repo. It is `noindex` and
-unlinked, but that is not access control: records sit unencrypted in `localStorage`, so the gate
-covers the screen, not the data.
 
 ## Develop
 
@@ -88,8 +47,7 @@ python3 server.py   # http://localhost:8000
 
 ## Build
 
-There is nothing to build. Every page is static and the planner's `app/` is plain ES modules
-served as-is, so Vercel needs no build step and `npm install` installs nothing.
+There is nothing to build. Every page is static and served as-is, so Vercel needs no build step and `npm install` installs nothing.
 
 ## Deploy
 

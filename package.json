@@ -2,6 +2,8 @@
   "name": "sunshine-and-moonlight",
   "version": "1.0.0",
   "private": true,
-  "description": "Portfolio site of Suwapat Saelee — public static pages, plus the private Content Life Planner",
-  "scripts": {}
+  "description": "Portfolio site of Suwapat Saelee — bilingual static web portfolio and interactive demos",
+  "scripts": {
+    "start": "python3 server.py"
+  }
 }

@@ -119,7 +119,7 @@
 <body>
 <div class="demo-bar">
   <span><b>เดโมผลงาน</b> · ร้านสมมติ ทุกอย่างในหน้านี้เป็นตัวอย่าง</span>
-  <a href="/work">← กลับหน้าผลงาน</a>
+  <a href="../index.html#projects" id="demo-back">← กลับหน้าพอร์ตโฟลิโอ</a>
 </div>
 
 <div class="wrap">
@@ -245,6 +245,12 @@
     toast.classList.add('show');
     clearTimeout(timer); timer = setTimeout(() => toast.classList.remove('show'), 2600);
   }));
+  (function(){
+    const from = new URLSearchParams(location.search).get('from');
+    const back = document.getElementById('demo-back');
+    if(from === 'work'){ back.href = '/work'; back.textContent = '← กลับหน้าผลงาน'; }
+    else if(from === 'packages'){ back.href = '../packages.html'; back.textContent = '← กลับหน้าแพ็กเกจ'; }
+  })();
 </script>
 </body>
 </html>

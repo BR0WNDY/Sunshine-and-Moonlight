@@ -8,8 +8,13 @@
       var t = el.getAttribute('data-' + lang);
       if(t !== null) el.textContent = t;
     });
+    document.querySelectorAll('[data-en-placeholder]').forEach(function(el){
+      var p = el.getAttribute('data-' + lang + '-placeholder');
+      if(p !== null) el.setAttribute('placeholder', p);
+    });
     var btn = document.getElementById('langBtn');
     if(btn) btn.textContent = (lang === 'en') ? 'TH ◇ EN' : 'EN ◇ TH';
+    window.dispatchEvent(new CustomEvent('site:langchange', { detail: { lang: lang } }));
   }
 
   window.toggleLang = function(){
@@ -39,10 +44,28 @@
     applyWorkView();
     var toggle = document.querySelector('.menu-toggle');
     var links = document.querySelector('.nav-links');
+    function setMenu(open){
+      if(!toggle || !links) return;
+      links.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = open ? '✕' : '☰';
+    }
     if(toggle && links){
-      toggle.addEventListener('click', function(){ links.classList.toggle('open'); });
-      links.querySelectorAll('a').forEach(function(a){
-        a.addEventListener('click', function(){ links.classList.remove('open'); });
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.addEventListener('click', function(e){
+        e.stopPropagation();
+        setMenu(!links.classList.contains('open'));
+      });
+      links.querySelectorAll('a, button').forEach(function(el){
+        el.addEventListener('click', function(){ setMenu(false); });
+      });
+      document.addEventListener('click', function(e){
+        if(links.classList.contains('open') && !links.contains(e.target) && e.target !== toggle){
+          setMenu(false);
+        }
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && links.classList.contains('open')) setMenu(false);
       });
     }
     applyLang();

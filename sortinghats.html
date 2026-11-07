@@ -14,8 +14,6 @@
 <meta property="og:image" content="https://browndy.vercel.app/images/thumb-sortinghat.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="stylesheet" href="assets/styles.css?v=5" />
-<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 <style>
   .sorting-wrap{max-width:720px;margin:0 auto}
 
@@ -102,24 +100,24 @@
     <p class="lead" data-en="An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript." data-th="แบบทดสอบเชิงโต้ตอบที่จัดคุณเข้าบ้านฮอกวอตส์ — สุ่มชุดคำถามใหม่ทุกครั้ง แตะตอบได้ทั้งบนมือถือและคอมพิวเตอร์ เลือกรันด้วย Python (PyScript) หรือ JavaScript ล้วนก็ได้">An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript.</p>
 
     <div class="hat-toggle" role="group" aria-label="Choose engine">
-      <button class="hat-toggle-btn is-active" id="engineJsBtn" type="button">JavaScript (Instant)</button>
-      <button class="hat-toggle-btn" id="enginePyBtn" type="button">Python · PyScript</button>
+      <button class="hat-toggle-btn is-active" id="engineJsBtn" type="button" data-en="JavaScript (Instant)" data-th="JavaScript (พร้อมเล่นทันที)">JavaScript (Instant)</button>
+      <button class="hat-toggle-btn" id="enginePyBtn" type="button" data-en="Python · PyScript" data-th="Python · PyScript">Python · PyScript</button>
     </div>
     <p class="hat-engine-note" data-en="Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser." data-th="แบบทดสอบเดียวกัน เลือกรันได้ 2 เอนจิน — JavaScript เริ่มเล่นได้ทันที ส่วน Python รันผ่าน Pyodide บนเบราว์เซอร์จริง">Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser.</p>
 
     <div class="hat-card">
       <div class="hat-progress" id="hatProgress"></div>
       <div class="hat-body" id="hatBody">
-        <p class="hat-line">The Hat is gathering its thoughts…</p>
+        <p class="hat-line" data-en="The Hat is gathering its thoughts…" data-th="หมวกคัดสรรกำลังรวบรวมความคิด…">The Hat is gathering its thoughts…</p>
       </div>
     </div>
 
     <script src="sorting-hat/sortinghat.js"></script>
-    <script type="py" src="./sorting-hat/sortinghat.py" config="./sorting-hat/pyscript.json"></script>
     <script>
       (function () {
         var current = "js";
         var pyReady = false;
+        var pyLoading = false;
 
         var jsBtn = document.getElementById("engineJsBtn");
         var pyBtn = document.getElementById("enginePyBtn");
@@ -128,6 +126,26 @@
           current = which;
           jsBtn.classList.toggle("is-active", which === "js");
           pyBtn.classList.toggle("is-active", which === "py");
+        }
+
+        function ensurePyScript() {
+          if (pyLoading || pyReady) return;
+          pyLoading = true;
+          var link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = "https://pyscript.net/releases/2024.1.1/core.css";
+          document.head.appendChild(link);
+
+          var pyTag = document.createElement("script");
+          pyTag.type = "py";
+          pyTag.src = "./sorting-hat/sortinghat.py";
+          pyTag.setAttribute("config", "./sorting-hat/pyscript.json");
+          document.body.appendChild(pyTag);
+
+          var core = document.createElement("script");
+          core.type = "module";
+          core.src = "https://pyscript.net/releases/2024.1.1/core.js";
+          document.head.appendChild(core);
         }
 
         if (typeof window.jsStartHat === "function") {
@@ -149,9 +167,13 @@
           if (pyReady) {
             window.pyStartHat();
           } else {
+            var isTh = (localStorage.getItem("site:lang") || "en") === "th";
             document.getElementById("hatProgress").textContent = "";
             document.getElementById("hatBody").innerHTML =
-              '<p class="hat-line">Loading the Python runtime… this can take a few seconds on first load.</p>';
+              '<p class="hat-line" data-en="Loading the Python runtime… this can take a few seconds on first load." data-th="กำลังโหลด Python runtime… อาจใช้เวลาสักครู่ในการเปิดครั้งแรก">' +
+              (isTh ? "กำลังโหลด Python runtime… อาจใช้เวลาสักครู่ในการเปิดครั้งแรก" : "Loading the Python runtime… this can take a few seconds on first load.") +
+              '</p>';
+            ensurePyScript();
           }
         });
       })();

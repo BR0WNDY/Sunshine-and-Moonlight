@@ -63,7 +63,7 @@
     --bronze-soft:#dcc06a;
     --silver:#c3cee0;
     --parchment:#eef2fb;
-    --muted:#8fa1c4;
+    --muted:#9db0d4;
     --charm:#7fe3f5;        /* Lumos / charm glow, text only */
     --font-title:'Cinzel','IBM Plex Sans Thai',Georgia,serif;
     --font-display:'Cormorant Garamond','IBM Plex Sans Thai',Georgia,serif;
@@ -193,11 +193,13 @@
   .run{font:inherit;line-height:inherit;color:var(--parchment);background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;
     text-decoration:underline dotted;text-decoration-color:rgba(200,163,58,.45);text-underline-offset:4px;-webkit-tap-highlight-color:transparent}
   .run:hover,.run:focus-visible{color:var(--bronze-soft);text-decoration-color:currentColor;outline:0}
-  .term-chips{display:none;flex-wrap:wrap;gap:8px;padding:10px 16px 12px;border-top:1px solid var(--line-soft);background:rgba(7,13,31,.45)}
-  .term-chips .chip{flex:0 0 auto;font-family:var(--font-mono);font-size:.78rem;text-decoration:none;color:var(--silver);
-    border:1px solid var(--line);border-radius:999px;padding:7px 14px;min-height:36px;background:rgba(42,74,134,.18)}
-  .term-chips .chip:active{background:rgba(200,163,58,.18);border-color:var(--bronze);color:var(--bronze-soft)}
-  @media (max-width:860px), (pointer:coarse){ .hero .term-chips{display:flex} }
+  .term-chips{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px 12px;border-top:1px solid var(--line-soft);background:rgba(7,13,31,.45)}
+  .term-chips .chip{flex:0 0 auto;font-family:var(--font-mono);font-size:.76rem;text-decoration:none;color:var(--silver);
+    border:1px solid var(--line);border-radius:999px;padding:6px 13px;min-height:34px;background:rgba(42,74,134,.18);transition:border-color .2s,color .2s,background .2s}
+  .term-chips .chip:hover{border-color:var(--bronze);color:var(--bronze-soft);background:rgba(200,163,58,.12)}
+  .term-chips .chip:active{background:rgba(200,163,58,.22);border-color:var(--bronze);color:var(--bronze-soft)}
+  .term-chips .chip-reset{display:none;border-color:rgba(220,192,106,.45);color:var(--bronze-soft);background:rgba(200,163,58,.14)}
+  .term-chips .chip-reset.show{display:inline-flex;align-items:center}
   .spell{display:inline-block;font-family:var(--font-title);font-size:1.5em;font-weight:700;letter-spacing:1px;
     color:#fff;margin:4px 0;animation:cast .45s ease-out}
   .spell.charm{text-shadow:0 0 10px #00f2fe,0 0 25px #0077fe}
@@ -733,6 +735,7 @@
   .page-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
   .page .stack{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.6px;color:var(--muted)}
   .page .link{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.6px;color:var(--bronze-soft);display:inline-flex;align-items:center;gap:7px}
+  .page .link::after{content:"";position:absolute;inset:0;z-index:1}
   .page .link:hover{color:var(--bronze)}
   .page .link .arr{transition:.2s}
   .page:hover .link .arr{transform:translateX(4px)}
@@ -811,8 +814,8 @@
       <span class="name">Suwapat Saelee</span>
       <span class="path">~/hogwarts/ravenclaw</span>
     </a>
-    <button class="menu-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
-    <div class="nav-links">
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">☰</button>
+    <div class="nav-links" id="navLinks">
       <a href="#about" data-en="About" data-th="เกี่ยวกับ">About</a>
       <a href="#skills" data-en="Skills" data-th="ทักษะ">Skills</a>
       <a href="#projects" data-en="Projects" data-th="ผลงาน">Projects</a>
@@ -864,7 +867,7 @@
       <div class="portrait">
         <div class="ring" aria-hidden="true"></div>
         <div class="portrait-frame">
-          <img src="images/Me.jpeg" alt="Suwapat Saelee" onerror="this.style.display='none'" />
+          <img src="images/Me.jpeg" alt="Suwapat Saelee" width="262" height="262" fetchpriority="high" decoding="async" onerror="this.style.display='none'" />
         </div>
         <div class="badge-card"><span class="dot" aria-hidden="true"></span><span data-en="Open to work · freelance &amp; internships" data-th="เปิดรับงาน · ฟรีแลนซ์และฝึกงาน">Open to work · freelance &amp; internships</span></div>
       </div>
@@ -1082,10 +1085,34 @@
   }
   function toggleLang(){ lang = (lang === 'en') ? 'th' : 'en'; localStorage.setItem('site:lang', lang); applyLang(); }
   document.getElementById('year').textContent = new Date().getFullYear();
-  // close mobile menu on link click
-  document.querySelectorAll('.nav-links a').forEach(function(a){
-    a.addEventListener('click', function(){ document.querySelector('.nav-links').classList.remove('open'); });
-  });
+  // mobile menu toggle, outside click & Escape to close
+  (function(){
+    var menuBtn = document.getElementById('menuToggle');
+    var navLinks = document.getElementById('navLinks');
+    function setMenu(open){
+      if(!menuBtn || !navLinks) return;
+      navLinks.classList.toggle('open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.textContent = open ? '✕' : '☰';
+    }
+    if(menuBtn && navLinks){
+      menuBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        setMenu(!navLinks.classList.contains('open'));
+      });
+      navLinks.querySelectorAll('a, button').forEach(function(el){
+        el.addEventListener('click', function(){ setMenu(false); });
+      });
+      document.addEventListener('click', function(e){
+        if(navLinks.classList.contains('open') && !navLinks.contains(e.target) && e.target !== menuBtn){
+          setMenu(false);
+        }
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && navLinks.classList.contains('open')) setMenu(false);
+      });
+    }
+  })();
   applyLang();
 
   // ---------- interactive hero terminal ----------
@@ -1561,7 +1588,12 @@
       line(T('✨ Cyan & electric blue charm aura illuminates the castle (#00f2fe / #0077fe).', '✨ แสงออร่าสีฟ้า-น้ำเงินเปล่งประกายปกคลุมปราสาท (#00f2fe / #0077fe)'));
       line(T('CS 204 Charms · Responsive Design. Type lumos to reset.', 'วิชา CS 204 คาถา · ออกแบบรองรับทุกหน้าจอ พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
     };
-    commands['cat'] = function(args){
+      commands.finite = function(){
+        setTheme();
+        spell('Finite Incantatem!', 'charm');
+        line(T('All active spells and themes lifted. Castle restored.', 'ถอนคาถาและเอฟเฟกต์ทั้งหมดแล้ว คืนค่าปราสาทสู่สภาวะปกติ'));
+      };
+      commands['cat'] = function(args){
       if(args[0] === 'motto.txt') line(T('“Wit beyond measure is man\'s greatest treasure.”', '“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”'), 'motto');
       else line('cat: ' + (args[0] || '') + T(': no such file', ': ไม่มีไฟล์นี้'), 'err');
     };
@@ -1823,6 +1855,7 @@
     });
 
     var ALL_THEMES = ['theme-charm', 'theme-dark', 'theme-patronus', 'theme-incendio', 'theme-aguamenti', 'theme-riddikulus', 'theme-crucio', 'theme-morsmordre', 'theme-imperio', 'avada', 'lit', 'dim', 'flash-charm', 'flash-dark', 'flash-patronus', 'flash-incendio', 'flash-aguamenti', 'flash-riddikulus', 'flash-crucio', 'flash-morsmordre', 'flash-imperio', 'avada-flash', 'shake-screen', 'petrified'];
+    var resetChip = null;
     function setTheme(themeClass, flashClass){
       ALL_THEMES.forEach(function(c){ document.body.classList.remove(c); });
       var mark = document.querySelector('.dark-mark');
@@ -1831,6 +1864,10 @@
       if(flashClass){
         void document.body.offsetWidth;
         document.body.classList.add(flashClass);
+      }
+      if(resetChip){
+        var hasCustomTheme = Boolean(themeClass && themeClass !== 'lit');
+        resetChip.classList.toggle('show', hasCustomTheme);
       }
     }
 
@@ -1869,7 +1906,7 @@
       input.focus({preventScroll:true});
     });
 
-    // quick-cast chips — tap instead of typing (shown on phones / touch screens)
+    // quick-cast chips — tap or click instead of typing
     var CAST_POOL = ['lumos', 'nox', 'expecto patronum', 'charm', 'protego', 'alohomora', 'wingardium leviosa', 'vulnera sanentur',
       'incendio', 'aguamenti', 'bombarda', 'riddikulus', 'stupefy', 'expelliarmus', 'petrificus totalus', 'tempus', 'avada kedavra', 'crucio', 'imperio', 'morsmordre', 'sectumsempra'];
     var chips = document.createElement('div');
@@ -1880,6 +1917,14 @@
       if(c[1] === '__random'){ b.setAttribute('data-en', '✦ random spell'); b.setAttribute('data-th', '✦ สุ่มคาถา'); }
       chips.appendChild(b);
     });
+    resetChip = document.createElement('button');
+    resetChip.type = 'button';
+    resetChip.className = 'run chip chip-reset';
+    resetChip.setAttribute('data-cmd', 'finite');
+    resetChip.setAttribute('data-en', '↺ reset theme');
+    resetChip.setAttribute('data-th', '↺ คืนค่าธีมเดิม');
+    resetChip.textContent = T('↺ reset theme', '↺ คืนค่าธีมเดิม');
+    chips.appendChild(resetChip);
     body.parentNode.appendChild(chips);
 
     // one handler for every tappable command (help/spells rows + chips)

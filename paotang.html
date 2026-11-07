@@ -254,14 +254,6 @@
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// --- placeholder i18n (site.js only swaps textContent, not placeholders) ---
-function applyPlaceholders(){
-  var lang = document.documentElement.lang === 'th' ? 'th' : 'en';
-  document.querySelectorAll('[data-en-placeholder]').forEach(function(el){
-    el.placeholder = el.getAttribute('data-' + lang + '-placeholder');
-  });
-}
-
 // --- dynamic-content i18n dictionary ---
 var L = {
   en: { noHistory:'No transaction history', total:'Total:', gov:'Gov:', you:'You:',
@@ -335,9 +327,17 @@ const historyList = document.getElementById('history-timeline');
 const itemNameInput = document.getElementById('item-name');
 
 let currentMonthlyQuota = 1000;
-let transactions = DEMO ? demoTransactions() : (JSON.parse(localStorage.getItem('paotangHistory')) || []);
+let transactions = [];
+try {
+  transactions = DEMO ? demoTransactions() : (JSON.parse(localStorage.getItem('paotangHistory')) || []);
+  if (!Array.isArray(transactions)) transactions = [];
+} catch {
+  transactions = [];
+}
 function persist() {
-  if (!DEMO) localStorage.setItem('paotangHistory', JSON.stringify(transactions));
+  if (!DEMO) {
+    try { localStorage.setItem('paotangHistory', JSON.stringify(transactions)); } catch {}
+  }
 }
 
 function renderHistory() {
@@ -410,30 +410,32 @@ window.addAmount = function(val) {
   inputElement.dispatchEvent(new Event('input'));
 };
 
+let countdownTimer = null;
+function updateCountdown() {
+  const now = new Date();
+  const nextCycle = new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0);
+
+  const diff = nextCycle - now;
+  const el = document.getElementById('wallet-countdown');
+  if (!el) return;
+
+  if (diff <= 0) { el.innerText = t('resetSoon'); return; }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / 1000 / 60) % 60);
+
+  let text = t('nextReset');
+  if (days > 0) text += `${days}${t('days')}`;
+  if (hours > 0) text += `${hours}${t('hrs')}`;
+  text += `${minutes}${t('mins')}`;
+
+  el.innerText = text;
+}
 function startCountdown() {
-  function update() {
-    const now = new Date();
-    const nextCycle = new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0);
-
-    const diff = nextCycle - now;
-    const el = document.getElementById('wallet-countdown');
-    if (!el) return;
-
-    if (diff <= 0) { el.innerText = t('resetSoon'); return; }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((diff / 1000 / 60) % 60);
-
-    let text = t('nextReset');
-    if (days > 0) text += `${days}${t('days')}`;
-    if (hours > 0) text += `${hours}${t('hrs')}`;
-    text += `${minutes}${t('mins')}`;
-
-    el.innerText = text;
-  }
-  update();
-  setInterval(update, 60000);
+  updateCountdown();
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = setInterval(updateCountdown, 60000);
 }
 
 function startApp() {
@@ -476,7 +478,6 @@ if (DEMO) {
     });
   }
 }
-applyPlaceholders();
 
 inputElement.addEventListener('input', function(e) {
   let amount = parseFloat(e.target.value) || 0;
@@ -606,13 +607,9 @@ clearBtn.addEventListener('click', () => {
 });
 
 // re-render dynamic (JS-authored) text whenever the shared language toggle fires
-document.addEventListener('DOMContentLoaded', function(){
-  var origToggle = window.toggleLang;
-  window.toggleLang = function(){
-    origToggle();
-    applyPlaceholders();
-    renderHistory();
-  };
+window.addEventListener('site:langchange', function(){
+  renderHistory();
+  updateCountdown();
 });
 </script>
 </body>
