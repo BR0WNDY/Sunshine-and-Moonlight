@@ -31,7 +31,7 @@
 
   function applyWorkView(){
     if(!fromWork) return;
-    document.querySelectorAll('a[href^="index.html"], .brand').forEach(function(a){
+    document.querySelectorAll('a[href^="index.html"], a[href^="../index.html"], a[href^="/index.html"], .brand').forEach(function(a){
       a.setAttribute('href', '/work');
     });
     document.querySelectorAll('footer a[data-en]').forEach(function(a){

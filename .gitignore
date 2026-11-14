@@ -1,5 +1,6 @@
 # Editors and tooling
 .claude/
+.gemini/
 .vscode/
 .idea/
 *.swp
@@ -20,6 +21,8 @@ __pycache__/
 .venv/
 venv/
 
-# Local scratch
+# Local scratch & archives
 *.local
+*.zip
 /tmp/
+planner/
