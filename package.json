@@ -4,6 +4,7 @@
   "private": true,
   "description": "Portfolio site of Suwapat Saelee — bilingual static web portfolio and interactive demos",
   "scripts": {
-    "start": "python3 server.py"
+    "start": "python3 server.py",
+    "test": "python3 -m unittest discover -s tests -v"
   }
 }
