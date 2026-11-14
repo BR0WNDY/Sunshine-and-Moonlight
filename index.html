@@ -746,7 +746,23 @@
   .contact{text-align:center}
   .contact h2{margin-bottom:16px}
   .contact .lead{margin:0 auto 30px}
-  .contact .term{max-width:640px;margin:0 auto 30px;text-align:left}
+  .contact .term{max-width:640px;margin:0 auto 24px;text-align:left}
+  .owl-form{max-width:640px;margin:0 auto 30px;padding:24px;text-align:left;background:linear-gradient(180deg,var(--night-2),var(--night));
+    border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 56px -28px rgba(0,0,0,.85)}
+  .owl-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .owl-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .owl-grid .owl-field{margin-bottom:0}
+  .owl-field label{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.6px;color:var(--bronze-soft)}
+  .owl-field input,.owl-field select,.owl-field textarea{width:100%;font-family:var(--font-body);font-size:.92rem;color:var(--parchment);
+    background:var(--term);border:1px solid var(--line);border-radius:8px;padding:11px 13px;transition:border-color .2s,box-shadow .2s}
+  .owl-field textarea{resize:vertical;min-height:104px}
+  .owl-field input::placeholder,.owl-field textarea::placeholder{color:rgba(157,176,212,.55)}
+  .owl-field input:focus,.owl-field select:focus,.owl-field textarea:focus{outline:none;border-color:var(--bronze);box-shadow:0 0 0 3px rgba(200,163,58,.16)}
+  .owl-hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+  .owl-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .owl-status{font-family:var(--font-mono);font-size:.78rem;margin-top:12px;min-height:1.3em;color:var(--charm)}
+  .owl-status.err{color:#ff8f8f}
+  .owl-status.ok{color:#7fd4a1}
   .contact-links{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
 
   footer{border-top:1px solid var(--line);padding:30px 0;position:relative;z-index:2}
@@ -786,7 +802,8 @@
     #term-log .rows .run{padding:5px 0 0;min-height:32px}
     #term-log .rows .v{margin:0 0 4px 14px;font-size:.92em;line-height:1.5}
     .term-bar span{font-size:.62rem}
-    .cta-row,.more-work{flex-direction:column;align-items:stretch}
+    .cta-row,.more-work,.owl-actions{flex-direction:column;align-items:stretch}
+    .owl-grid{grid-template-columns:1fr}
     .btn{justify-content:center}
     .foot{justify-content:center;text-align:center}
   }
@@ -1053,6 +1070,37 @@
         <div class="out lumos" data-en="🦉 Owl ready. Choose a route below." data-th="🦉 นกฮูกพร้อมแล้ว เลือกช่องทางด้านล่างได้เลย">🦉 Owl ready. Choose a route below.</div>
       </div>
     </div>
+    <form id="owl-form" class="owl-form" novalidate>
+      <input type="text" name="_gotcha" class="owl-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <div class="owl-grid">
+        <div class="owl-field">
+          <label for="owl-name" data-en="Your Name" data-th="ชื่อของคุณ">Your Name</label>
+          <input id="owl-name" name="name" type="text" required placeholder="Your name or company" data-en-placeholder="Your name or company" data-th-placeholder="ชื่อของคุณ หรือชื่อธุรกิจ" />
+        </div>
+        <div class="owl-field">
+          <label for="owl-reply" data-en="Email or LINE ID" data-th="อีเมล หรือ LINE ID">Email or LINE ID</label>
+          <input id="owl-reply" name="reply" type="text" required placeholder="you@example.com or @line_id" data-en-placeholder="you@example.com or @line_id" data-th-placeholder="อีเมล หรือ LINE ID สำหรับติดต่อกลับ" />
+        </div>
+      </div>
+      <div class="owl-field">
+        <label for="owl-pkg" data-en="Package / Scope" data-th="แพ็กเกจหรือขอบเขตงาน">Package / Scope</label>
+        <select id="owl-pkg" name="package">
+          <option value="Basic (฿1,500)" data-en="Basic — Single Landing Page (฿1,500)" data-th="Basic — เว็บหน้าเดียว Landing Page (฿1,500)">Basic — Single Landing Page (฿1,500)</option>
+          <option value="Standard (฿3,000)" selected data-en="Standard — Multi-Section / Business Site (฿3,000)" data-th="Standard — เว็บธุรกิจหลายส่วน / กรองข้อมูล (฿3,000)">Standard — Multi-Section / Business Site (฿3,000)</option>
+          <option value="Premium (฿5,500)" data-en="Premium — Full Web App / Back-Office Demo (฿5,500)" data-th="Premium — เว็บแอปครบวงจร / ระบบหลังบ้าน (฿5,500)">Premium — Full Web App / Back-Office Demo (฿5,500)</option>
+          <option value="Custom / Internship" data-en="Custom Quote / Internship / General Inquiry" data-th="ประเมินราคาตามบรีฟ / ฝึกงาน / พูดคุยทั่วไป">Custom Quote / Internship / General Inquiry</option>
+        </select>
+      </div>
+      <div class="owl-field">
+        <label for="owl-msg" data-en="Project Brief" data-th="รายละเอียดโปรเจกต์">Project Brief</label>
+        <textarea id="owl-msg" name="message" rows="4" required placeholder="Tell me about the website or tool you need, timeline, or reference links..." data-en-placeholder="Tell me about the website or tool you need, timeline, or reference links..." data-th-placeholder="เล่ารายละเอียดเว็บไซต์หรือระบบที่ต้องการ ระยะเวลา หรือลิงก์ตัวอย่าง..."></textarea>
+      </div>
+      <div class="owl-actions">
+        <button type="submit" class="btn btn-primary" data-en="Send Scroll →" data-th="ส่งข้อความ →">Send Scroll →</button>
+        <button type="button" id="owl-copy" class="btn btn-ghost" data-en="Copy Brief" data-th="คัดลอกบรีฟ">Copy Brief</button>
+      </div>
+      <div id="owl-status" class="owl-status" role="status" aria-live="polite"></div>
+    </form>
     <div class="contact-links">
       <a class="btn btn-primary" href="packages.html" data-en="View Packages &amp; Hire" data-th="ดูแพ็กเกจจ้างงาน">View Packages &amp; Hire</a>
       <a class="btn btn-ghost" href="mailto:browndy_moconi@icloud.com">Email</a>
@@ -1074,6 +1122,7 @@
 
 <script>
   var lang = localStorage.getItem('site:lang') || 'en';
+  var onLangChangeHooks = [];
   function applyLang(){
     document.documentElement.lang = lang;
     document.documentElement.classList.toggle('lang-th', lang === 'th');
@@ -1081,10 +1130,100 @@
       var t = el.getAttribute('data-' + lang);
       if(t !== null) el.textContent = t;
     });
+    document.querySelectorAll('[data-en-placeholder]').forEach(function(el){
+      var p = el.getAttribute('data-' + lang + '-placeholder');
+      if(p !== null) el.setAttribute('placeholder', p);
+    });
     document.getElementById('langBtn').textContent = (lang === 'en') ? 'TH ◇ EN' : 'EN ◇ TH';
+    onLangChangeHooks.forEach(function(fn){ fn(lang); });
   }
   function toggleLang(){ lang = (lang === 'en') ? 'th' : 'en'; localStorage.setItem('site:lang', lang); applyLang(); }
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---------- Owl Post inquiry form ----------
+  (function(){
+    var owlForm = document.getElementById('owl-form');
+    var owlName = document.getElementById('owl-name');
+    var owlReply = document.getElementById('owl-reply');
+    var owlPkg = document.getElementById('owl-pkg');
+    var owlMsg = document.getElementById('owl-msg');
+    var owlCopy = document.getElementById('owl-copy');
+    var owlStatus = document.getElementById('owl-status');
+    var lastStatus = null;
+
+    function setStatus(kind, enText, thText){
+      if(!owlStatus) return;
+      lastStatus = { kind: kind, en: enText, th: thText };
+      owlStatus.className = 'owl-status' + (kind ? ' ' + kind : '');
+      owlStatus.textContent = (lang === 'th') ? thText : enText;
+    }
+
+    onLangChangeHooks.push(function(){
+      if(lastStatus && owlStatus){
+        owlStatus.textContent = (lang === 'th') ? lastStatus.th : lastStatus.en;
+      }
+    });
+
+    function buildBrief(){
+      var n = (owlName && owlName.value || '').trim();
+      var r = (owlReply && owlReply.value || '').trim();
+      var p = (owlPkg && owlPkg.value || 'Standard (฿3,000)').trim();
+      var m = (owlMsg && owlMsg.value || '').trim();
+      return {
+        name: n,
+        reply: r,
+        pkg: p,
+        msg: m,
+        subject: '[Owl Post] ' + p + ' — ' + (n || 'Project Inquiry'),
+        body: 'Name: ' + n + '\nReply to: ' + r + '\nPackage: ' + p + '\n\nProject Brief:\n' + m
+      };
+    }
+
+    function validateBrief(b){
+      if(!b.name || !b.reply || !b.msg){
+        setStatus('err',
+          '⚠ Please fill in your name, contact info, and project brief before sending.',
+          '⚠ กรุณากรอกชื่อ ช่องทางติดต่อกลับ และรายละเอียดโปรเจกต์ให้ครบก่อนส่งครับ');
+        return false;
+      }
+      return true;
+    }
+
+    function copyText(text){
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        return navigator.clipboard.writeText(text).catch(function(){});
+      }
+      return Promise.resolve();
+    }
+
+    if(owlCopy){
+      owlCopy.addEventListener('click', function(){
+        var b = buildBrief();
+        if(!validateBrief(b)) return;
+        copyText(b.body).then(function(){
+          setStatus('ok',
+            '✦ Brief copied to clipboard! You can paste it into LINE, Fastwork, or Email.',
+            '✦ คัดลอกบรีฟเรียบร้อย! นำไปวางในแชท LINE, Fastwork หรืออีเมลได้เลยครับ');
+        });
+      });
+    }
+
+    if(owlForm){
+      owlForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var hp = owlForm.querySelector('input[name="_gotcha"]');
+        if(hp && hp.value) return;
+        var b = buildBrief();
+        if(!validateBrief(b)) return;
+        copyText(b.body);
+        setStatus('ok',
+          '🦉 Owl dispatched! Brief copied to clipboard & opening your email client...',
+          '🦉 เตรียมข้อมูลเรียบร้อย! คัดลอกบรีฟแล้ว และกำลังเปิดแอปอีเมลให้คุณ...');
+        var mailto = 'mailto:browndy_moconi@icloud.com?subject=' + encodeURIComponent(b.subject) + '&body=' + encodeURIComponent(b.body);
+        window.location.href = mailto;
+      });
+    }
+  })();
   // mobile menu toggle, outside click & Escape to close
   (function(){
     var menuBtn = document.getElementById('menuToggle');

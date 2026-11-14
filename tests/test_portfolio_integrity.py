@@ -268,6 +268,25 @@ class TestPortfolioIntegrity(unittest.TestCase):
                 finally:
                     os.unlink(tmp_path)
 
+    def test_owl_post_inquiry_form(self):
+        """index.html must include #owl-form with bilingual placeholders, package options, and #owl-status live region."""
+        inspector = parse_html_file("index.html")
+        for req_id in ("owl-form", "owl-name", "owl-reply", "owl-pkg", "owl-msg", "owl-status"):
+            self.assertIn(req_id, inspector.ids, f"Missing #{req_id} in index.html")
+
+        status_elems = [
+            attrs for tag, attrs, _ in inspector.elements if attrs.get("id") == "owl-status"
+        ]
+        self.assertEqual(len(status_elems), 1)
+        self.assertEqual(status_elems[0].get("role"), "status")
+        self.assertEqual(status_elems[0].get("aria-live"), "polite")
+
+        for field_id in ("owl-name", "owl-reply", "owl-msg"):
+            elems = [attrs for tag, attrs, _ in inspector.elements if attrs.get("id") == field_id]
+            self.assertEqual(len(elems), 1)
+            self.assertIn("data-en-placeholder", elems[0], f"#{field_id} missing data-en-placeholder")
+            self.assertIn("data-th-placeholder", elems[0], f"#{field_id} missing data-th-placeholder")
+
 
 if __name__ == "__main__":
     unittest.main()
