@@ -287,6 +287,31 @@ class TestPortfolioIntegrity(unittest.TestCase):
             self.assertIn("data-en-placeholder", elems[0], f"#{field_id} missing data-en-placeholder")
             self.assertIn("data-th-placeholder", elems[0], f"#{field_id} missing data-th-placeholder")
 
+    def test_case_study_dialog_and_triggers(self):
+        """index.html must include <dialog id='case-dialog'> and [data-case] triggers for spell-1..spell-6."""
+        inspector = parse_html_file("index.html")
+        self.assertIn("case-dialog", inspector.ids, "Missing <dialog id='case-dialog'> in index.html")
+        self.assertIn("case-title", inspector.ids, "Missing #case-title inside case study dialog")
+
+        dialogs = [
+            attrs for tag, attrs, _ in inspector.elements
+            if tag == "dialog" and attrs.get("id") == "case-dialog"
+        ]
+        self.assertEqual(len(dialogs), 1)
+        self.assertEqual(dialogs[0].get("aria-labelledby"), "case-title")
+
+        case_triggers = [
+            attrs.get("data-case")
+            for tag, attrs, _ in inspector.elements
+            if tag == "button" and "data-case" in attrs
+        ]
+        expected = [f"spell-{i}" for i in range(1, 7)]
+        self.assertEqual(
+            case_triggers,
+            expected,
+            f"Expected 6 case study buttons {expected}, found {case_triggers}",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

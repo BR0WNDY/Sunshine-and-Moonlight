@@ -734,11 +734,35 @@
   .page:hover .incant{text-shadow:0 0 10px rgba(127,227,245,.55);border-color:rgba(127,227,245,.32)}
   .page-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
   .page .stack{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.6px;color:var(--muted)}
+  .page-actions{display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}
   .page .link{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.6px;color:var(--bronze-soft);display:inline-flex;align-items:center;gap:7px}
-  .page .link::after{content:"";position:absolute;inset:0;z-index:1}
+  .page a.link::after{content:"";position:absolute;inset:0;z-index:1}
   .page .link:hover{color:var(--bronze)}
   .page .link .arr{transition:.2s}
   .page:hover .link .arr{transform:translateX(4px)}
+  .page .case-btn{position:relative;z-index:2;background:rgba(42,74,134,.28);border:1px solid rgba(200,163,58,.32);
+    border-radius:6px;padding:4px 10px;font-size:.72rem;color:var(--parchment);cursor:pointer;transition:.2s}
+  .page .case-btn:hover{border-color:var(--bronze);background:rgba(200,163,58,.18);color:var(--bronze-soft)}
+
+  /* ---------- case study modal (<dialog>) ---------- */
+  .case-dialog{max-width:680px;width:calc(100% - 32px);margin:auto;padding:0;background:linear-gradient(180deg,var(--night-2),var(--night));
+    color:var(--parchment);border:1px solid rgba(200,163,58,.45);border-radius:16px;
+    box-shadow:0 36px 90px -20px rgba(0,0,0,.92),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
+  .case-dialog::backdrop{background:rgba(5,10,24,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .case-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:22px 26px 18px;
+    border-bottom:1px solid var(--line);background:rgba(7,13,31,.55)}
+  .case-folio{font-family:var(--font-mono);font-size:.72rem;letter-spacing:2px;color:var(--bronze);text-transform:uppercase;margin-bottom:6px}
+  .case-title{font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2rem);font-weight:500;line-height:1.15;color:var(--parchment)}
+  .case-close{background:transparent;border:1px solid var(--line);color:var(--silver);width:34px;height:34px;border-radius:8px;
+    font-size:1rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s}
+  .case-close:hover{border-color:var(--bronze);color:var(--bronze-soft)}
+  .case-body{padding:22px 26px 26px;max-height:min(74vh,640px);overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+  .case-sec h4{font-family:var(--font-mono);font-size:.74rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--bronze-soft);margin-bottom:6px}
+  .case-sec p{color:var(--silver);font-size:.94rem;line-height:1.65}
+  .case-list{list-style:none;display:flex;flex-direction:column;gap:6px;padding:0}
+  .case-list li{color:var(--silver);font-size:.9rem;padding-left:18px;position:relative}
+  .case-list li::before{content:"✦";position:absolute;left:0;color:var(--bronze);font-size:.75rem;top:2px}
+  .case-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--line-soft)}
 
   .more-work{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:36px}
 
@@ -980,7 +1004,10 @@
           <div class="incant"><span class="kw">lumos</span>(<span class="cm">'portfolio'</span>, { lang })</div>
           <div class="page-foot">
             <span class="stack">HTML · CSS · JavaScript</span>
-            <a class="link" href="#top"><span data-en="View" data-th="ดูผลงาน">View</span> <span class="arr">→</span></a>
+            <div class="page-actions">
+              <button type="button" class="link case-btn" data-case="spell-1"><span data-en="Case Study" data-th="เจาะลึกงาน">Case Study</span></button>
+              <a class="link" href="#top"><span data-en="View" data-th="ดูผลงาน">View</span> <span class="arr">→</span></a>
+            </div>
           </div>
         </div>
       </article>
@@ -993,7 +1020,10 @@
           <div class="incant">house = <span class="kw">sorting_hat</span>.sort(you)  <span class="cm"># 🦅?</span></div>
           <div class="page-foot">
             <span class="stack">Python · PyScript · JS</span>
-            <a class="link" href="sortinghats.html"><span data-en="Launch App" data-th="เปิดใช้งาน">Launch App</span> <span class="arr">→</span></a>
+            <div class="page-actions">
+              <button type="button" class="link case-btn" data-case="spell-2"><span data-en="Case Study" data-th="เจาะลึกงาน">Case Study</span></button>
+              <a class="link" href="sortinghats.html"><span data-en="Launch App" data-th="เปิดใช้งาน">Launch App</span> <span class="arr">→</span></a>
+            </div>
           </div>
         </div>
       </article>
@@ -1006,7 +1036,10 @@
           <div class="incant">you = amount - <span class="kw">Math.min</span>(amount * 0.6, quota)</div>
           <div class="page-foot">
             <span class="stack">HTML · CSS · JavaScript</span>
-            <a class="link" href="paotang.html?demo=1"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            <div class="page-actions">
+              <button type="button" class="link case-btn" data-case="spell-3"><span data-en="Case Study" data-th="เจาะลึกงาน">Case Study</span></button>
+              <a class="link" href="paotang.html?demo=1"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            </div>
           </div>
         </div>
       </article>
@@ -1019,7 +1052,10 @@
           <div class="incant"><span class="kw">orders</span>.push({ items, status: <span class="cm">'new'</span> })</div>
           <div class="page-foot">
             <span class="stack">E-commerce · Admin UI</span>
-            <a class="link" href="demos/shop.html"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            <div class="page-actions">
+              <button type="button" class="link case-btn" data-case="spell-4"><span data-en="Case Study" data-th="เจาะลึกงาน">Case Study</span></button>
+              <a class="link" href="demos/shop.html"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            </div>
           </div>
         </div>
       </article>
@@ -1032,7 +1068,10 @@
           <div class="incant"><span class="kw">bookSlot</span>({ doctor, day, time })</div>
           <div class="page-foot">
             <span class="stack">Multi-page · Booking</span>
-            <a class="link" href="demos/clinic.html"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            <div class="page-actions">
+              <button type="button" class="link case-btn" data-case="spell-5"><span data-en="Case Study" data-th="เจาะลึกงาน">Case Study</span></button>
+              <a class="link" href="demos/clinic.html"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            </div>
           </div>
         </div>
       </article>
@@ -1045,7 +1084,10 @@
           <div class="incant"><span class="kw">menu</span>.filter(item =&gt; item.kind === tag)</div>
           <div class="page-foot">
             <span class="stack">Landing Page · Filter</span>
-            <a class="link" href="demos/cafe.html"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            <div class="page-actions">
+              <button type="button" class="link case-btn" data-case="spell-6"><span data-en="Case Study" data-th="เจาะลึกงาน">Case Study</span></button>
+              <a class="link" href="demos/cafe.html"><span data-en="Launch Demo" data-th="เปิดเดโม">Launch Demo</span> <span class="arr">→</span></a>
+            </div>
           </div>
         </div>
       </article>
@@ -1110,6 +1152,41 @@
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/browndy-moconi/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </section>
+
+  <dialog id="case-dialog" class="case-dialog" aria-labelledby="case-title">
+    <div class="case-head">
+      <div>
+        <p id="case-folio" class="case-folio">Spell I</p>
+        <h3 id="case-title" class="case-title">Project Title</h3>
+      </div>
+      <button type="button" id="case-close" class="case-close" aria-label="Close">✕</button>
+    </div>
+    <div class="case-body">
+      <div class="case-sec">
+        <h4 data-en="Challenge" data-th="โจทย์ของงาน">Challenge</h4>
+        <p id="case-challenge"></p>
+      </div>
+      <div class="case-sec">
+        <h4 data-en="Solution &amp; Architecture" data-th="แนวทางแก้ปัญหา &amp; โครงสร้าง">Solution &amp; Architecture</h4>
+        <p id="case-solution"></p>
+      </div>
+      <div class="case-sec">
+        <h4 data-en="Tech Highlights" data-th="เทคนิคเด่น">Tech Highlights</h4>
+        <ul id="case-highlights" class="case-list"></ul>
+      </div>
+      <div class="case-sec">
+        <h4 data-en="Outcome" data-th="ผลลัพธ์">Outcome</h4>
+        <p id="case-outcome"></p>
+      </div>
+      <div class="case-foot">
+        <span id="case-stack" class="stack"></span>
+        <div class="page-actions">
+          <a id="case-hire" class="btn btn-ghost" href="#contact"><span data-en="Inquire Similar Project" data-th="สั่งทำโปรเจกต์คล้ายกัน">Inquire Similar Project</span></a>
+          <a id="case-cta" class="btn btn-primary" href="#top"><span id="case-cta-label">Launch Demo</span> <span>→</span></a>
+        </div>
+      </div>
+    </div>
+  </dialog>
 </main>
 
 <footer>
@@ -1223,6 +1300,281 @@
         window.location.href = mailto;
       });
     }
+  })();
+
+  // ---------- Project Case Study Modal (<dialog>) ----------
+  (function(){
+    var CASE_STUDIES = {
+      'spell-1': {
+        stack: 'HTML5 · CSS3 · Vanilla JS · Vercel',
+        href: '#top',
+        en: {
+          folio: 'Spell I · Personal Brand',
+          title: 'Ravenclaw Portfolio Website',
+          challenge: 'Design a memorable bilingual portfolio (EN/TH) that showcases both Computer Science fundamentals and freelance front-end craftsmanship without heavy framework bloat.',
+          solution: 'Architected a zero-build static system powered by CSS custom properties, an interactive Unix/Hogwarts terminal emulator with 20+ spells, and leaf-node bilingual state switching.',
+          highlights: [
+            'Interactive terminal emulator with command history, tab completion feel, and real-time astronomical clock (Tempus)',
+            'Instant EN/TH language toggle preserving DOM icons, form inputs, and active modal states',
+            'Automated Python unittest suite verifying asset integrity, bilingual parity, and Fastwork compliance'
+          ],
+          outcome: 'Sub-second first paint on Vercel with 100% static reliability and zero runtime dependencies.',
+          cta: 'Explore Top'
+        },
+        th: {
+          folio: 'คาถาที่ I · พอร์ตโฟลิโอส่วนตัว',
+          title: 'เว็บพอร์ตโฟลิโอธีมเรเวนคลอว์',
+          challenge: 'ออกแบบเว็บพอร์ตโฟลิโอสองภาษา (ไทย/อังกฤษ) ที่น่าจดจำ สะท้อนทั้งพื้นฐาน Computer Science และงานฝีมือฝั่ง Front-End โดยไม่ต้องพึ่งไลบรารีหนัก ๆ',
+          solution: 'พัฒนาด้วยสถาปัตยกรรม Static HTML/CSS/JS แบบ Zero-Build พร้อมเทอร์มินัลโต้ตอบได้จริงกว่า 20 คาถา และระบบสลับภาษาที่ไม่ทำลายโครงสร้างไอคอนใน DOM',
+          highlights: [
+            'เทอร์มินัลโต้ตอบได้จริง รองรับประวัติคำสั่ง ปุ่มลัด และนาฬิกาดาราศาสตร์ฮอกวอตส์แบบเรียลไทม์ (Tempus)',
+            'สลับภาษา ไทย ↔ อังกฤษ ทันทีโดยไม่รีเซ็ตค่าในฟอร์มหรือปิดหน้าต่างที่กำลังเปิดอยู่',
+            'มีชุดทดสอบอัตโนมัติ (Python unittest) ตรวจสอบลิงก์ ไวยากรณ์ JS และความครบถ้วนของสองภาษา'
+          ],
+          outcome: 'โหลดเร็วระดับเสี้ยววินาทีบน Vercel ดูแลรักษาง่าย และเสถียร 100%',
+          cta: 'กลับขึ้นด้านบน'
+        }
+      },
+      'spell-2': {
+        stack: 'Python · PyScript · WebAssembly · CSS',
+        href: 'sortinghats.html',
+        en: {
+          folio: 'Spell II · Browser Python App',
+          title: 'The Sorting Hat Quiz',
+          challenge: 'Run genuine Python sorting logic and multi-step personality scoring directly inside a user’s browser without requiring a backend Python server.',
+          solution: 'Configured PyScript / Pyodide with Cross-Origin-Opener-Policy (COOP) and Cross-Origin-Embedder-Policy (COEP) headers so WebAssembly workers execute Python natively on the client.',
+          highlights: [
+            'Zero-backend Python execution in the browser using PyScript and custom JSON configuration',
+            'Weighted house scoring algorithm across Gryffindor, Ravenclaw, Hufflepuff, and Slytherin',
+            'Dynamic house crest reveal with custom theme transitions and bilingual question banks'
+          ],
+          outcome: 'Serverless Python web application capable of handling unlimited concurrent visitors at zero hosting cost.',
+          cta: 'Launch App'
+        },
+        th: {
+          folio: 'คาถาที่ II · เว็บแอป Python บนเบราว์เซอร์',
+          title: 'หมวกคัดสรรฮอกวอตส์ (The Sorting Hat)',
+          challenge: 'รันโค้ดภาษา Python สำหรับคำนวณคะแนนบุคลิกภาพและคัดสรรบ้านฮอกวอตส์บนเบราว์เซอร์ของผู้ใช้โดยตรง โดยไม่ต้องเช่าเซิร์ฟเวอร์หลังบ้าน',
+          solution: 'ตั้งค่า PyScript ร่วมกับ COOP/COEP Security Headers เพื่อให้ WebAssembly รันตรรกะ Python บนฝั่งคลายเอนต์ได้อย่างสมบูรณ์',
+          highlights: [
+            'ประมวลผลภาษา Python บนเบราว์เซอร์โดยตรงผ่าน PyScript โดยไม่ต้องมีเซิร์ฟเวอร์หลังบ้าน',
+            'อัลกอริทึมถ่วงน้ำหนักคะแนนทั้ง 4 บ้าน (กริฟฟินดอร์, เรเวนคลอว์, ฮัฟเฟิลพัฟ, สลิธีริน)',
+            'แสดงผลตราประจำบ้านพร้อมแอนิเมชันเปลี่ยนธีมและชุดคำถามสองภาษา'
+          ],
+          outcome: 'เว็บแอป Python แบบ Serverless ที่รองรับผู้เล่นพร้อมกันได้ไม่จำกัดโดยไม่มีค่าเซิร์ฟเวอร์รายเดือน',
+          cta: 'เปิดใช้งานแอป'
+        }
+      },
+      'spell-3': {
+        stack: 'HTML5 · CSS3 · Financial JS Logic',
+        href: 'paotang.html?demo=1',
+        en: {
+          folio: 'Spell III · Utility Calculator',
+          title: 'Thai Chuay Thai Co-Payment Calculator',
+          challenge: 'Help citizens and small merchants quickly calculate 60:40 government co-payment splits and daily/total subsidy quota caps without mental math errors.',
+          solution: 'Built a mobile-first calculator modeled after familiar Thai payment workflows that computes state share, citizen out-of-pocket cost, and remaining quota in real time.',
+          highlights: [
+            'Instant 60:40 split calculation bounded by remaining subsidy quota (`Math.min(amount * 0.6, quota)`)',
+            'Interactive receipt breakdown showing exact baht amounts for both state and user',
+            'Guided `?demo=1` walkthrough mode so prospective clients can test scenarios immediately'
+          ],
+          outcome: 'Clear, foolproof utility interface usable on any smartphone screen.',
+          cta: 'Launch Demo'
+        },
+        th: {
+          folio: 'คาถาที่ III · เครื่องมือคำนวณ',
+          title: 'เครื่องคำนวณโครงการไทยช่วยไทย (60:40)',
+          challenge: 'ช่วยให้ประชาชนและร้านค้ารายย่อยคำนวณส่วนลดโครงการรัฐ (รัฐช่วยจ่าย 60% ประชาชนจ่าย 40%) และตรวจสอบเพดานโควตาคงเหลือได้โดยไม่สับสน',
+          solution: 'ออกแบบ UI สไตล์แอปกระเป๋าตังค์ที่คุ้นเคย คำนวณยอดที่รัฐช่วยจ่าย ยอดที่ต้องจ่ายจริง และโควตาคงเหลือแบบเรียลไทม์ทันทีที่พิมพ์ตัวเลข',
+          highlights: [
+            'คำนวณสัดส่วน 60:40 อัตโนมัติพร้อมเช็กเพดานโควตาคงเหลือ (`Math.min(amount * 0.6, quota)`)',
+            'สรุปใบเสร็จแยกยอดรัฐสมทบและยอดจ่ายจริงชัดเจนทุกบาท',
+            'รองรับโหมดตัวอย่าง (`?demo=1`) ให้ทดลองกดสถานการณ์จำลองได้ทันที'
+          ],
+          outcome: 'ใช้งานง่ายบนมือถือ ลดความผิดพลาดในการคิดเงินหน้าเคาน์เตอร์ร้านค้า',
+          cta: 'เปิดเดโม'
+        }
+      },
+      'spell-4': {
+        stack: 'E-commerce · Cart State · Admin Dashboard',
+        href: 'demos/shop.html',
+        en: {
+          folio: 'Spell IV · Full-Flow E-Commerce Demo',
+          title: 'Bakery Shop with Live Back Office',
+          challenge: 'Demonstrate how a customer-facing online storefront and a merchant’s inventory/order management dashboard work together seamlessly.',
+          solution: 'Created a dual-view web app where customers browse pastries, filter categories, and place orders while the Back-Office tab updates stock counts and order statuses live.',
+          highlights: [
+            'Synchronized storefront cart, checkout flow, and back-office order queue in one cohesive demo',
+            'Real-time inventory stock editing and order status transitions (`new` → `preparing` → `completed`)',
+            'Responsive product cards with category filtering and bilingual TH/EN labels'
+          ],
+          outcome: 'Serves as the reference blueprint for Premium (฿5,500) e-commerce & admin dashboard client builds.',
+          cta: 'Launch Demo'
+        },
+        th: {
+          folio: 'คาถาที่ IV · เดโมร้านค้าออนไลน์ครบวงจร',
+          title: 'ร้านขนมออนไลน์พร้อมระบบหลังบ้าน (Back Office)',
+          challenge: 'สาธิตการทำงานร่วมกันระหว่างหน้าร้านสั่งซื้อของลูกค้า กับระบบจัดการออเดอร์และสต็อกสินค้าของเจ้าของร้านในเว็บเดียว',
+          solution: 'พัฒนาเว็บแอปแบบ 2 มุมมอง (Storefront & Admin Dashboard) เมื่อลูกค้ากดสั่งซื้อขนมในตะกร้า ข้อมูลจะเด้งเข้าหน้าแอดมินพร้อมตัดสต็อกทันที',
+          highlights: [
+            'เชื่อมต่อระบบตะกร้าสินค้า การสั่งซื้อ และตารางออเดอร์หลังบ้านแบบเรียลไทม์',
+            'แอดมินปรับสถานะออเดอร์และแก้ไขจำนวนสต็อกสินค้าได้ทันที',
+            'รองรับการกรองหมวดหมู่สินค้า แสดงผลสวยทั้งบนมือถือและคอมพิวเตอร์'
+          ],
+          outcome: 'ต้นแบบมาตรฐานสำหรับแพ็กเกจ Premium (฿5,500) สำหรับลูกค้าที่ต้องการเว็บขายของพร้อมระบบจัดการ',
+          cta: 'เปิดเดโม'
+        }
+      },
+      'spell-5': {
+        stack: 'SPA Router · Schedule Filter · Booking Form',
+        href: 'demos/clinic.html',
+        en: {
+          folio: 'Spell V · Corporate & Booking Demo',
+          title: 'Dental Clinic Website & Appointment System',
+          challenge: 'Medical and service businesses need trustworthy presentation paired with transparent treatment pricing and frictionless appointment scheduling.',
+          solution: 'Engineered a multi-view clinic website (`#/`, `#/services`, `#/about`, `#/booking`) featuring interactive treatment filters, doctor duty rosters by day, and a validated booking flow.',
+          highlights: [
+            'Client-side hash router (`data-route`) enabling instant page transitions without reload',
+            'Interactive treatment price search and day-of-week dentist availability filter',
+            'Structured appointment booking form with instant confirmation summary'
+          ],
+          outcome: 'Reference showcase for Standard (฿3,000) and Premium business websites requiring booking workflows.',
+          cta: 'Launch Demo'
+        },
+        th: {
+          folio: 'คาถาที่ V · เดโมเว็บคลินิกและระบบจองคิว',
+          title: 'เว็บไซต์คลินิกทันตกรรมและระบบนัดหมาย',
+          challenge: 'ธุรกิจคลินิกและบริการต้องการเว็บไซต์ที่ดูน่าเชื่อถือ แสดงตารางราคาชัดเจน และให้คนไข้เช็กคิวหมอเพื่อจองนัดหมายได้สะดวก',
+          solution: 'ออกแบบเว็บคลินิกหลายหน้า (`#/`, `#/services`, `#/about`, `#/booking`) พร้อมตัวกรองราคาค่ารักษา ตารางเวรทันตแพทย์รายวัน และฟอร์มจองคิวออนไลน์',
+          highlights: [
+            'ระบบเปลี่ยนหน้าแบบ SPA Hash Routing (`data-route`) รวดเร็วไม่ต้องโหลดหน้าใหม่',
+            'ค้นหาและกรองหมวดหมู่ค่ารักษาพยาบาล พร้อมเช็กตารางเข้าเวรของแพทย์แต่ละวัน',
+            'ฟอร์มจองคิวนัดหมายพร้อมตรวจสอบข้อมูลและสรุปใบนัดทันที'
+          ],
+          outcome: 'ต้นแบบยอดนิยมสำหรับธุรกิจคลินิก สปา และบริการที่ต้องการระบบนัดหมายออนไลน์',
+          cta: 'เปิดเดโม'
+        }
+      },
+      'spell-6': {
+        stack: 'Landing Page · Menu Filter · Brand Storytelling',
+        href: 'demos/cafe.html',
+        en: {
+          folio: 'Spell VI · High-Conversion Landing Page',
+          title: 'Specialty Coffee Landing Page',
+          challenge: 'Local cafés and F&B brands need a fast, atmospheric single-page site that highlights signature drinks, bean tasting notes, and branch directions on mobile.',
+          solution: 'Crafted a warm editorial landing page with instant category filtering (Hot / Iced / Bakery), roast profile badges, and clear opening hours.',
+          highlights: [
+            'Zero-latency menu filter (`menu.filter(item => item.kind === tag)`) with smooth layout transitions',
+            'Editorial typography and sensory tasting-note cards tailored for specialty coffee branding',
+            'Mobile-first layout optimized for customers scanning QR codes or clicking social bio links'
+          ],
+          outcome: 'Reference showcase for Basic (฿1,500) single-page promotional & café websites.',
+          cta: 'Launch Demo'
+        },
+        th: {
+          folio: 'คาถาที่ VI · หน้า Landing Page ร้านกาแฟ',
+          title: 'เว็บหน้าเดียวสำหรับร้านกาแฟ Specialty',
+          challenge: 'ร้านกาแฟและคาเฟ่ต้องการเว็บหน้าเดียวที่มีเอกลักษณ์ โหลดไวบนมือถือ แสดงเมนูซิกเนเจอร์ โทนรสชาติเมล็ดกาแฟ และพิกัดสาขาครบถ้วน',
+          solution: 'สร้างสรรค์ Landing Page โทนอบอุ่นพร้อมปุ่มกรองเมนู (ร้อน / เย็น / เบเกอรี่) ป้ายกำกับ Tasting Notes และข้อมูลเวลาเปิด-ปิดที่อ่านง่าย',
+          highlights: [
+            'กรองเมนูตามหมวดหมู่ได้ทันที (`menu.filter(...)`) โดยไม่ต้องโหลดหน้าใหม่',
+            'ดีไซน์การ์ดเมนูเน้นภาพลักษณ์แบรนด์และรายละเอียดเมล็ดกาแฟ',
+            'เหมาะสำหรับวางลิงก์หน้าโปรไฟล์ IG / LINE Official ให้ลูกค้ากดดูเมนูก่อนมาหน้าร้าน'
+          ],
+          outcome: 'ต้นแบบสำหรับแพ็กเกจ Basic (฿1,500) เว็บหน้าเดียวสำหรับโปรโมตธุรกิจและร้านอาหาร',
+          cta: 'เปิดเดโม'
+        }
+      }
+    };
+
+    var dialog = document.getElementById('case-dialog');
+    var closeBtn = document.getElementById('case-close');
+    var folioEl = document.getElementById('case-folio');
+    var titleEl = document.getElementById('case-title');
+    var challengeEl = document.getElementById('case-challenge');
+    var solutionEl = document.getElementById('case-solution');
+    var highlightsEl = document.getElementById('case-highlights');
+    var outcomeEl = document.getElementById('case-outcome');
+    var stackEl = document.getElementById('case-stack');
+    var ctaEl = document.getElementById('case-cta');
+    var ctaLabelEl = document.getElementById('case-cta-label');
+    var hireEl = document.getElementById('case-hire');
+    var activeCaseId = null;
+
+    function renderCase(id){
+      var item = CASE_STUDIES[id];
+      if(!item || !dialog) return;
+      activeCaseId = id;
+      var copy = (lang === 'th') ? item.th : item.en;
+      folioEl.textContent = copy.folio;
+      titleEl.textContent = copy.title;
+      challengeEl.textContent = copy.challenge;
+      solutionEl.textContent = copy.solution;
+      highlightsEl.innerHTML = '';
+      copy.highlights.forEach(function(h){
+        var li = document.createElement('li');
+        li.textContent = h;
+        highlightsEl.appendChild(li);
+      });
+      outcomeEl.textContent = copy.outcome;
+      stackEl.textContent = item.stack;
+      ctaEl.setAttribute('href', item.href);
+      ctaLabelEl.textContent = copy.cta;
+    }
+
+    function openCase(id){
+      if(!dialog || !CASE_STUDIES[id]) return;
+      renderCase(id);
+      if(typeof dialog.showModal === 'function'){
+        if(!dialog.open) dialog.showModal();
+      } else {
+        dialog.setAttribute('open', 'open');
+      }
+    }
+
+    function closeCase(){
+      if(!dialog) return;
+      activeCaseId = null;
+      if(typeof dialog.close === 'function' && dialog.open){
+        dialog.close();
+      } else {
+        dialog.removeAttribute('open');
+      }
+    }
+
+    document.querySelectorAll('[data-case]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openCase(btn.getAttribute('data-case'));
+      });
+    });
+
+    if(closeBtn){
+      closeBtn.addEventListener('click', closeCase);
+    }
+    if(hireEl){
+      hireEl.addEventListener('click', function(){ closeCase(); });
+    }
+    if(ctaEl){
+      ctaEl.addEventListener('click', function(){
+        if(ctaEl.getAttribute('href').charAt(0) === '#') closeCase();
+      });
+    }
+    if(dialog){
+      dialog.addEventListener('click', function(e){
+        if(e.target === dialog) closeCase();
+      });
+      dialog.addEventListener('close', function(){
+        activeCaseId = null;
+      });
+    }
+
+    onLangChangeHooks.push(function(){
+      if(activeCaseId && dialog && (dialog.open || dialog.hasAttribute('open'))){
+        renderCase(activeCaseId);
+      }
+    });
   })();
   // mobile menu toggle, outside click & Escape to close
   (function(){
