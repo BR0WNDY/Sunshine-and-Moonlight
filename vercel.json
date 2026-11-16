@@ -7,9 +7,22 @@
     {
       "source": "/packages",
       "destination": "/packages.html"
+    },
+    {
+      "source": "/books",
+      "destination": "/books.html"
     }
   ],
   "headers": [
+    {
+      "source": "/books(.html)?",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "unsafe-none"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
