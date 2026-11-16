@@ -1414,25 +1414,25 @@
 
     // Cover fallback helper (handles 404 and Open Library 1x1 transparent pixels)
     function coverFallbackHtml(title, small = false) {
-      if (small) return `<div class="mini-cover-fallback">${escapeHtml(title.slice(0, 14))}</div>`;
-      return `<div class="cover-placeholder">${escapeHtml(title)}</div>`;
+      if (small) return `<div class="mini-cover-fallback">${escapeHtml((title || '').slice(0, 14))}</div>`;
+      return `<div class="cover-placeholder">${escapeHtml(title || '')}</div>`;
     }
 
-    window.handleCoverError = function(img, title, isSmall) {
-      const wrap = img.parentElement;
-      if (wrap) wrap.innerHTML = coverFallbackHtml(title, isSmall);
+    window.handleCoverError = function(img) {
+      const title = img.dataset.title || '';
+      const isSmall = img.dataset.small === '1';
+      img.outerHTML = coverFallbackHtml(title, isSmall);
     };
 
-    window.handleCoverLoad = function(img, title, isSmall) {
+    window.handleCoverLoad = function(img) {
       if (img.naturalWidth <= 1 || img.naturalHeight <= 1) {
-        window.handleCoverError(img, title, isSmall);
+        window.handleCoverError(img);
       }
     };
 
     function renderCoverImg(cover, title, isSmall = false, lazy = false) {
       if (!cover) return coverFallbackHtml(title, isSmall);
-      const safeTitleAttr = escapeHtml(title).replace(/'/g, '&#39;');
-      return `<img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" ${lazy ? 'loading="lazy"' : ''} referrerpolicy="no-referrer" onerror="handleCoverError(this,'${safeTitleAttr}',${isSmall})" onload="handleCoverLoad(this,'${safeTitleAttr}',${isSmall})" />`;
+      return `<img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" data-title="${escapeHtml(title)}" data-small="${isSmall ? '1' : '0'}" ${lazy ? 'loading="lazy"' : ''} referrerpolicy="no-referrer" onerror="handleCoverError(this)" onload="handleCoverLoad(this)" />`;
     }
 
     // Tabs
