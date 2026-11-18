@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Sorting Hat — Suwapat Saelee</title>
+<title>The Sorting Hat · Suwapat Saelee</title>
 <meta name="description" content="An interactive quiz that sorts you into a Hogwarts house, with randomized questions, running in either Python (PyScript) or plain JavaScript." />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href="https://browndy.vercel.app/sortinghats.html" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://browndy.vercel.app/sortinghats.html" />
-<meta property="og:title" content="The Sorting Hat — Suwapat Saelee" />
+<meta property="og:title" content="The Sorting Hat · Suwapat Saelee" />
 <meta property="og:description" content="An interactive quiz that sorts you into a Hogwarts house, with randomized questions, running in either Python (PyScript) or plain JavaScript." />
 <meta property="og:image" content="https://browndy.vercel.app/images/thumb-sortinghat.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="stylesheet" href="assets/styles.css?v=6" />
+<link rel="stylesheet" href="assets/styles.css?v=7" />
 <style>
   .sorting-wrap{max-width:720px;margin:0 auto}
 
@@ -51,7 +51,7 @@
   .hat-input{flex:1 1 200px;min-height:52px;padding:12px 16px;border-radius:12px;
     border:1px solid var(--line);background:rgba(255,255,255,.03);
     color:var(--parchment);font-family:var(--font-body);font-size:1rem}
-  .hat-input:focus{outline:none;border-color:var(--bronze)}
+  .hat-input:focus{outline:none;border-color:var(--bronze);box-shadow:0 0 0 3px rgba(200,163,58,.2)}
 
   .hat-result{padding-top:4px}
   .hat-house{font-family:var(--font-display);font-size:2.1rem;font-weight:600;
@@ -97,13 +97,13 @@
   <div class="sorting-wrap">
     <p class="eyebrow" data-en="Projects · Interactive" data-th="ผลงาน · เชิงโต้ตอบ">Projects · Interactive</p>
     <h1 class="page-title" data-en="The Great Hall: Sorting Ceremony" data-th="ห้องโถงใหญ่: พิธีคัดสรร">The Great Hall: Sorting Ceremony</h1>
-    <p class="lead" data-en="An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript." data-th="แบบทดสอบเชิงโต้ตอบที่จัดคุณเข้าบ้านฮอกวอตส์ — สุ่มชุดคำถามใหม่ทุกครั้ง แตะตอบได้ทั้งบนมือถือและคอมพิวเตอร์ เลือกรันด้วย Python (PyScript) หรือ JavaScript ล้วนก็ได้">An interactive quiz that sorts you into a Hogwarts house — a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript.</p>
+    <p class="lead" data-en="An interactive quiz that sorts you into a Hogwarts house: a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript." data-th="แบบทดสอบเชิงโต้ตอบที่จัดคุณเข้าบ้านฮอกวอตส์: สุ่มชุดคำถามใหม่ทุกครั้ง แตะตอบได้ทั้งบนมือถือและคอมพิวเตอร์ เลือกรันด้วย Python (PyScript) หรือ JavaScript ล้วนก็ได้">An interactive quiz that sorts you into a Hogwarts house: a different, randomly-picked set of questions every time. Tap your way through on phone or desktop, in either Python (PyScript) or plain JavaScript.</p>
 
     <div class="hat-toggle" role="group" aria-label="Choose engine">
       <button class="hat-toggle-btn is-active" id="engineJsBtn" type="button" data-en="JavaScript (Instant)" data-th="JavaScript (พร้อมเล่นทันที)">JavaScript (Instant)</button>
       <button class="hat-toggle-btn" id="enginePyBtn" type="button" data-en="Python · PyScript" data-th="Python · PyScript">Python · PyScript</button>
     </div>
-    <p class="hat-engine-note" data-en="Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser." data-th="แบบทดสอบเดียวกัน เลือกรันได้ 2 เอนจิน — JavaScript เริ่มเล่นได้ทันที ส่วน Python รันผ่าน Pyodide บนเบราว์เซอร์จริง">Same quiz, two engines — JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser.</p>
+    <p class="hat-engine-note" data-en="Same quiz, two engines: JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser." data-th="แบบทดสอบเดียวกัน เลือกรันได้ 2 เอนจิน: JavaScript เริ่มเล่นได้ทันที ส่วน Python รันผ่าน Pyodide บนเบราว์เซอร์จริง">Same quiz, two engines: JavaScript runs instantly; Python spins up a real Pyodide runtime in your browser.</p>
 
     <div class="hat-card">
       <div class="hat-progress" id="hatProgress"></div>

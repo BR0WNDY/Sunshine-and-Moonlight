@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Thai Chuay Thai Calculator — Suwapat Saelee</title>
+<title>Thai Chuay Thai Calculator · Suwapat Saelee</title>
 <meta name="description" content="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href="https://browndy.vercel.app/paotang.html" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://browndy.vercel.app/paotang.html" />
-<meta property="og:title" content="Thai Chuay Thai Calculator — Suwapat Saelee" />
+<meta property="og:title" content="Thai Chuay Thai Calculator · Suwapat Saelee" />
 <meta property="og:description" content="A co-payment calculator for a Thai government scheme (state 60 : citizen 40) that estimates a user's share." />
 <meta property="og:image" content="https://browndy.vercel.app/images/thumb-paotang.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="stylesheet" href="assets/styles.css?v=6" />
+<link rel="stylesheet" href="assets/styles.css?v=7" />
 <style>
   .pao-wrap{max-width:var(--maxw);margin:0 auto}
   .pao-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start;margin-top:8px}
@@ -46,8 +46,8 @@
     border-radius:10px;padding:14px;color:var(--parchment);font-family:inherit;
     font-size:1rem;outline:none;transition:.2s}
   .input-wrapper input::placeholder{color:var(--muted)}
-  .input-wrapper input:focus{border-color:var(--bronze-soft);
-    box-shadow:0 0 0 3px rgba(200,163,58,.15)}
+  .input-wrapper input:focus,.input-box input:focus{border-color:var(--bronze);
+    box-shadow:0 0 0 3px rgba(200,163,58,.2)}
   .input-wrapper input[type="number"]{font-size:1.4rem;padding-right:48px}
   .currency-label{position:absolute;right:14px;color:var(--muted);font-size:1rem;pointer-events:none}
   .quick-add{display:flex;gap:10px;margin-top:12px}
@@ -144,7 +144,7 @@
     <div style="font-size:.78rem;color:var(--muted);margin-bottom:20px" data-en="Enter the password to open your calculator" data-th="ใส่รหัสผ่านเพื่อเปิดเครื่องคำนวณของคุณ">Enter the password to open your calculator</div>
     <input type="password" name="password" id="lock-pw" autocomplete="current-password" autocapitalize="off" spellcheck="false"
       data-en-placeholder="Password" data-th-placeholder="รหัสผ่าน" placeholder="Password"
-      style="width:100%;background:rgba(7,13,31,.6);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--parchment);font-family:inherit;font-size:1rem;outline:none;text-align:center;margin-bottom:10px" />
+      style="width:100%;background:rgba(7,13,31,.6);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--parchment);font-family:inherit;font-size:1rem;text-align:center;margin-bottom:10px" />
     <div id="lock-error" hidden style="font-size:.78rem;color:#e07a6b;margin-bottom:10px" data-en="Wrong password" data-th="รหัสผ่านไม่ถูกต้อง">Wrong password</div>
     <button type="submit" id="lock-btn" class="btn btn-primary" style="width:100%" data-en="Unlock" data-th="ปลดล็อก">Unlock</button>
     <a href="?demo=1" style="display:inline-block;margin-top:16px;font-size:.78rem;color:var(--muted)" data-en="or view the public demo →" data-th="หรือดูเดโมสาธารณะ →">or view the public demo →</a>
@@ -354,7 +354,7 @@ function renderHistory() {
       <div class="timeline-dot"></div>
       <div class="timeline-content">
         <div class="timeline-header">
-          <span class="timeline-name">${escapeHtml(tx.itemName || '—')}</span>
+          <span class="timeline-name">${escapeHtml(tx.itemName || '-')}</span>
           <div style="display:flex;align-items:center;gap:10px">
             <span class="timeline-date">${escapeHtml(tx.date)}</span>
             <button onclick="deleteTransaction(${originalIndex})" class="timeline-delete-btn" title="${t('confirmDelete')}">🗑️</button>

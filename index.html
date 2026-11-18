@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Suwapat Saelee — Front-End Developer</title>
+<title>Suwapat Saelee · Front-End Developer</title>
 <meta name="description" content="Portfolio of Suwapat Saelee, a Front-End Developer and Computer Science student based in Bangkok." />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="canonical" href="https://browndy.vercel.app/" />
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://browndy.vercel.app/" />
-<meta property="og:title" content="Suwapat Saelee — Front-End Developer" />
+<meta property="og:title" content="Suwapat Saelee · Front-End Developer" />
 <meta property="og:description" content="Portfolio of Suwapat Saelee, a Front-End Developer and Computer Science student based in Bangkok." />
 <meta property="og:image" content="https://browndy.vercel.app/images/Me.jpeg" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:locale:alternate" content="th_TH" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Suwapat Saelee — Front-End Developer" />
+<meta name="twitter:title" content="Suwapat Saelee · Front-End Developer" />
 <meta name="twitter:description" content="Portfolio of Suwapat Saelee, a Front-End Developer and Computer Science student based in Bangkok." />
 <meta name="twitter:image" content="https://browndy.vercel.app/images/Me.jpeg" />
 
@@ -63,7 +63,7 @@
     --bronze-soft:#dcc06a;
     --silver:#c3cee0;
     --parchment:#eef2fb;
-    --muted:#9db0d4;
+    --muted:#adc0e4;
     --charm:#7fe3f5;        /* Lumos / charm glow, text only */
     --font-title:'Cinzel','IBM Plex Sans Thai',Georgia,serif;
     --font-display:'Cormorant Garamond','IBM Plex Sans Thai',Georgia,serif;
@@ -79,6 +79,8 @@
   body{background:var(--ink);color:var(--parchment);font-family:var(--font-body);
     line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
+  a[href],button,summary,select,label[for],input[type="checkbox"],input[type="radio"],[role="button"]{cursor:pointer}
+  :disabled,[aria-disabled="true"]{cursor:not-allowed;opacity:.55}
   :focus-visible{outline:2px solid var(--bronze);outline-offset:3px;border-radius:4px}
   ::selection{background:rgba(200,163,58,.35);color:#fff}
 
@@ -93,18 +95,11 @@
       radial-gradient(1px 1px at 12% 70%, rgba(195,206,224,.5), transparent),
       radial-gradient(1px 1px at 33% 52%, rgba(127,227,245,.4), transparent),
       radial-gradient(1px 1px at 90% 80%, rgba(220,192,106,.45), transparent);
-    background-repeat:no-repeat;animation:twinkle 6s ease-in-out infinite alternate}
+    background-repeat:no-repeat;animation:twinkle 4s ease-in-out 1 forwards}
   .glow{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
       radial-gradient(900px 520px at 80% -8%, rgba(42,74,134,.5), transparent 60%),
       radial-gradient(700px 500px at 0% 100%, rgba(42,74,134,.3), transparent 60%)}
-  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
-    background-image:
-      linear-gradient(rgba(79,121,201,.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(79,121,201,.05) 1px, transparent 1px);
-    background-size:56px 56px;
-    mask-image:radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%);
-    -webkit-mask-image:radial-gradient(ellipse at 50% 0%, #000 20%, transparent 70%)}
   @keyframes twinkle{from{opacity:.55}to{opacity:1}}
 
   .wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding-left:24px;padding-right:24px}
@@ -125,9 +120,9 @@
   .nav-links a.nav-work{color:var(--bronze-soft);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
   .nav-links a.nav-work:hover{border-color:var(--bronze);color:var(--bronze)}
   .lang-btn{font-family:var(--font-mono);font-size:.72rem;letter-spacing:1px;color:var(--bronze-soft);
-    border:1px solid var(--line);background:transparent;padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
+    border:1px solid var(--line);background:transparent;min-height:44px;display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.2s}
   .lang-btn:hover{border-color:var(--bronze);color:var(--bronze)}
-  .menu-toggle{display:none;background:none;border:0;color:var(--parchment);font-size:1.5rem;cursor:pointer;padding:6px}
+  .menu-toggle{display:none;background:none;border:0;color:var(--parchment);font-size:1.5rem;cursor:pointer;padding:6px;min-width:44px;min-height:44px}
 
   /* ---------- shared ---------- */
   section{padding:104px 0;position:relative;z-index:2}
@@ -172,10 +167,12 @@
   @keyframes blink{50%{opacity:0}}
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
+  .term .cm{color:#9bb2d8}
   /* ---------- interactive hero terminal ---------- */
   .hero .term-body{max-height:420px;overflow-y:auto;cursor:text;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
   .out.hint{color:var(--muted)}
-  .term-input{display:flex;align-items:center;gap:8px}
+  .term-input{display:flex;align-items:center;gap:8px;border-top:1px solid transparent;padding-top:4px}
+  .term-input:focus-within{border-top-color:var(--bronze);box-shadow:inset 0 1px 0 rgba(200,163,58,.35)}
   .term-input input{flex:1;min-width:0;background:transparent;border:0;outline:0;padding:0;
     color:var(--parchment);font:inherit;caret-color:var(--bronze)}
   .term-input input:focus-visible{outline:0}
@@ -192,10 +189,11 @@
   #term-log .rows .v{color:var(--muted)}
   .run{font:inherit;line-height:inherit;color:var(--parchment);background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;
     text-decoration:underline dotted;text-decoration-color:rgba(200,163,58,.45);text-underline-offset:4px;-webkit-tap-highlight-color:transparent}
-  .run:hover,.run:focus-visible{color:var(--bronze-soft);text-decoration-color:currentColor;outline:0}
+  .run:hover,.run:focus-visible{color:var(--bronze-soft);text-decoration-color:currentColor}
+  .run:focus-visible{outline:2px solid var(--bronze);outline-offset:2px;border-radius:3px}
   .term-chips{display:flex;flex-wrap:wrap;gap:8px;padding:10px 16px 12px;border-top:1px solid var(--line-soft);background:rgba(7,13,31,.45)}
   .term-chips .chip{flex:0 0 auto;font-family:var(--font-mono);font-size:.76rem;text-decoration:none;color:var(--silver);
-    border:1px solid var(--line);border-radius:999px;padding:6px 13px;min-height:34px;background:rgba(42,74,134,.18);transition:border-color .2s,color .2s,background .2s}
+    border:1px solid var(--line);border-radius:999px;min-height:44px;display:inline-flex;align-items:center;padding:8px 14px;background:rgba(42,74,134,.18);transition:border-color .2s,color .2s,background .2s}
   .term-chips .chip:hover{border-color:var(--bronze);color:var(--bronze-soft);background:rgba(200,163,58,.12)}
   .term-chips .chip:active{background:rgba(200,163,58,.22);border-color:var(--bronze);color:var(--bronze-soft)}
   .term-chips .chip-reset{display:none;border-color:rgba(220,192,106,.45);color:var(--bronze-soft);background:rgba(200,163,58,.14)}
@@ -603,7 +601,7 @@
   .fx-wave{position:absolute;left:-5%;bottom:0;width:110%;height:48vh;animation:fxWave 2.2s ease-in-out both}
   @keyframes fxWave{0%{transform:translateY(105%)}40%{transform:translateY(8%) translateX(-2%)}60%{transform:translateY(14%) translateX(2%)}100%{transform:translateY(105%)}}
   .fx-fog{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(240,246,255,.75),rgba(200,215,240,.35) 70%);
-    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;animation:fxFog 1.6s ease-in-out both}
+    opacity:0;animation:fxFog 1.6s ease-in-out both}
   @keyframes fxFog{0%{opacity:0}35%,55%{opacity:1}100%{opacity:0}}
   .fx-beam{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 6px var(--c)) drop-shadow(0 0 18px var(--c))}
   .fx-beam svg{position:absolute;inset:0;overflow:visible}
@@ -634,7 +632,7 @@
   .astro{width:124px;height:124px;flex:0 0 auto;overflow:visible}
   .astro .rim{fill:rgba(200,163,58,.06);stroke:var(--bronze);stroke-width:1}
   .astro .inner{fill:rgba(7,13,31,.5);stroke:var(--line);stroke-dasharray:2 3}
-  .astro .zodiac{transform-origin:60px 60px;animation:spin 240s linear infinite}
+  .astro .zodiac{transform-origin:60px 60px;animation:spin 4.5s cubic-bezier(.22,.61,.36,1) 1 forwards}
   .astro .zodiac line{stroke:var(--bronze);stroke-width:.8}
   .astro .zodiac text{fill:var(--bronze-soft);font-size:7px;opacity:.8}
   .astro .hand-h{stroke:var(--parchment);stroke-width:2.6;stroke-linecap:round}
@@ -681,7 +679,7 @@
     border:1px solid var(--line);box-shadow:0 0 0 10px rgba(42,74,134,.12),0 0 60px -10px rgba(79,121,201,.45),0 30px 60px -20px rgba(0,0,0,.7)}
   .portrait-frame img{width:262px;height:262px;border-radius:50%;object-fit:cover}
   .ring{position:absolute;top:-18px;left:50%;width:326px;height:326px;margin-left:-163px;border-radius:50%;
-    border:1px dashed rgba(200,163,58,.38);animation:spin 50s linear infinite}
+    border:1px dashed rgba(200,163,58,.38);animation:spin 4.5s cubic-bezier(.22,.61,.36,1) 1 forwards}
   .ring::after{content:"✦";position:absolute;top:-9px;left:50%;margin-left:-6px;color:var(--bronze);font-size:.8rem}
   @keyframes spin{to{transform:rotate(360deg)}}
   .badge-card{font-family:var(--font-mono);font-size:.74rem;color:var(--silver);background:rgba(12,23,48,.85);
@@ -730,12 +728,13 @@
     border:1px solid rgba(127,227,245,.14);border-radius:8px;padding:9px 12px;margin-bottom:16px;
     overflow-wrap:anywhere;transition:text-shadow .25s,border-color .25s}
   .incant .kw{color:var(--bronze-soft)}
-  .incant .cm{color:var(--muted)}
+  .incant .cm{color:#9bb2d8}
   .page:hover .incant{text-shadow:0 0 10px rgba(127,227,245,.55);border-color:rgba(127,227,245,.32)}
   .page-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
   .page .stack{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.6px;color:var(--muted)}
   .page-actions{display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}
   .page .link{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.6px;color:var(--bronze-soft);display:inline-flex;align-items:center;gap:7px}
+  .page-foot .link{min-height:44px;display:inline-flex;align-items:center}
   .page a.link::after{content:"";position:absolute;inset:0;z-index:1}
   .page .link:hover{color:var(--bronze)}
   .page .link .arr{transition:.2s}
@@ -847,7 +846,6 @@
 <body>
 <div class="stars" aria-hidden="true"></div>
 <div class="glow" aria-hidden="true"></div>
-<div class="grid-bg" aria-hidden="true"></div>
 
 <header>
   <nav class="nav">
@@ -875,7 +873,7 @@
       <div>
         <p class="crest-line"><span>Ravenclaw</span><span data-en="Computer Science" data-th="วิทยาการคอมพิวเตอร์">Computer Science</span><span>Bangkok</span></p>
         <h1>Suwapat Saelee</h1>
-        <p class="tagline" data-en="I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail." data-th="ผมสร้างเว็บที่สะอาด เรียบง่าย และใช้งานได้จริง ด้วยความละเอียดในแบบเรเวนคลอว์">I build clean, reliable websites — with the patience of a Ravenclaw and an eye for detail.</p>
+        <p class="tagline" data-en="I build clean, reliable websites, with the patience of a Ravenclaw and an eye for detail." data-th="ผมสร้างเว็บที่สะอาด เรียบง่าย และใช้งานได้จริง ด้วยความละเอียดในแบบเรเวนคลอว์">I build clean, reliable websites, with the patience of a Ravenclaw and an eye for detail.</p>
 
         <div class="term" id="hero-term">
           <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>ravenclaw@hogwarts: ~/portfolio</span></div>
@@ -887,8 +885,8 @@
             <div class="reveal" style="--at:1.2s"><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:13;--dur:.9s;--at:1.3s">cat motto.txt</span></div>
             <div class="out motto reveal" style="--at:2.35s" data-en="“Wit beyond measure is man's greatest treasure.”" data-th="“ปัญญาที่เหนือกว่าคือสมบัติล้ำค่าที่สุดของมนุษย์”">“Wit beyond measure is man's greatest treasure.”</div>
             <div class="reveal" style="--at:2.6s"><span class="ps"><span class="loc">~</span> $</span> <span class="cmd typed" style="--n:17;--dur:1s;--at:2.7s">lumos --portfolio</span></div>
-            <div class="out lumos reveal" style="--at:3.85s" data-en="✦ Lumos. The path ahead is lit — scroll to explore." data-th="✦ ลูมอส ทางข้างหน้าสว่างแล้ว — เลื่อนลงเพื่อสำรวจ">✦ Lumos. The path ahead is lit — scroll to explore.</div>
-            <div class="out hint reveal" style="--at:4.1s" data-en="Psst — this terminal is real. Type help and press Enter." data-th="ความลับนะ — เทอร์มินัลนี้ใช้ได้จริง พิมพ์ help แล้วกด Enter">Psst — this terminal is real. Type help and press Enter.</div>
+            <div class="out lumos reveal" style="--at:3.85s" data-en="✦ Lumos. The path ahead is lit: scroll to explore." data-th="✦ ลูมอส ทางข้างหน้าสว่างแล้ว: เลื่อนลงเพื่อสำรวจ">✦ Lumos. The path ahead is lit: scroll to explore.</div>
+            <div class="out hint reveal" style="--at:4.1s" data-en="Psst: this terminal is real. Type help and press Enter." data-th="ความลับนะ: เทอร์มินัลนี้ใช้ได้จริง พิมพ์ help แล้วกด Enter">Psst: this terminal is real. Type help and press Enter.</div>
             </div>
             <div id="term-log" aria-live="polite"></div>
             <form class="term-input reveal" id="term-form" style="--at:4.3s" autocomplete="off">
@@ -923,7 +921,7 @@
       <div>
         <p class="eyebrow"><span class="no">01</span><span data-en="About" data-th="เกี่ยวกับ">About</span></p>
         <h2 data-en="A developer who thinks before casting the spell." data-th="นักพัฒนาที่คิดให้รอบคอบก่อนลงมือ">A developer who thinks before casting the spell.</h2>
-        <p class="lead" data-en="I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software — from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project." data-th="ผมเป็นนักศึกษาวิทยาการคอมพิวเตอร์ในกรุงเทพฯ และรับงานพัฒนาเว็บแบบฟรีแลนซ์ ผมชอบเปลี่ยนไอเดียให้กลายเป็นซอฟต์แวร์ที่ใช้งานได้จริง ตั้งแต่เว็บไซต์ที่รองรับทุกหน้าจอ ไปจนถึงเครื่องมือเล็ก ๆ ที่ช่วยแก้ปัญหา ผมใส่ใจโค้ดที่สะอาด โครงสร้างที่ดี และเรียนรู้สิ่งใหม่ในทุกโปรเจกต์">I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software — from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project.</p>
+        <p class="lead" data-en="I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software, from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project." data-th="ผมเป็นนักศึกษาวิทยาการคอมพิวเตอร์ในกรุงเทพฯ และรับงานพัฒนาเว็บแบบฟรีแลนซ์ ผมชอบเปลี่ยนไอเดียให้กลายเป็นซอฟต์แวร์ที่ใช้งานได้จริง ตั้งแต่เว็บไซต์ที่รองรับทุกหน้าจอ ไปจนถึงเครื่องมือเล็ก ๆ ที่ช่วยแก้ปัญหา ผมใส่ใจโค้ดที่สะอาด โครงสร้างที่ดี และเรียนรู้สิ่งใหม่ในทุกโปรเจกต์">I'm a Computer Science student in Bangkok and a freelance web developer. I enjoy turning ideas into clear, working software, from responsive websites to small tools that solve real problems. I care about clean code, good structure, and learning something new in every project.</p>
       </div>
       <div class="term record">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>student_record.json</span></div>
@@ -992,7 +990,7 @@
         <p class="eyebrow"><span class="no">03</span><span data-en="Projects · The Spellbook" data-th="ผลงาน · ตำราเวท">Projects · The Spellbook</span></p>
         <h2 data-en="Things I've built" data-th="ผลงานที่ผมสร้าง">Things I've built</h2>
       </div>
-      <p class="sec-note" data-en="Each page carries its incantation — the one line of code at its heart." data-th="แต่ละหน้ามีคาถาประจำ — โค้ดหนึ่งบรรทัดที่เป็นหัวใจของงาน">Each page carries its incantation — the one line of code at its heart.</p>
+      <p class="sec-note" data-en="Each page carries its incantation: the one line of code at its heart." data-th="แต่ละหน้ามีคาถาประจำ: โค้ดหนึ่งบรรทัดที่เป็นหัวใจของงาน">Each page carries its incantation: the one line of code at its heart.</p>
     </div>
     <div class="proj-grid">
       <article class="page">
@@ -1000,7 +998,7 @@
         <div class="page-body">
           <p class="folio" data-en="Spell I" data-th="คาถาที่ I">Spell I</p>
           <h3 data-en="Portfolio Website" data-th="เว็บพอร์ตโฟลิโอ">Portfolio Website</h3>
-          <p data-en="This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive." data-th="เว็บนี้เอง — พอร์ตโฟลิโอสองภาษาธีมเรเวนคลอว์ สร้างเองทั้งหมดและรองรับทุกหน้าจอ">This site — a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive.</p>
+          <p data-en="This site: a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive." data-th="เว็บนี้เอง: พอร์ตโฟลิโอสองภาษาธีมเรเวนคลอว์ สร้างเองทั้งหมดและรองรับทุกหน้าจอ">This site: a bilingual personal portfolio with a Ravenclaw theme, built from scratch and fully responsive.</p>
           <div class="incant"><span class="kw">lumos</span>(<span class="cm">'portfolio'</span>, { lang })</div>
           <div class="page-foot">
             <span class="stack">HTML · CSS · JavaScript</span>
@@ -1127,9 +1125,9 @@
       <div class="owl-field">
         <label for="owl-pkg" data-en="Package / Scope" data-th="แพ็กเกจหรือขอบเขตงาน">Package / Scope</label>
         <select id="owl-pkg" name="package">
-          <option value="Basic (฿1,500)" data-en="Basic — Single Landing Page (฿1,500)" data-th="Basic — เว็บหน้าเดียว Landing Page (฿1,500)">Basic — Single Landing Page (฿1,500)</option>
-          <option value="Standard (฿3,000)" selected data-en="Standard — Multi-Section / Business Site (฿3,000)" data-th="Standard — เว็บธุรกิจหลายส่วน / กรองข้อมูล (฿3,000)">Standard — Multi-Section / Business Site (฿3,000)</option>
-          <option value="Premium (฿5,500)" data-en="Premium — Full Web App / Back-Office Demo (฿5,500)" data-th="Premium — เว็บแอปครบวงจร / ระบบหลังบ้าน (฿5,500)">Premium — Full Web App / Back-Office Demo (฿5,500)</option>
+          <option value="Basic (฿1,500)" data-en="Basic · Single Landing Page (฿1,500)" data-th="Basic · เว็บหน้าเดียว Landing Page (฿1,500)">Basic · Single Landing Page (฿1,500)</option>
+          <option value="Standard (฿3,000)" selected data-en="Standard · Multi-Section / Business Site (฿3,000)" data-th="Standard · เว็บธุรกิจหลายส่วน / กรองข้อมูล (฿3,000)">Standard · Multi-Section / Business Site (฿3,000)</option>
+          <option value="Premium (฿5,500)" data-en="Premium · Full Web App / Back-Office Demo (฿5,500)" data-th="Premium · เว็บแอปครบวงจร / ระบบหลังบ้าน (฿5,500)">Premium · Full Web App / Back-Office Demo (฿5,500)</option>
           <option value="Custom / Internship" data-en="Custom Quote / Internship / General Inquiry" data-th="ประเมินราคาตามบรีฟ / ฝึกงาน / พูดคุยทั่วไป">Custom Quote / Internship / General Inquiry</option>
         </select>
       </div>
@@ -1138,7 +1136,7 @@
         <textarea id="owl-msg" name="message" rows="4" required placeholder="Tell me about the website or tool you need, timeline, or reference links..." data-en-placeholder="Tell me about the website or tool you need, timeline, or reference links..." data-th-placeholder="เล่ารายละเอียดเว็บไซต์หรือระบบที่ต้องการ ระยะเวลา หรือลิงก์ตัวอย่าง..."></textarea>
       </div>
       <div class="owl-actions">
-        <button type="submit" class="btn btn-primary" data-en="Send Scroll →" data-th="ส่งข้อความ →">Send Scroll →</button>
+        <button type="submit" class="btn btn-primary" data-en="Send Scroll" data-th="ส่งข้อความ">Send Scroll</button>
         <button type="button" id="owl-copy" class="btn btn-ghost" data-en="Copy Brief" data-th="คัดลอกบรีฟ">Copy Brief</button>
       </div>
       <div id="owl-status" class="owl-status" role="status" aria-live="polite"></div>
@@ -1251,7 +1249,7 @@
         reply: r,
         pkg: p,
         msg: m,
-        subject: '[Owl Post] ' + p + ' — ' + (n || 'Project Inquiry'),
+        subject: '[Owl Post] ' + p + ' - ' + (n || 'Project Inquiry'),
         body: 'Name: ' + n + '\nReply to: ' + r + '\nPackage: ' + p + '\n\nProject Brief:\n' + m
       };
     }
@@ -1641,17 +1639,17 @@
                 ['🌔', 'Waxing Gibbous', 'ข้างขึ้นค่อนดวง'], ['🌕', 'Full Moon', 'จันทร์เต็มดวง'], ['🌖', 'Waning Gibbous', 'ข้างแรมค่อนดวง'],
                 ['🌗', 'Last Quarter', 'ข้างแรมครึ่งดวง'], ['🌘', 'Waning Crescent', 'ข้างแรมเสี้ยว']];
     var HOURS = [ // [until hour (Hogwarts time), EN, TH]
-      [3, 'The Witching Hour — ghosts roam the corridors', 'ชั่วโมงแม่มด — ผีออกเดินตามทางเดิน'],
-      [6, 'Before dawn — only the house-elves are awake', 'ก่อนรุ่งสาง — มีแค่เอลฟ์ประจำบ้านที่ตื่นอยู่'],
-      [9, 'Breakfast in the Great Hall — the owl post arrives', 'อาหารเช้าในห้องโถงใหญ่ — นกฮูกส่งจดหมายมาถึง'],
-      [12, 'Morning lessons — Potions in the dungeons', 'คาบเช้า — วิชาปรุงยาในคุกใต้ดิน'],
+      [3, 'The Witching Hour: ghosts roam the corridors', 'ชั่วโมงแม่มด: ผีออกเดินตามทางเดิน'],
+      [6, 'Before dawn: only the house-elves are awake', 'ก่อนรุ่งสาง: มีแค่เอลฟ์ประจำบ้านที่ตื่นอยู่'],
+      [9, 'Breakfast in the Great Hall: the owl post arrives', 'อาหารเช้าในห้องโถงใหญ่: นกฮูกส่งจดหมายมาถึง'],
+      [12, 'Morning lessons: Potions in the dungeons', 'คาบเช้า: วิชาปรุงยาในคุกใต้ดิน'],
       [14, 'Lunch & Quidditch gossip', 'มื้อกลางวันและคุยเรื่องควิดดิช'],
-      [17, 'Afternoon lessons — Herbology in the greenhouses', 'คาบบ่าย — วิชาสมุนไพรศาสตร์ในเรือนกระจก'],
+      [17, 'Afternoon lessons: Herbology in the greenhouses', 'คาบบ่าย: วิชาสมุนไพรศาสตร์ในเรือนกระจก'],
       [19, 'Quidditch practice on the pitch', 'ซ้อมควิดดิชที่สนาม'],
       [21, 'Dinner feast in the Great Hall', 'งานเลี้ยงมื้อค่ำในห้องโถงใหญ่'],
       [24, 'Astronomy class atop the Astronomy Tower', 'วิชาดาราศาสตร์บนยอดหอดูดาว']
     ];
-    var SIGNS = [ // [month, last day of sign in that month, glyph, EN, TH] — sign that starts after the cut-off
+    var SIGNS = [ // [month, last day of sign in that month, glyph, EN, TH] - sign that starts after the cut-off
       [1, 19, '♑', 'Capricorn', 'มังกร'], [2, 18, '♒', 'Aquarius', 'กุมภ์'], [3, 20, '♓', 'Pisces', 'มีน'], [4, 19, '♈', 'Aries', 'เมษ'],
       [5, 20, '♉', 'Taurus', 'พฤษภ'], [6, 20, '♊', 'Gemini', 'เมถุน'], [7, 22, '♋', 'Cancer', 'กรกฎ'], [8, 22, '♌', 'Leo', 'สิงห์'],
       [9, 22, '♍', 'Virgo', 'กันย์'], [10, 22, '♎', 'Libra', 'ตุลย์'], [11, 21, '♏', 'Scorpio', 'พิจิก'], [12, 21, '♐', 'Sagittarius', 'ธนู']
@@ -1755,7 +1753,7 @@
         line(T('…and a few spells, if you know any. Type spells to see them all.', '…และคาถาอีกเพียบ พิมพ์ spells เพื่อดูทั้งหมด'), 'hint');
       },
       whoami: function(){
-        line('Suwapat Saelee — ' + T('Front-End Developer · Computer Science student · Ravenclaw 🦅', 'นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์ · เรเวนคลอว์ 🦅'));
+        line('Suwapat Saelee · ' + T('Front-End Developer · Computer Science student · Ravenclaw 🦅', 'นักพัฒนา Front-End · นักศึกษาวิทยาการคอมพิวเตอร์ · เรเวนคลอว์ 🦅'));
       },
       ls: function(){ line(SECTIONS.map(function(s){ return s + '/'; }).join('  ') + '  packages.html  motto.txt'); },
       cd: function(args){
@@ -1765,8 +1763,8 @@
         if(SECTIONS.indexOf(t) === -1 || !go(t)) line(T('cd: no such section: ', 'cd: ไม่มีหมวดนี้: ') + t, 'err');
       },
       projects: function(){
-        line(T('Spell I    Portfolio Website — this site', 'คาถา I    เว็บพอร์ตโฟลิโอ — เว็บนี้เอง'));
-        line(T('Spell II   The Sorting Hat — Python / JS in the browser', 'คาถา II   หมวกคัดสรร — Python / JS บนเบราว์เซอร์'));
+        line(T('Spell I    Portfolio Website · this site', 'คาถา I    เว็บพอร์ตโฟลิโอ · เว็บนี้เอง'));
+        line(T('Spell II   The Sorting Hat · Python / JS in the browser', 'คาถา II   หมวกคัดสรร · Python / JS บนเบราว์เซอร์'));
         line(T('Spell III  Thai Chuay Thai Calculator', 'คาถา III  เครื่องคำนวณไทยช่วยไทย'));
         line(T('Spell IV   Bakery Shop with Back Office (open shop)', 'คาถา IV   ร้านขนมออนไลน์ + ระบบหลังบ้าน (open shop)'));
         line(T('Spell V    Dental Clinic Website (open clinic)', 'คาถา V    เว็บไซต์คลินิกทันตกรรม (open clinic)'));
@@ -1834,8 +1832,8 @@
           ['-', T('✦ ELEMENTS', '✦ ธาตุ')],
           ['incendio', T('Gryffindor-warm firelight & embers 🔥', 'ไฟส้ม-ทองอบอุ่นแบบห้องนั่งเล่นกริฟฟินดอร์ 🔥')],
           ['aguamenti', T('aqua spray & rippling water light 💧', 'ละอองน้ำฟ้าครามและแสงระลอกคลื่น 💧')],
-          ['bombarda', T('blasting charm — shakes the screen 💥', 'คาถาระเบิด หน้าจอสั่นสะเทือน 💥')],
-          ['riddikulus', T('rainbow party — laughs away dark themes 🎈', 'โหมดสายรุ้ง แก้ทางธีมมืด 🎈')],
+          ['bombarda', T('blasting charm: shakes the screen 💥', 'คาถาระเบิด หน้าจอสั่นสะเทือน 💥')],
+          ['riddikulus', T('rainbow party: laughs away dark themes 🎈', 'โหมดสายรุ้ง แก้ทางธีมมืด 🎈')],
           ['-', T('⚔ DUELLING', '⚔ คาถาดวล')],
           ['stupefy', T('Stunning Spell: a jet of red light ⚡', 'คาถาสะกดนิ่ง: ลำแสงสีแดง ⚡')],
           ['expelliarmus', T('Disarming Charm: send their wand flying 🪄', 'คาถาปลดอาวุธ: ไม้กายสิทธิ์กระเด็น 🪄')],
@@ -1941,7 +1939,7 @@
         line(T('Aqua theme active. Type lumos to reset.', 'ธีมสายน้ำทำงาน พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       bombarda: function(){
-        // drop leftover flash classes first — they come later in the CSS and would override the shake animation
+        // drop leftover flash classes first - they come later in the CSS and would override the shake animation
         ALL_THEMES.forEach(function(c){ if(c.indexOf('flash') !== -1) document.body.classList.remove(c); });
         document.body.classList.remove('shake-screen');
         void document.body.offsetWidth;
@@ -1952,7 +1950,7 @@
       riddikulus: function(){
         setTheme('theme-riddikulus', 'flash-riddikulus');
         spell('Riddikulus!', 'charm');
-        line(T('🎈 Boggart banished! Every dark curse is laughed away — the realm bursts into rainbow candy colours.', '🎈 กำจัดบ็อกการ์ทสำเร็จ! ความมืดทั้งหมดถูกหัวเราะใส่จนหายไป ปราสาทกลายเป็นสีลูกกวาดสายรุ้ง'));
+        line(T('🎈 Boggart banished! Every dark curse is laughed away: the realm bursts into rainbow candy colours.', '🎈 กำจัดบ็อกการ์ทสำเร็จ! ความมืดทั้งหมดถูกหัวเราะใส่จนหายไป ปราสาทกลายเป็นสีลูกกวาดสายรุ้ง'));
         line(T('Party mode active! Type lumos to reset.', 'โหมดปาร์ตี้สายรุ้งทำงาน! พิมพ์ lumos เพื่อคืนค่าเดิม'), 'hint');
       },
       accio: function(args){
@@ -1989,7 +1987,7 @@
           go('about');
           return;
         }
-        line(T('Accio: could not locate “', 'Accio: ไม่พบสิ่งของ “') + target + T('” — try resume, projects, contact, work, github or email', '” — ลอง resume, projects, contact, work, github หรือ email'), 'err');
+        line(T('Accio: could not locate “', 'Accio: ไม่พบสิ่งของ “') + target + T('” - try resume, projects, contact, work, github or email', '” - ลอง resume, projects, contact, work, github หรือ email'), 'err');
       },
       obliviate: function(){
         history = []; hIdx = 0;
@@ -2010,7 +2008,7 @@
       },
       stupefy: function(){
         spell('Stupefy!', 'stun');
-        line(T('⚡ A jet of red light streaks across the castle — target stunned!', '⚡ ลำแสงสีแดงพุ่งข้ามปราสาท — เป้าหมายถูกสะกดให้นิ่งแล้ว!'));
+        line(T('⚡ A jet of red light streaks across the castle: target stunned!', '⚡ ลำแสงสีแดงพุ่งข้ามปราสาท: เป้าหมายถูกสะกดให้นิ่งแล้ว!'));
       },
       expelliarmus: function(){
         spell('Expelliarmus!', 'stun');
@@ -2019,7 +2017,7 @@
       'petrificus totalus': function(){
         setTheme('petrified');
         spell('Petrificus Totalus!', 'ice');
-        line(T('❄️ Full Body-Bind! Every animation freezes — the stars stop twinkling, the portrait ring stops turning.', '❄️ คาถาสะกดร่าง! ทุกแอนิเมชันหยุดนิ่ง ดวงดาวเลิกกะพริบ วงแหวนโปรไฟล์หยุดหมุน'));
+        line(T('❄️ Full Body-Bind! Every animation freezes: the stars stop twinkling, the portrait ring stops turning.', '❄️ คาถาสะกดร่าง! ทุกแอนิเมชันหยุดนิ่ง ดวงดาวเลิกกะพริบ วงแหวนโปรไฟล์หยุดหมุน'));
         line(T('The castle is frozen in icy blue-grey. Type lumos to thaw it.', 'ปราสาทกลายเป็นสีน้ำแข็งฟ้าอมเทา พิมพ์ lumos เพื่อละลาย'), 'hint');
       },
       tempus: function(){
@@ -2335,7 +2333,7 @@
     FX['rm -rf /'] = FX.protego;
     function castFx(name, args){
       if(REDUCED.matches || !FX[name]) return;
-      try { FX[name](args); } catch(e){ /* effects are decorative — never break the terminal */ }
+      try { FX[name](args); } catch(e){ /* effects are decorative - never break the terminal */ }
     }
 
     // wrap each spell (and every alias pointing at the same function) so its effect plays after it is cast
@@ -2378,7 +2376,7 @@
       if(lower.indexOf(' ') !== -1 && Object.prototype.hasOwnProperty.call(commands, lower)) return commands[lower]([]);   // multi-word spells
       var parts = text.split(/\s+/), name = parts[0].toLowerCase().replace(/[!.]+$/, '');
       if(Object.prototype.hasOwnProperty.call(commands, name)) commands[name](parts.slice(1));
-      else line(name + T(': command not found — try help', ': ไม่พบคำสั่งนี้ — ลองพิมพ์ help'), 'err');
+      else line(name + T(': command not found - try help', ': ไม่พบคำสั่งนี้ - ลองพิมพ์ help'), 'err');
     }
 
     form.addEventListener('submit', function(e){
@@ -2398,7 +2396,7 @@
       input.focus({preventScroll:true});
     });
 
-    // quick-cast chips — tap or click instead of typing
+    // quick-cast chips: tap or click instead of typing
     var CAST_POOL = ['lumos', 'nox', 'expecto patronum', 'charm', 'protego', 'alohomora', 'wingardium leviosa', 'vulnera sanentur',
       'incendio', 'aguamenti', 'bombarda', 'riddikulus', 'stupefy', 'expelliarmus', 'petrificus totalus', 'tempus', 'avada kedavra', 'crucio', 'imperio', 'morsmordre', 'sectumsempra'];
     var chips = document.createElement('div');
@@ -2425,7 +2423,7 @@
       if(!b) return;
       var cmd = b.getAttribute('data-cmd');
       if(cmd === '__random') cmd = pick(CAST_POOL);
-      if(/ $/.test(cmd)){ input.value = cmd; input.focus({preventScroll:true}); return; }   // needs an argument — let them finish typing
+      if(/ $/.test(cmd)){ input.value = cmd; input.focus({preventScroll:true}); return; }   // needs an argument: let them finish typing
       run(cmd);
       body.scrollTop = body.scrollHeight;
     });

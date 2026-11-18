@@ -1,5 +1,5 @@
 /* ============================================================
-   Starlit Academy — shared shell for sub-pages
+   Starlit Academy · shared shell for sub-pages
    (index.html is self-contained; this styles sortinghats,
    paotang and any future sub-page)
    ============================================================ */
@@ -16,7 +16,7 @@
   --bronze-soft:#dcc06a;
   --silver:#c3cee0;
   --parchment:#eef2fb;
-  --muted:#9db0d4;
+  --muted:#adc0e4;
   --font-display:'Cormorant Garamond','IBM Plex Sans Thai',Georgia,serif;
   --font-body:'Inter','IBM Plex Sans Thai',system-ui,sans-serif;
   --font-mono:'IBM Plex Mono','IBM Plex Sans Thai',monospace;
@@ -37,6 +37,8 @@ body{
   min-height:100vh;
 }
 a{color:inherit;text-decoration:none}
+a[href],button,summary,select,label[for],input[type="checkbox"],input[type="radio"],[role="button"]{cursor:pointer}
+:disabled,[aria-disabled="true"]{cursor:not-allowed;opacity:.55}
 :focus-visible{outline:2px solid var(--bronze-soft);outline-offset:3px;border-radius:4px}
 
 /* ---------- ambient starfield ---------- */
@@ -50,7 +52,7 @@ a{color:inherit;text-decoration:none}
     radial-gradient(1px 1px at 12% 70%, rgba(195,206,224,.5), transparent),
     radial-gradient(1px 1px at 90% 80%, rgba(220,192,106,.45), transparent);
   background-repeat:no-repeat;
-  animation:twinkle 6s ease-in-out infinite alternate;
+  animation:twinkle 4s ease-in-out 1 forwards;
 }
 .glow{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
@@ -74,10 +76,10 @@ header{position:sticky;top:0;z-index:50;
 .nav-links a:hover{color:var(--bronze-soft)}
 .lang-btn{font-family:var(--font-mono);font-size:.74rem;letter-spacing:1px;
   color:var(--bronze-soft);border:1px solid var(--line);background:transparent;
-  padding:7px 13px;border-radius:999px;cursor:pointer;transition:.2s}
+  min-height:44px;display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;cursor:pointer;transition:.2s}
 .lang-btn:hover{border-color:var(--bronze);color:var(--bronze)}
 .menu-toggle{display:none;background:none;border:0;color:var(--parchment);
-  font-size:1.5rem;cursor:pointer}
+  font-size:1.5rem;cursor:pointer;min-width:44px;min-height:44px}
 
 /* ---------- page scaffolding ---------- */
 .page{position:relative;z-index:2;padding:clamp(48px,7vw,80px) 0}
@@ -139,14 +141,14 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
   background:rgba(42,74,134,.28);border:1px solid rgba(79,121,201,.25);color:var(--bronze-soft)}
 
 /* ---------- preparation checklist ---------- */
-.prep-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:24px}
+.prep-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
 .prep-card{background:var(--night);border:1px solid var(--line);border-radius:14px;
-  padding:22px 18px;display:flex;flex-direction:column;transition:.25s}
+  display:grid;grid-template-columns:46px 1fr;column-gap:16px;row-gap:4px;align-items:start;padding:20px;transition:.25s}
 .prep-card:hover{border-color:rgba(200,163,58,.4);background:var(--night-2);transform:translateY(-2px)}
-.prep-icon{font-size:1.6rem;margin-bottom:12px;line-height:1}
-.prep-card h4{font-family:var(--font-display);font-size:1.2rem;font-weight:600;
-  color:#fff;margin-bottom:8px}
-.prep-card p{color:var(--silver);font-size:.86rem;line-height:1.55}
+.prep-icon{grid-row:1/span 2;width:46px;height:46px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(42,74,134,.22);border:1px solid rgba(200,163,58,.22);font-size:1.35rem;margin-bottom:0;line-height:1}
+.prep-card h4{grid-column:2;font-family:var(--font-display);font-size:1.2rem;font-weight:600;
+  color:#fff;margin-bottom:2px}
+.prep-card p{grid-column:2;color:var(--silver);font-size:.86rem;line-height:1.55}
 
 /* ---------- deliverables scope matrix ---------- */
 .matrix-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
@@ -199,6 +201,12 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
   color:var(--muted);letter-spacing:.3px}
 
 /* ---------- responsive ---------- */
+@media(min-width:901px){
+  .sec-faq{display:grid;grid-template-columns:280px 1fr;column-gap:40px;align-items:start}
+  .sec-faq > .sec-title{grid-column:1;margin-bottom:10px}
+  .sec-faq > .sec-sub{grid-column:1;margin-bottom:0}
+  .sec-faq > .faq-list{grid-column:2;grid-row:1/span 3;margin-top:0}
+}
 @media(max-width:900px){
   .flow-grid{grid-template-columns:repeat(2,1fr)}
   .prep-grid{grid-template-columns:repeat(2,1fr)}
@@ -216,6 +224,7 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
   .menu-toggle{display:block}
 }
 @media(max-width:640px){
+  .prep-grid{grid-template-columns:1fr}
   .eyebrow{justify-content:center}
   h1.page-title{text-align:center}
   .lead{text-align:center;margin-left:auto;margin-right:auto}
