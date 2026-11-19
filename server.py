@@ -6,12 +6,15 @@ PORT = 8000
 REWRITES = {
     "/work": "/work.html",
     "/packages": "/packages.html",
+    "/books": "/books.html",
 }
 
 class SecureHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
+        path = self.path.partition("?")[0]
+        coep = "unsafe-none" if path in ("/books", "/books.html") else "require-corp"
         self.send_header("Cross-Origin-Opener-Policy", "same-origin")
-        self.send_header("Cross-Origin-Embedder-Policy", "require-corp")
+        self.send_header("Cross-Origin-Embedder-Policy", coep)
         self.send_header("X-Content-Type-Options", "nosniff")
         super().end_headers()
 

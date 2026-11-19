@@ -254,7 +254,7 @@
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// --- dynamic-content i18n dictionary ---
+// Dynamic-content i18n dictionary
 var L = {
   en: { noHistory:'No transaction history', total:'Total:', gov:'Gov:', you:'You:',
         resetSoon:'✨ Quota reset! (please refresh)', nextReset:'⏳ Next reset in: ',
@@ -275,7 +275,7 @@ function t(key){
 }
 function dateLocale(){ return document.documentElement.lang === 'th' ? 'th-TH' : 'en-GB'; }
 
-// --- private / public (demo) modes ---
+// Private and public demo modes
 const DEMO = new URLSearchParams(location.search).has('demo');
 const PASS_KDF = {
   salt: '0bfcf4f02864271a82b9939ff7237f9b',

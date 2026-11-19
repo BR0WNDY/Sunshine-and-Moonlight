@@ -84,7 +84,7 @@
   :focus-visible{outline:2px solid var(--bronze);outline-offset:3px;border-radius:4px}
   ::selection{background:rgba(200,163,58,.35);color:#fff}
 
-  /* ---------- atmosphere: stars, house glow, faint scanlines ---------- */
+  /* Atmosphere: stars and house glow */
   .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
       radial-gradient(1px 1px at 20% 30%, rgba(220,192,106,.7), transparent),
@@ -104,7 +104,7 @@
 
   .wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding-left:24px;padding-right:24px}
 
-  /* ---------- nav ---------- */
+  /* Navigation */
   header{position:sticky;top:0;z-index:50;background:rgba(7,13,31,.78);
     backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;justify-content:space-between;height:64px;
@@ -124,7 +124,7 @@
   .lang-btn:hover{border-color:var(--bronze);color:var(--bronze)}
   .menu-toggle{display:none;background:none;border:0;color:var(--parchment);font-size:1.5rem;cursor:pointer;padding:6px;min-width:44px;min-height:44px}
 
-  /* ---------- shared ---------- */
+  /* Shared */
   section{padding:104px 0;position:relative;z-index:2}
   .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:42px}
   .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
@@ -145,7 +145,7 @@
   .btn-ghost{border-color:var(--line);color:var(--silver)}
   .btn-ghost:hover{border-color:var(--bronze);color:var(--bronze-soft)}
 
-  /* ---------- terminal window ---------- */
+  /* Terminal window */
   .term{background:linear-gradient(180deg,rgba(16,31,66,.9),rgba(5,10,24,.95));border:1px solid var(--line);
     border-radius:14px;box-shadow:0 30px 70px -30px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.04);overflow:hidden}
   .term-bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line-soft);
@@ -168,7 +168,7 @@
   .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
   .term .cm{color:#9bb2d8}
-  /* ---------- interactive hero terminal ---------- */
+  /* Interactive hero terminal */
   .hero .term-body{max-height:420px;overflow-y:auto;cursor:text;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
   .out.hint{color:var(--muted)}
   .term-input{display:flex;align-items:center;gap:8px;border-top:1px solid transparent;padding-top:4px}
@@ -216,7 +216,7 @@
   body.dim .glow{opacity:.25}
   body.dim .stars{opacity:.35}
 
-  /* ---------- magic aura themes (charm, dark, patronus) ---------- */
+  /* Magic aura themes (charm, dark, patronus) */
   /* 1. Charm: Cyan/Electric Blue aura (#00f2fe / #0077fe) */
   body.theme-charm{
     --ink:#030c20;
@@ -561,7 +561,7 @@
     100%{opacity:0;transform:scaleX(1.1) rotate(var(--rot,-14deg))}
   }
 
-  /* ---------- spell effects layer (particles, rings, bolts, waves…) ---------- */
+  /* Spell effects layer */
   .fx-layer{position:fixed;inset:0;z-index:9997;pointer-events:none;overflow:hidden}
   .fx-p{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
     border-radius:50%;background:var(--c);box-shadow:0 0 calc(var(--s) * 1.8) var(--c);opacity:0;
@@ -659,7 +659,7 @@
   .reveal{opacity:0;animation:appear .35s ease-out var(--at) forwards}
   @keyframes appear{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
 
-  /* ---------- hero ---------- */
+  /* Hero */
   .hero{padding:clamp(56px,9vw,104px) 0 clamp(64px,8vw,96px)}
   .hero-grid{display:grid;grid-template-columns:1.25fr .85fr;gap:60px;align-items:center}
   .crest-line{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;text-transform:uppercase;
@@ -686,7 +686,7 @@
     border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px}
   .badge-card .dot{width:8px;height:8px;border-radius:50%;background:#57b47e;box-shadow:0 0 10px #57b47e}
 
-  /* ---------- about: student record ---------- */
+  /* About: student record */
   .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:start}
   .about-grid h2{margin-bottom:22px}
   .record .term-body{padding:8px 22px 14px}
@@ -697,7 +697,7 @@
   .fact .v{color:var(--parchment);text-align:right;font-family:var(--font-body);font-size:.92rem}
   .fact .v.ok{color:#7fd4a1}
 
-  /* ---------- skills: curriculum ---------- */
+  /* Skills: curriculum */
   .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .course{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:22px 22px 24px;
     transition:.25s;position:relative;overflow:hidden}
@@ -712,7 +712,7 @@
   .tag{font-family:var(--font-mono);font-size:.74rem;color:var(--silver);background:rgba(42,74,134,.26);
     border:1px solid rgba(79,121,201,.24);padding:4px 10px;border-radius:6px}
 
-  /* ---------- projects: spellbook ---------- */
+  /* Projects: spellbook */
   .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
   .page{background:linear-gradient(180deg,var(--night-2),var(--night));border:1px solid var(--line);
     border-radius:4px 16px 16px 4px;display:flex;flex-direction:column;transition:.28s;position:relative;overflow:hidden;
@@ -743,7 +743,7 @@
     border-radius:6px;padding:4px 10px;font-size:.72rem;color:var(--parchment);cursor:pointer;transition:.2s}
   .page .case-btn:hover{border-color:var(--bronze);background:rgba(200,163,58,.18);color:var(--bronze-soft)}
 
-  /* ---------- case study modal (<dialog>) ---------- */
+  /* Case study modal (<dialog>) */
   .case-dialog{max-width:680px;width:calc(100% - 32px);margin:auto;padding:0;background:linear-gradient(180deg,var(--night-2),var(--night));
     color:var(--parchment);border:1px solid rgba(200,163,58,.45);border-radius:16px;
     box-shadow:0 36px 90px -20px rgba(0,0,0,.92),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
@@ -765,7 +765,7 @@
 
   .more-work{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:36px}
 
-  /* ---------- contact: owl post ---------- */
+  /* Contact: owl post */
   .contact{text-align:center}
   .contact h2{margin-bottom:16px}
   .contact .lead{margin:0 auto 30px}
@@ -793,7 +793,7 @@
     color:var(--muted);font-size:.78rem;font-family:var(--font-mono);letter-spacing:.4px}
   .foot .handle{opacity:.4;color:var(--silver);letter-spacing:2px}
 
-  /* ---------- responsive ---------- */
+  /* Responsive */
   section[id]{scroll-margin-top:78px}
   @media(max-width:960px){
     .hero-grid{grid-template-columns:1fr;gap:40px}
@@ -1215,7 +1215,7 @@
   function toggleLang(){ lang = (lang === 'en') ? 'th' : 'en'; localStorage.setItem('site:lang', lang); applyLang(); }
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---------- Owl Post inquiry form ----------
+  // Owl Post inquiry form
   (function(){
     var owlForm = document.getElementById('owl-form');
     var owlName = document.getElementById('owl-name');
@@ -1300,7 +1300,7 @@
     }
   })();
 
-  // ---------- Project Case Study Modal (<dialog>) ----------
+  // Project Case Study modal (<dialog>)
   (function(){
     var CASE_STUDIES = {
       'spell-1': {
@@ -1604,7 +1604,7 @@
   })();
   applyLang();
 
-  // ---------- interactive hero terminal ----------
+  // Interactive hero terminal
   (function(){
     var body = document.getElementById('term-body');
     var log = document.getElementById('term-log');
@@ -1634,7 +1634,7 @@
       s.className = 'spell ' + kind; s.textContent = text;
       d.appendChild(s);
     }
-    // ---------- tempus: astronomical clock ----------
+    // Tempus: astronomical clock
     var MOON = [['🌑', 'New Moon', 'จันทร์ดับ'], ['🌒', 'Waxing Crescent', 'ข้างขึ้นเสี้ยว'], ['🌓', 'First Quarter', 'ข้างขึ้นครึ่งดวง'],
                 ['🌔', 'Waxing Gibbous', 'ข้างขึ้นค่อนดวง'], ['🌕', 'Full Moon', 'จันทร์เต็มดวง'], ['🌖', 'Waning Gibbous', 'ข้างแรมค่อนดวง'],
                 ['🌗', 'Last Quarter', 'ข้างแรมครึ่งดวง'], ['🌘', 'Waning Crescent', 'ข้างแรมเสี้ยว']];
@@ -2089,7 +2089,7 @@
     };
     commands['sorting-hat'] = commands.sort;
 
-    // ---------- spell effects (visual only; skipped for prefers-reduced-motion) ----------
+    // Spell effects (visual only; skipped for prefers-reduced-motion)
     var REDUCED = matchMedia('(prefers-reduced-motion: reduce)');
     function rnd(a, b){ return a + Math.random() * (b - a); }
     function pick(a){ return a[Math.floor(Math.random() * a.length)]; }

@@ -1,8 +1,4 @@
-/* ============================================================
-   Starlit Academy · shared shell for sub-pages
-   (index.html is self-contained; this styles sortinghats,
-   paotang and any future sub-page)
-   ============================================================ */
+/* Starlit Academy shared shell for sub-pages (index.html is self-contained) */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap');
 
 :root{
@@ -41,7 +37,7 @@ a[href],button,summary,select,label[for],input[type="checkbox"],input[type="radi
 :disabled,[aria-disabled="true"]{cursor:not-allowed;opacity:.55}
 :focus-visible{outline:2px solid var(--bronze-soft);outline-offset:3px;border-radius:4px}
 
-/* ---------- ambient starfield ---------- */
+/* Ambient starfield */
 .stars{position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
     radial-gradient(1px 1px at 20% 30%, rgba(220,192,106,.7), transparent),
@@ -63,7 +59,7 @@ a[href],button,summary,select,label[for],input[type="checkbox"],input[type="radi
 
 .wrap{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;padding:0 24px}
 
-/* ---------- nav ---------- */
+/* Navigation */
 header{position:sticky;top:0;z-index:50;
   background:rgba(7,13,31,.72);backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line)}
@@ -81,7 +77,7 @@ header{position:sticky;top:0;z-index:50;
 .menu-toggle{display:none;background:none;border:0;color:var(--parchment);
   font-size:1.5rem;cursor:pointer;min-width:44px;min-height:44px}
 
-/* ---------- page scaffolding ---------- */
+/* Page scaffolding */
 .page{position:relative;z-index:2;padding:clamp(48px,7vw,80px) 0}
 .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:3px;
   text-transform:uppercase;color:var(--bronze);display:flex;align-items:center;
@@ -91,7 +87,7 @@ h1.page-title{font-family:var(--font-display);font-weight:500;
   font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;margin-bottom:14px}
 .lead{color:var(--silver);max-width:62ch;font-size:1.02rem;margin-bottom:34px}
 
-/* ---------- primitives ---------- */
+/* Primitives */
 .card{background:var(--night);border:1px solid var(--line);border-radius:16px;
   padding:26px 24px}
 .card-raised{background:linear-gradient(180deg,var(--night-2),var(--night))}
@@ -110,19 +106,19 @@ footer{border-top:1px solid var(--line);padding:30px 0;position:relative;z-index
   gap:12px;color:var(--muted);font-size:.82rem;font-family:var(--font-mono);
   letter-spacing:.4px}
 
-/* ---------- work view: a demo opened from /work keeps only the language switch ---------- */
+/* Work view: a demo opened from /work keeps only the language switch */
 html.from-work .nav-links a,
 html.from-work .menu-toggle{display:none}
 html.from-work .nav-links{position:static;transform:none;flex-direction:row;
   background:none;padding:0;border:0}
 
-/* ---------- section headers & helpers ---------- */
+/* Section headers & helpers */
 .sec{margin-top:clamp(56px,9vw,88px)}
 .sec-title{font-family:var(--font-display);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.3rem);
   line-height:1.15;margin-bottom:8px}
 .sec-sub{color:var(--muted);font-size:.92rem;margin-bottom:28px}
 
-/* ---------- workflow grid ---------- */
+/* Workflow grid */
 .flow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:24px}
 .flow-card{background:linear-gradient(180deg,var(--night-2),var(--night));
   border:1px solid var(--line);border-radius:14px;padding:24px 20px;display:flex;
@@ -140,7 +136,7 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
   font-size:.68rem;letter-spacing:.5px;padding:4px 10px;border-radius:999px;
   background:rgba(42,74,134,.28);border:1px solid rgba(79,121,201,.25);color:var(--bronze-soft)}
 
-/* ---------- preparation checklist ---------- */
+/* Preparation checklist */
 .prep-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
 .prep-card{background:var(--night);border:1px solid var(--line);border-radius:14px;
   display:grid;grid-template-columns:46px 1fr;column-gap:16px;row-gap:4px;align-items:start;padding:20px;transition:.25s}
@@ -150,7 +146,7 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
   color:#fff;margin-bottom:2px}
 .prep-card p{grid-column:2;color:var(--silver);font-size:.86rem;line-height:1.55}
 
-/* ---------- deliverables scope matrix ---------- */
+/* Deliverables scope matrix */
 .matrix-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);
   border-radius:14px;background:var(--night);margin-top:24px;box-shadow:0 12px 30px -12px rgba(0,0,0,.6)}
 .matrix-table{width:100%;border-collapse:collapse;text-align:left;font-size:.88rem;min-width:680px}
@@ -171,7 +167,7 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
 .pill-no{color:var(--muted);font-family:var(--font-mono);font-size:.82rem}
 .pill-val{color:var(--parchment);font-family:var(--font-mono);font-size:.8rem;font-weight:500}
 
-/* ---------- client faq accordion ---------- */
+/* Client FAQ accordion */
 .faq-list{display:flex;flex-direction:column;gap:14px;margin-top:24px}
 .faq-item{background:var(--night);border:1px solid var(--line);border-radius:12px;
   transition:border-color .2s,background .2s;overflow:hidden}
@@ -188,7 +184,7 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
 .faq-body{padding:0 22px 20px;color:var(--silver);font-size:.92rem;line-height:1.65;
   border-top:1px solid rgba(200,163,58,.08);padding-top:14px}
 
-/* ---------- consultation banner ---------- */
+/* Consultation banner */
 .consult-banner{margin-top:clamp(56px,9vw,88px);
   background:linear-gradient(135deg,rgba(42,74,134,.35),var(--night-2) 60%,var(--night));
   border:1px solid rgba(200,163,58,.38);border-radius:18px;
@@ -200,7 +196,7 @@ html.from-work .nav-links{position:static;transform:none;flex-direction:row;
 .consult-note{margin-top:20px;font-family:var(--font-mono);font-size:.76rem;
   color:var(--muted);letter-spacing:.3px}
 
-/* ---------- responsive ---------- */
+/* Responsive */
 @media(min-width:901px){
   .sec-faq{display:grid;grid-template-columns:280px 1fr;column-gap:40px;align-items:start}
   .sec-faq > .sec-title{grid-column:1;margin-bottom:10px}

@@ -280,7 +280,7 @@
   const sel = document.getElementById('service');
   SERVICES.forEach(([, t]) => sel.add(new Option(t, t)));
 
-  // ---- hash router: #/services, #/booking ... ----
+  // Hash router (#/services, #/booking, ...)
   const pages = document.querySelectorAll('.page');
   const links = document.querySelectorAll('.menu a');
   function route(){
@@ -303,7 +303,7 @@
     burger.setAttribute('aria-expanded', open);
   });
 
-  // ---- booking ----
+  // Booking form
   const date = document.getElementById('date');
   const pad = n => String(n).padStart(2, '0');
   const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;

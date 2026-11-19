@@ -38,7 +38,7 @@
   .cart-btn{border:0;background:var(--ink);color:#fff;padding:10px 18px;border-radius:999px;font-weight:500;position:relative}
   .cart-btn b{background:var(--rose);border-radius:999px;padding:0 8px;margin-left:6px}
 
-  /* ---------- storefront ---------- */
+  /* Storefront */
   .banner{background:linear-gradient(120deg,var(--rose),#f0866b);color:#fff;border-radius:26px;padding:38px;margin:6px 0 30px;
     display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden;position:relative}
   .banner h1{font-size:clamp(1.6rem,4vw,2.5rem);line-height:1.2;margin-bottom:8px}
@@ -87,7 +87,7 @@
     z-index:100;transition:.3s;max-width:calc(100% - 32px);text-align:center;font-size:.92rem}
   .toast.show{transform:translate(-50%,0)}
 
-  /* ---------- admin ---------- */
+  /* Admin */
   .admin{display:none;grid-template-columns:1fr 330px;gap:22px;padding-bottom:60px}
   body.mode-admin .admin{display:grid}
   body.mode-admin .store{display:none}
@@ -225,7 +225,7 @@
   const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const hhmm = d => new Date(d).toLocaleTimeString('th-TH', {hour:'2-digit', minute:'2-digit'});
 
-  // ---- state (localStorage when available, memory otherwise) ----
+  // State (localStorage when available, memory otherwise)
   const KEY = 'demo-shop:v1';
   function seed(){
     const now = Date.now();
@@ -245,7 +245,7 @@
   const P = id => PRODUCTS.find(p => p.id === id);
   const orderTotal = o => o.items.reduce((s, [id, q]) => s + P(id).price * q, 0);
 
-  // ---- storefront ----
+  // Storefront
   let cat = 'ทั้งหมด';
   function renderCats(){
     const cats = ['ทั้งหมด', ...new Set(PRODUCTS.map(p => p.cat))];
@@ -273,7 +273,7 @@
     save(); renderAll(); toast('เพิ่ม ' + P(b.dataset.add).name + ' ลงตะกร้าแล้ว');
   });
 
-  // ---- cart ----
+  // Cart
   const cartLines = () => Object.entries(S.cart).filter(([, q]) => q > 0);
   function renderCart(){
     const lines = cartLines();
@@ -313,7 +313,7 @@
     toast(`สั่งซื้อสำเร็จ ออเดอร์ #${no} · ลองสลับไปดูหลังบ้าน`);
   };
 
-  // ---- admin ----
+  // Admin
   function renderAdmin(){
     const today = new Date().toDateString();
     const todays = S.orders.filter(o => new Date(o.at).toDateString() === today);
@@ -350,7 +350,7 @@
     S.orders.slice().reverse().forEach(o => pushLine(o, false)); renderAll(); toast('รีเซ็ตข้อมูลเดโมแล้ว');
   };
 
-  // ---- notification feed ----
+  // Notification feed
   function addMsg(text, at, scroll){
     const chat = document.getElementById('chat');
     const m = document.createElement('div'); m.className = 'msg';
@@ -364,7 +364,7 @@
   }
   S.orders.slice().reverse().forEach(o => pushLine(o, false));
 
-  // ---- mode switch ----
+  // Mode switch
   document.querySelectorAll('.switch button').forEach(b => b.addEventListener('click', () => {
     document.querySelectorAll('.switch button').forEach(x => x.setAttribute('aria-pressed', x === b));
     document.body.className = 'mode-' + b.dataset.mode;
