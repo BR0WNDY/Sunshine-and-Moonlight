@@ -312,6 +312,30 @@ class TestPortfolioIntegrity(unittest.TestCase):
             f"Expected 6 case study buttons {expected}, found {case_triggers}",
         )
 
+    def test_security_headers_and_books_hardening(self):
+        """vercel.json, server.py, and books.html must enforce security headers, localhost bind, and XSS hardening."""
+        with (ROOT / "vercel.json").open(encoding="utf-8") as f:
+            vcfg = json.load(f)
+        global_headers = {
+            h["key"]: h["value"]
+            for rule in vcfg.get("headers", [])
+            if rule.get("source") == "/(.*)"
+            for h in rule.get("headers", [])
+        }
+        for key in ("X-Frame-Options", "Referrer-Policy", "Permissions-Policy", "X-Content-Type-Options"):
+            self.assertIn(key, global_headers, f"Missing {key} in vercel.json")
+
+        server_src = (ROOT / "server.py").read_text(encoding="utf-8")
+        self.assertIn('HOST = "127.0.0.1"', server_src, "server.py must bind to 127.0.0.1")
+        self.assertIn("def list_directory", server_src, "server.py must disable directory listing")
+
+        books_src = (ROOT / "books.html").read_text(encoding="utf-8")
+        self.assertIn("function sanitizeBook", books_src, "books.html must sanitize imported/stored books")
+        self.assertIn("function safeCoverUrl", books_src, "books.html must validate cover URL protocol")
+        self.assertIn("AbortController", books_src, "books.html must use AbortController for API calls")
+        self.assertNotIn("onclick=\"openBookModal('${b.id}')\"", books_src, "books.html must not use unescaped inline onclick with b.id")
+        self.assertNotIn("onclick=\"markReturned('${b.id}')\"", books_src, "books.html must not use unescaped inline markReturned with b.id")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1395,20 +1395,72 @@
       const curr = document.documentElement.getAttribute('data-theme');
       const next = curr === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem(THEME_KEY, next);
+      try { localStorage.setItem(THEME_KEY, next); } catch {}
       $('btn-theme').textContent = next === 'dark' ? '📜' : '🦅';
       showToast(next === 'dark' ? 'โหมด Ravenclaw Midnight' : 'โหมด Light Parchment');
     });
 
+    let toastTimer = null;
     function showToast(msg) {
       const t = $('toast');
       t.textContent = msg;
       t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2600);
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
     }
 
+    function safeCoverUrl(url) {
+      const s = String(url || '').trim();
+      return /^https:\/\//i.test(s) ? s : '';
+    }
+
+    const VALID_STATUSES = new Set(['reading', 'finished', 'tbr', 'dnf']);
+    const VALID_FORMATS = new Set(['physical', 'ebook', 'audiobook']);
+    const VALID_LEND_TYPES = new Set(['none', 'lent', 'borrowed']);
+
+    function sanitizeBook(raw) {
+      const b = raw && typeof raw === 'object' ? raw : {};
+      const status = VALID_STATUSES.has(b.status) ? b.status : 'tbr';
+      const format = VALID_FORMATS.has(b.format) ? b.format : 'physical';
+      const lendType = VALID_LEND_TYPES.has(b.lendType) ? b.lendType : 'none';
+      const totalPages = Math.max(0, parseInt(b.totalPages, 10) || 0);
+      const currentPage = Math.max(0, Math.min(totalPages || 99999, parseInt(b.currentPage, 10) || 0));
+      const rating = Math.max(0, Math.min(5, parseInt(b.rating, 10) || 0));
+      const safeId = String(b.id || `bk_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`).replace(/[^a-zA-Z0-9_-]/g, '');
+      return {
+        id: safeId || `bk_${Date.now()}`,
+        title: String(b.title || 'Untitled').slice(0, 300),
+        author: String(b.author || 'Unknown Author').slice(0, 200),
+        isbn: String(b.isbn || '').slice(0, 32),
+        edition: String(b.edition || '').slice(0, 200),
+        format,
+        status,
+        totalPages,
+        currentPage,
+        rating,
+        location: String(b.location || '').slice(0, 120),
+        cover: safeCoverUrl(b.cover),
+        tags: Array.isArray(b.tags) ? b.tags.map(t => String(t).slice(0, 40)).filter(Boolean) : [],
+        notes: String(b.notes || '').slice(0, 5000),
+        quotes: Array.isArray(b.quotes) ? b.quotes.map(q => ({
+          text: String(q?.text || '').slice(0, 1000),
+          page: String(q?.page || '').slice(0, 20)
+        })).filter(q => q.text) : [],
+        lendType,
+        lendPerson: String(b.lendPerson || '').slice(0, 120),
+        lendDate: String(b.lendDate || '').slice(0, 32),
+        addedAt: Number(b.addedAt) || Date.now()
+      };
+    }
+
+    books = books.map(sanitizeBook);
+
     function saveBooks() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+      } catch {
+        showToast('ไม่สามารถบันทึกลงเบราว์เซอร์ได้ (พื้นที่เก็บข้อมูลเต็มหรืออยู่ในโหมดส่วนตัว)');
+      }
       renderAll();
     }
 
@@ -1431,8 +1483,9 @@
     };
 
     function renderCoverImg(cover, title, isSmall = false, lazy = false) {
-      if (!cover) return coverFallbackHtml(title, isSmall);
-      return `<img src="${escapeHtml(cover)}" alt="${escapeHtml(title)}" data-title="${escapeHtml(title)}" data-small="${isSmall ? '1' : '0'}" ${lazy ? 'loading="lazy"' : ''} referrerpolicy="no-referrer" onerror="handleCoverError(this)" onload="handleCoverLoad(this)" />`;
+      const safe = safeCoverUrl(cover);
+      if (!safe) return coverFallbackHtml(title, isSmall);
+      return `<img src="${escapeHtml(safe)}" alt="${escapeHtml(title)}" data-title="${escapeHtml(title)}" data-small="${isSmall ? '1' : '0'}" ${lazy ? 'loading="lazy"' : ''} referrerpolicy="no-referrer" onerror="handleCoverError(this)" onload="handleCoverLoad(this)" />`;
     }
 
     // Tabs
@@ -1515,8 +1568,8 @@
               <p>${escapeHtml(b.author)}${b.edition ? ' · ' + escapeHtml(b.edition) : ''}</p>
               <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
               <div class="reading-mini-actions">
-                <span>หน้า ${b.currentPage}/${b.totalPages} (${pct}%)</span>
-                <button class="quick-update-btn" onclick="openBookModal('${b.id}')">อัปเดต</button>
+                <span>หน้า ${Number(b.currentPage) || 0}/${Number(b.totalPages) || 0} (${pct}%)</span>
+                <button type="button" class="quick-update-btn" data-open-book="${escapeHtml(b.id)}">อัปเดต</button>
               </div>
             </div>
           </div>`;
@@ -1576,12 +1629,18 @@
           ? `<span class="badge badge-lent">ยืม: ${escapeHtml(b.lendPerson || 'เพื่อน')}</span>`
           : (b.lendType === 'borrowed' ? `<span class="badge badge-lent">ยืมมา</span>` : '');
 
+        const safeStatus = VALID_STATUSES.has(b.status) ? b.status : 'tbr';
+        const safeFormat = VALID_FORMATS.has(b.format) ? b.format : 'physical';
+        const safeMetaRight = b.rating
+          ? '★ ' + (Number(b.rating) || 0)
+          : (safeStatus === 'reading' ? pct + '%' : escapeHtml(b.location || ''));
+
         return `
-          <article class="book-card" onclick="openBookModal('${b.id}')">
+          <article class="book-card" data-open-book="${escapeHtml(b.id)}">
             <div class="book-cover-wrap">
               ${renderCoverImg(b.cover, b.title, false, true)}
               <div class="badge-overlay">
-                <span class="badge badge-status-${b.status}">${statusLabel[b.status] || b.status}</span>
+                <span class="badge badge-status-${safeStatus}">${escapeHtml(statusLabel[safeStatus] || safeStatus)}</span>
                 ${lentBadge}
               </div>
             </div>
@@ -1590,8 +1649,8 @@
               <div class="book-author">${escapeHtml(b.author)}</div>
               ${b.edition ? `<div style="font-size:11px; color:var(--accent); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(b.edition)}</div>` : ''}
               <div class="book-meta-row">
-                <span class="format-pill">${formatLabel[b.format] || b.format}</span>
-                <span>${b.rating ? '★ ' + b.rating : (b.status === 'reading' ? pct + '%' : (b.location || ''))}</span>
+                <span class="format-pill">${escapeHtml(formatLabel[safeFormat] || safeFormat)}</span>
+                <span>${safeMetaRight}</span>
               </div>
             </div>
           </article>`;
@@ -1626,18 +1685,33 @@
       }
       el.innerHTML = lent.map(b => `
         <div class="book-card" style="justify-content:space-between;">
-          <div style="display:flex; align-items:center; gap:14px; flex:1; min-width:0;" onclick="openBookModal('${b.id}')">
+          <div style="display:flex; align-items:center; gap:14px; flex:1; min-width:0;" data-open-book="${escapeHtml(b.id)}">
             <div class="book-cover-wrap">${renderCoverImg(b.cover, b.title, true, false)}</div>
             <div style="min-width:0;">
               <div class="book-title">${escapeHtml(b.title)}</div>
               <div class="book-author">${b.lendType === 'lent' ? '📤 ให้ยืมแก่:' : '📥 ยืมมาจาก:'} <b>${escapeHtml(b.lendPerson || 'ไม่ระบุชื่อ')}</b></div>
-              <div style="font-size:11.5px; color:var(--text-soft);">${b.lendDate || ''}</div>
+              <div style="font-size:11.5px; color:var(--text-soft);">${escapeHtml(b.lendDate || '')}</div>
             </div>
           </div>
-          <button class="btn btn-secondary" onclick="markReturned('${b.id}')">✅ คืนแล้ว</button>
+          <button type="button" class="btn btn-secondary" data-return-book="${escapeHtml(b.id)}">✅ คืนแล้ว</button>
         </div>
       `).join('');
     }
+
+    ['currently-reading-list', 'library-grid', 'lending-list'].forEach(listId => {
+      const container = $(listId);
+      if (!container) return;
+      container.addEventListener('click', (e) => {
+        const returnBtn = e.target.closest('[data-return-book]');
+        if (returnBtn) {
+          e.stopPropagation();
+          markReturned(returnBtn.dataset.returnBook);
+          return;
+        }
+        const openEl = e.target.closest('[data-open-book]');
+        if (openEl) openBookModal(openEl.dataset.openBook);
+      });
+    });
 
     window.markReturned = function(id) {
       const idx = books.findIndex(b => b.id === id);
@@ -1703,10 +1777,16 @@
       }
     });
 
-    // Real API Search (Google Books + Open Library)
+    // Real API Search (Google Books + Open Library) with AbortController & timeout
+    let activeSearchController = null;
     async function searchRealBooks(query) {
       const q = query.trim();
       if (!q) return;
+      if (activeSearchController) activeSearchController.abort();
+      const controller = new AbortController();
+      activeSearchController = controller;
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+
       const statusEl = $('api-status');
       const resultsEl = $('api-results');
       statusEl.innerHTML = `<span class="spinner"></span> <span style="font-size:13px; color:var(--text-muted);">กำลังค้นหาข้อมูลหนังสือและ Edition จาก Google Books &amp; Open Library...</span>`;
@@ -1717,18 +1797,22 @@
 
       try {
         const [gbRes, olRes] = await Promise.allSettled([
-          fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(gbQuery)}&maxResults=12`).then(r => {
+          fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(gbQuery)}&maxResults=12`, { signal: controller.signal }).then(r => {
             if (!r.ok) throw new Error(`HTTP ${r.status}`);
             return r.json();
           }),
-          fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=8`).then(r => {
+          fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=8`, { signal: controller.signal }).then(r => {
             if (!r.ok) throw new Error(`HTTP ${r.status}`);
             return r.json();
           })
         ]);
+        clearTimeout(timeoutId);
+        if (activeSearchController !== controller) return;
 
         const items = [];
         const seenKeys = new Set();
+        const rateLimited = (gbRes.status === 'rejected' && /429/.test(gbRes.reason?.message || '')) ||
+          (olRes.status === 'rejected' && /429/.test(olRes.reason?.message || ''));
 
         if (gbRes.status === 'fulfilled' && Array.isArray(gbRes.value.items)) {
           for (const v of gbRes.value.items) {
@@ -1738,7 +1822,7 @@
             const isbn10 = identifiers.find(i => i.type === 'ISBN_10')?.identifier || '';
             const isbn = isbn13 || isbn10;
             let cover = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || '';
-            if (cover) cover = cover.replace('http://', 'https://');
+            if (cover) cover = safeCoverUrl(cover.replace(/^http:\/\//i, 'https://'));
 
             const key = isbn || `${norm(info.title)}-${info.publishedDate || ''}`;
             if (seenKeys.has(key)) continue;
@@ -1749,8 +1833,8 @@
               author: (info.authors || ['Unknown Author']).join(', '),
               isbn,
               edition: info.publisher || '',
-              langYear: `${(info.language || 'en').toUpperCase()}${info.publishedDate ? ' · ' + info.publishedDate.slice(0, 4) : ''}`,
-              totalPages: info.pageCount || 200,
+              langYear: `${(info.language || 'en').toUpperCase()}${info.publishedDate ? ' · ' + String(info.publishedDate).slice(0, 4) : ''}`,
+              totalPages: Math.max(0, parseInt(info.pageCount, 10) || 200),
               cover,
               source: 'Google Books'
             });
@@ -1760,7 +1844,8 @@
         if (olRes.status === 'fulfilled' && Array.isArray(olRes.value.docs)) {
           for (const d of olRes.value.docs) {
             const isbn = (d.isbn && d.isbn[0]) || '';
-            const cover = d.cover_i ? `https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg` : '';
+            const coverId = parseInt(d.cover_i, 10);
+            const cover = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : '';
             const key = isbn || `${norm(d.title)}-${d.first_publish_year || ''}`;
             if (seenKeys.has(key)) continue;
             seenKeys.add(key);
@@ -1769,9 +1854,9 @@
               title: d.title || 'Untitled',
               author: (d.author_name || ['Unknown Author']).join(', '),
               isbn,
-              edition: (d.publisher && d.publisher[0]) || (d.edition_count ? `${d.edition_count} editions` : ''),
-              langYear: `${(d.language && d.language[0] ? d.language[0].toUpperCase() : 'EN')}${d.first_publish_year ? ' · ' + d.first_publish_year : ''}`,
-              totalPages: d.number_of_pages_median || 200,
+              edition: (d.publisher && d.publisher[0]) || (d.edition_count ? `${parseInt(d.edition_count, 10) || 1} editions` : ''),
+              langYear: `${(d.language && d.language[0] ? String(d.language[0]).toUpperCase() : 'EN')}${d.first_publish_year ? ' · ' + parseInt(d.first_publish_year, 10) : ''}`,
+              totalPages: Math.max(0, parseInt(d.number_of_pages_median, 10) || 200),
               cover,
               source: 'Open Library'
             });
@@ -1779,19 +1864,22 @@
         }
 
         if (items.length === 0) {
-          statusEl.innerHTML = `<p style="font-size:13.5px; color:var(--text-muted);">ไม่พบข้อมูลสำหรับ "${escapeHtml(q)}" — คุณสามารถกด <b>✏️ กรอกข้อมูลเอง</b> ด้านบนขวาได้ทันที</p>`;
+          const extra = rateLimited ? ' (บาง API ติด Rate Limit ชั่วคราว)' : '';
+          statusEl.innerHTML = `<p style="font-size:13.5px; color:var(--text-muted);">ไม่พบข้อมูลสำหรับ "${escapeHtml(q)}"${extra} · คุณสามารถกด <b>✏️ กรอกข้อมูลเอง</b> ด้านบนขวาได้ทันที</p>`;
           return;
         }
 
-        statusEl.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">พบ <b>${items.length}</b> รายการ/Edition — เลือกเล่มที่ตรงกับฉบับของคุณ:</p>`;
+        const warnNote = rateLimited ? ' <span style="color:var(--warning);">(บางแหล่งข้อมูลติด Rate Limit)</span>' : '';
+        statusEl.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">พบ <b>${items.length}</b> รายการ/Edition${warnNote} · เลือกเล่มที่ตรงกับฉบับของคุณ:</p>`;
         window._searchResults = items;
 
         resultsEl.innerHTML = items.map((item, idx) => {
           const dup = findDuplicates(item.isbn, item.title, item.author);
           const hasDup = dup.exactIsbn || dup.sameWork.length > 0;
+          const safeImg = safeCoverUrl(item.cover);
           return `
             <div class="edition-card">
-              ${item.cover ? `<img src="${escapeHtml(item.cover)}" alt="" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=edition-no-cover>No Cover</div>'" />` : `<div class="edition-no-cover">No Cover</div>`}
+              ${safeImg ? `<img src="${escapeHtml(safeImg)}" alt="" referrerpolicy="no-referrer" onerror="this.outerHTML='<div class=edition-no-cover>No Cover</div>'" />` : `<div class="edition-no-cover">No Cover</div>`}
               <div class="edition-info">
                 <h4>${escapeHtml(item.title)}</h4>
                 <div class="ed-author">${escapeHtml(item.author)}</div>
@@ -1799,16 +1887,23 @@
                   <span class="spec-tag">${escapeHtml(item.langYear)}</span>
                   ${item.edition ? `<span class="spec-tag">${escapeHtml(item.edition)}</span>` : ''}
                   ${item.isbn ? `<span class="spec-tag">ISBN: ${escapeHtml(item.isbn)}</span>` : ''}
-                  <span class="spec-tag">${item.totalPages} หน้า</span>
+                  <span class="spec-tag">${Number(item.totalPages) || 0} หน้า</span>
                   ${dup.exactIsbn ? `<span class="spec-tag dup-warn">⚠️ มีฉบับนี้แล้ว!</span>` : (dup.sameWork.length > 0 ? `<span class="spec-tag dup-warn">⚠️ มีอีก Edition แล้ว</span>` : '')}
                 </div>
-                <button class="btn ${hasDup ? 'btn-secondary' : 'btn-primary'}" style="min-height:34px; padding:5px 12px; font-size:12.5px;" onclick="selectSearchResult(${idx})">
+                <button type="button" class="btn ${hasDup ? 'btn-secondary' : 'btn-primary'}" style="min-height:34px; padding:5px 12px; font-size:12.5px;" onclick="selectSearchResult(${idx})">
                   ${hasDup ? 'ตรวจสอบ / เพิ่มฉบับนี้' : '＋ เลือก Edition นี้'}
                 </button>
               </div>
             </div>`;
         }).join('');
       } catch (err) {
+        clearTimeout(timeoutId);
+        if (err && err.name === 'AbortError') {
+          if (activeSearchController === controller) {
+            statusEl.innerHTML = `<p style="color:var(--danger); font-size:13px;">การเชื่อมต่อ API ใช้เวลานานเกินกำหนด (Timeout) · กรุณาลองใหม่อีกครั้ง</p>`;
+          }
+          return;
+        }
         statusEl.innerHTML = `<p style="color:var(--danger); font-size:13px;">เกิดข้อผิดพลาดในการเชื่อมต่อ API (${escapeHtml(err.message)})</p>`;
       }
     }
@@ -1996,13 +2091,18 @@
         if (window.Html5Qrcode) return resolve(window.Html5Qrcode);
         const s = document.createElement('script');
         s.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+        s.crossOrigin = 'anonymous';
         s.onload = () => resolve(window.Html5Qrcode);
         s.onerror = () => reject(new Error('ไม่สามารถโหลดตัวสแกนสำรองได้'));
         document.head.appendChild(s);
       });
     }
 
+    let scannerSessionId = 0;
+
     $('btn-scan-isbn').addEventListener('click', async () => {
+      await stopScanner();
+      const mySession = ++scannerSessionId;
       $('scanner-modal').classList.add('open');
       $('scanner-manual-isbn').value = '';
       $('qr-reader').innerHTML = '';
@@ -2012,14 +2112,19 @@
 
       if ('BarcodeDetector' in window) {
         try {
-          scannerStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          if (mySession !== scannerSessionId) {
+            stream.getTracks().forEach(t => t.stop());
+            return;
+          }
+          scannerStream = stream;
           video.style.display = 'block';
           video.srcObject = scannerStream;
           const detector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a'] });
           $('scanner-status').textContent = 'ส่องบาร์โค้ดหนังสือให้อยู่ในกรอบ...';
 
           scannerTimer = setInterval(async () => {
-            if (video.readyState < 2) return;
+            if (mySession !== scannerSessionId || video.readyState < 2) return;
             try {
               const barcodes = await detector.detect(video);
               if (barcodes.length > 0) {
@@ -2033,7 +2138,9 @@
           }, 350);
           return;
         } catch (err) {
-          $('scanner-status').textContent = 'เปิดกล้องไม่สำเร็จ: ' + err.message;
+          if (mySession === scannerSessionId) {
+            $('scanner-status').textContent = 'เปิดกล้องไม่สำเร็จ: ' + err.message;
+          }
           return;
         }
       }
@@ -2042,8 +2149,10 @@
       try {
         $('scanner-status').textContent = 'กำลังเตรียมตัวสแกนสำหรับ iOS / Safari...';
         const Html5Qrcode = await loadHtml5Qrcode();
-        html5QrInstance = new Html5Qrcode('qr-reader');
-        await html5QrInstance.start(
+        if (mySession !== scannerSessionId) return;
+        const instance = new Html5Qrcode('qr-reader');
+        html5QrInstance = instance;
+        await instance.start(
           { facingMode: 'environment' },
           { fps: 10, qrbox: { width: 260, height: 120 } },
           (decodedText) => {
@@ -2054,19 +2163,28 @@
           },
           () => {}
         );
+        if (mySession !== scannerSessionId) {
+          try { await instance.stop(); } catch {}
+          try { instance.clear(); } catch {}
+          return;
+        }
         $('scanner-status').textContent = 'ส่องบาร์โค้ดหนังสือให้อยู่ในกรอบ...';
       } catch (err) {
-        $('scanner-status').textContent = 'ไม่สามารถเปิดกล้องได้ — สามารถพิมพ์เลข ISBN 13 หลักด้านล่างแทนได้ทันที';
+        if (mySession === scannerSessionId) {
+          $('scanner-status').textContent = 'ไม่สามารถเปิดกล้องได้ · สามารถพิมพ์เลข ISBN 13 หลักด้านล่างแทนได้ทันที';
+        }
       }
     });
 
     async function stopScanner() {
+      scannerSessionId++;
       if (scannerTimer) { clearInterval(scannerTimer); scannerTimer = null; }
       if (scannerStream) { scannerStream.getTracks().forEach(t => t.stop()); scannerStream = null; }
       if (html5QrInstance) {
-        try { await html5QrInstance.stop(); } catch {}
-        try { html5QrInstance.clear(); } catch {}
+        const inst = html5QrInstance;
         html5QrInstance = null;
+        try { await inst.stop(); } catch {}
+        try { inst.clear(); } catch {}
       }
       $('scanner-modal').classList.remove('open');
     }
@@ -2104,10 +2222,12 @@
 
     $('btn-export-json').addEventListener('click', () => {
       const blob = new Blob([JSON.stringify({ books, readingGoal }, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
+      a.href = url;
       a.download = `folio-books-${new Date().toISOString().slice(0,10)}.json`;
       a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('ดาวน์โหลดไฟล์สำรองข้อมูลแล้ว');
     });
 
@@ -2120,16 +2240,18 @@
           const data = JSON.parse(reader.result);
           const imported = Array.isArray(data) ? data : (data.books || []);
           if (!Array.isArray(imported)) throw new Error('Invalid format');
-          books = imported;
+          books = imported.map(sanitizeBook);
           if (data.readingGoal) {
             readingGoal = Math.max(1, parseInt(data.readingGoal, 10) || 12);
-            localStorage.setItem(GOAL_KEY, String(readingGoal));
+            try { localStorage.setItem(GOAL_KEY, String(readingGoal)); } catch {}
           }
           saveBooks();
           $('backup-modal').classList.remove('open');
           showToast(`นำเข้าหนังสือ ${books.length} เล่มสำเร็จ`);
         } catch {
           alert('ไฟล์ JSON ไม่ถูกต้อง');
+        } finally {
+          e.target.value = '';
         }
       };
       reader.readAsText(file);
